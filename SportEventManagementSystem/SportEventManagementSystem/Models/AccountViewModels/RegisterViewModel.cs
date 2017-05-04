@@ -8,6 +8,8 @@ namespace SportEventManagementSystem.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
+        private const string PHONENUMBERREGEX = @"(^1(3|8)[0-9]{2}(\ |-){0,1}[0-9]{3}(\ |-){0,1}[0-9]{3})|(^\({0,1}(0|\+61){0,1}(\ |-){0,1}0{0,1}(2|4|3|7|8){0,1}\){0,1}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{1}(\ |-){0,1}[0-9]{3})|(^13((\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{2}))|(^13[0-9](\ |-){0,1}[0-9]{3})";
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -60,28 +62,27 @@ namespace SportEventManagementSystem.Models.AccountViewModels
         public int Gender { get; set; }
 
         [Required]
-        [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"/^\({0,1}((0|\+61)(2|4|3|7|8)){0,1}\){0,1}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{1}(\ |-){0,1}[0-9]{3}$/",ErrorMessage = "Not a valid phone number.")]
+               [DataType(DataType.Text)]
+        [RegularExpression(PHONENUMBERREGEX, ErrorMessage = "Not a valid phone number.")]
         [Display(Name = "Home Phone")]
-        public int HomePhone { get; set; }
-
-        [Required]
-        [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"/^\({0,1}((0|\+61)(2|4|3|7|8)){0,1}\){0,1}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{1}(\ |-){0,1}[0-9]{3}$/", ErrorMessage = "Not a valid phone number.")]
-        [Display(Name = "Mobile Phone")]
-        public int MobilePhone { get; set; }
+        public string HomePhone { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [StringLength(70, ErrorMessage = "{0} must be at max {1} character long.", MinimumLength = 1)]
-        [Display(Name = "Emergency Contact Name")]
-        public int EmergencyContact { get; set; }
+        [RegularExpression(PHONENUMBERREGEX, ErrorMessage = "Not a valid phone number.")]
+        [Display(Name = "Mobile Phone")]
+        public string MobilePhone { get; set; }
 
         [Required]
-        [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"/^\({0,1}((0|\+61)(2|4|3|7|8)){0,1}\){0,1}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{2}(\ |-){0,1}[0-9]{1}(\ |-){0,1}[0-9]{3}$/", ErrorMessage = "Not a valid phone number.")]
+        [DataType(DataType.Text)]
+       // [StringLength(70, ErrorMessage = "{0} must be at max {1} character long.", MinimumLength = 1)]
+        [Display(Name = "Emergency Contact Name")]
+        public string EmergencyContact { get; set; }
+
+        [Required]
+        [RegularExpression(PHONENUMBERREGEX, ErrorMessage = "Not a valid phone number.")]
         [Display(Name = "Emergency Contact Number")]
-        public int EmergencyContactNo { get; set; }
+        public string EmergencyContactNo { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
