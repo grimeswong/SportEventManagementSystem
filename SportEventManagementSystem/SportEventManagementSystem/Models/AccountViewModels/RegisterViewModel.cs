@@ -100,7 +100,7 @@ namespace SportEventManagementSystem.Models.AccountViewModels
     public sealed class IsGender : ValidationAttribute
     {
         private const string defaultError = "'{0}' must have at least one element.";
-        public IsGender() : base(defaultError) //
+        public IsGender() : base(defaultError)
         {
         }
 
