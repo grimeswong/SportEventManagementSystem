@@ -34,4 +34,28 @@ namespace SportEventManagementSystem.Models
     {
 
     }
+
+    public class Restriction
+    {
+        public Restriction restrictionType;
+        public int restrictionValue;
+
+        public enum RestrictionTypes
+        {
+            Age,
+            Gender
+        }
+
+            //for (Restriction restriction in Restriction)
+            //{
+            //    if(restriction.restrictionType == RestrictionTypes.Age)
+            //    {
+            //        return <currentValue>.restrictionValue <= restrictionValue;
+            //    } else if(restriction.restrictionType == RestrictionTypes.Gender)
+            //    {
+            //        return < currentValue >.restrictionValue == restrictionValue;
+            //    }
+            //}
+        
+    }
 }
