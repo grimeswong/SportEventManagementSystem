@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using SportEventManagementSystem.Models;
 using SportEventManagementSystem.Models.ManageViewModels;
 using SportEventManagementSystem.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace SportEventManagementSystem.Controllers
 {
@@ -51,32 +52,31 @@ namespace SportEventManagementSystem.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.UpdatedInfoSuccess ? "Your information was successfully changed."
                 : "";
 
-            var user = await GetCurrentUserAsync();
+            var user = GetCurrentUserAsync();
+           // user.details = await
             if (user == null)
             {
                 return View("Error");
-            }
-            var model = new IndexViewModel
-            {
-                //HasPassword = await _userManager.HasPasswordAsync(user),
-                //PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
-                Email = user.Email,
-                FirstName = user.FirstName,
-                MiddleName = user.MiddleName,
-                LastName = user.LastName,
-                DateOfBirth = user.DateOfBirth,
-                Street = user.Street,
-                Suburb = user.Suburb,
-                PostCode = user.PostCode,
-                Gender = user.Gender,
-                HomePhone = user.HomePhone,
-                MobilePhone = user.MobilePhone,
-                EmergencyContact = user.EmergencyContact,
-                EmergencyContactNo = user.EmergencyContactNo
-            };
+            } 
+                var model = new Models.AccountViewModels.RegisterViewModel
+                {
+                    Email = user.Email,
+                    FirstName = user.details.FirstName,
+                    MiddleName = user.details.MiddleName,
+                    LastName = user.details.LastName,
+                    DateOfBirth = user.details.DateOfBirth,
+                    Street = user.details.Street,
+                    Suburb = user.details.Suburb,
+                    PostCode = user.details.PostCode,
+                    Gender = user.details.Gender,
+                    HomePhone = user.details.HomePhone,
+                    MobilePhone = user.details.MobilePhone,
+                    EmergencyContact = user.details.EmergencyContact,
+                    EmergencyContactNo = user.details.EmergencyContactNo
+                };      
             return View(model);
         }
 
@@ -86,6 +86,50 @@ namespace SportEventManagementSystem.Controllers
         public IActionResult ChangePassword()
         {
             return View();
+        }
+
+
+        //
+        // POST: /Manage/Index
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateInfo(Models.AccountViewModels.RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = GetCurrentUserAsync();
+            //
+            if (user != null)
+            {
+                user.Email = model.Email;
+                user.details = new UserDetails
+                {
+                    FirstName = model.FirstName,
+                    EmergencyContactNo = model.EmergencyContactNo,
+                    EmergencyContact = model.EmergencyContact,
+                    MobilePhone = model.MobilePhone,
+                    HomePhone = model.HomePhone,
+                    MiddleName = model.MiddleName,
+                    LastName = model.LastName,
+                    DateOfBirth = model.DateOfBirth,
+                    Street = model.Street,
+                    Suburb = model.Suburb,
+                    Gender = model.Gender,
+                    PostCode = model.PostCode
+                };
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation(3, "User updated their info successfully");
+                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.UpdatedInfoSuccess});
+                }
+                AddErrors(result);
+                return View(model);
+            }
+            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
         //
@@ -98,7 +142,7 @@ namespace SportEventManagementSystem.Controllers
             {
                 return View(model);
             }
-            var user = await GetCurrentUserAsync();
+            var user = GetCurrentUserAsync();
             if (user != null)
             {
                 var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
@@ -133,7 +177,7 @@ namespace SportEventManagementSystem.Controllers
                 return View(model);
             }
 
-            var user = await GetCurrentUserAsync();
+            var user = GetCurrentUserAsync();
             if (user != null)
             {
                 var result = await _userManager.AddPasswordAsync(user, model.NewPassword);
@@ -167,12 +211,13 @@ namespace SportEventManagementSystem.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
+            UpdatedInfoSuccess,
             Error
         }
 
-        private Task<ApplicationUser> GetCurrentUserAsync()
+        private ApplicationUser GetCurrentUserAsync()
         {
-            return _userManager.GetUserAsync(HttpContext.User);
+            return _userManager.Users.Include(x => x.details).FirstOrDefault(x => x.Id == _userManager.GetUserId(User));
         }
 
         #endregion
