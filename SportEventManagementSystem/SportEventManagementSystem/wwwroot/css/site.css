@@ -14,7 +14,9 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    /*max-width: 280px;*/
+    max-width:100%; /* shadowG*/
+ 
 }
 
 /* Carousel */
@@ -47,4 +49,53 @@ textarea {
     .carousel-caption {
         display: none;
     }
+}
+
+
+
+/*** shadowG created following css files ***/
+
+@media screen and (max-width: 767px) {
+    .body-content {
+        max-width: 80%;
+    }
+}
+
+/* Set widths on the form inputs since otherwise they're 100% wide */
+@media screen and (max-width: 480px) {
+
+    input, select, textarea {
+        width: 80%;
+    }
+}
+
+
+/*** Avoid overlap by the fixed top navbar ***/
+.maincontent {
+    margin-top: 50px;
+}
+
+/* Carousel image*/
+.img-responsive {
+    width: 100%;
+    max-height: 400px;
+}
+
+/* Fix the height consistance with form-control*/
+select {    
+   padding: 6px;
+   height: 34px;
+}
+
+
+/*** Create Event Page ***/
+textarea {
+    padding-left: 12px;
+}
+.event-description {
+    width: 100%;
+}
+
+.create-img {
+    width: 100%;
 }
