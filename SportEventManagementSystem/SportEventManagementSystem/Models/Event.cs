@@ -90,7 +90,14 @@ namespace SportEventManagementSystem.Models
 
         public string TeamName { get; set; }
         public string ManagerID { get; set; }
-        public List<String> TeamMembers { get; set; }
+        public List<TeamMember> TeamMembers { get; set; }
+    }
+
+    public class TeamMember
+    {
+        [Key]
+        public string id { get; set; }
+        public string MemberName { get; set; }
     }
 
     //public class SportType
