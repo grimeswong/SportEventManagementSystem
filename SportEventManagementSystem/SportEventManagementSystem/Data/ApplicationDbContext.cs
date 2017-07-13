@@ -14,12 +14,12 @@ namespace SportEventManagementSystem.Data
             : base(options)
         {
         }
-       // public DbSet<Event> Events { get; set; }
+        public DbSet<Event> Events { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-           // builder.Entity<Event>().ToTable("Event");
+            builder.Entity<Event>().ToTable("Event");
         }
     }
 }
