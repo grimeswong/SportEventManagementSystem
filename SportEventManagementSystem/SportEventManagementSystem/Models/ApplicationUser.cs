@@ -4,17 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace SportEventManagementSystem.Models
 {
-    // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
         public UserDetails details { get; set; }
     }
 
-    public class UserDetails : IdentityUser
+    public class UserDetails
     {
+        [Key]
+        public string id { get; set; }
         public string FirstName { get; set; }
         public string EmergencyContactNo { get; set; }
         public string EmergencyContact { get; set; }
