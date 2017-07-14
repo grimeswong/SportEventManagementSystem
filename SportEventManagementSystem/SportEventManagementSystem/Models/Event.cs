@@ -27,6 +27,7 @@ namespace SportEventManagementSystem.Models
         public int EntryCapacity { get; set; }
         public string OrginiserName { get; set; }
         public string OrginiserClub { get; set; }
+        public string ownerID { get; set; }
     }
     public class Competition
     {
@@ -48,7 +49,8 @@ namespace SportEventManagementSystem.Models
 
     public enum RestrictionTypes
     {
-        Age,
+        MinimumAge,
+        MaximumAge,
         Gender
     }
 
@@ -100,7 +102,6 @@ namespace SportEventManagementSystem.Models
         public string TeamName { get; set; }
         public string ManagerID { get; set; }
         public List<TeamMember> TeamMembers { get; set; }
-
     }
 
     public class TeamMember
@@ -114,8 +115,6 @@ namespace SportEventManagementSystem.Models
     public class SportType
     {
         [Key]
-        public string id { get; set; }
-
         public string Name { get; set; }
         public string Description { get; set; }
     }
