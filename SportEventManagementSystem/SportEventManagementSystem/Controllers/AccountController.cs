@@ -12,6 +12,8 @@ using Microsoft.Extensions.Options;
 using SportEventManagementSystem.Models;
 using SportEventManagementSystem.Models.AccountViewModels;
 using SportEventManagementSystem.Services;
+using Microsoft.EntityFrameworkCore;
+using SportEventManagementSystem.Data;
 
 namespace SportEventManagementSystem.Controllers
 {

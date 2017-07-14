@@ -55,8 +55,8 @@ namespace SportEventManagementSystem.Controllers
                 : message == ManageMessageId.UpdatedInfoSuccess ? "Your information was successfully changed."
                 : "";
 
-            var user = GetCurrentUserAsync();
-           // user.details = await
+            var user = QueryController.GetCurrentUserAsync(_userManager, User);
+            QueryController.GetUserEvents(user);
             if (user == null)
             {
                 return View("Error");
@@ -99,8 +99,8 @@ namespace SportEventManagementSystem.Controllers
             {
                 return View(model);
             }
-            var user = GetCurrentUserAsync();
-            //
+            var user = QueryController.GetCurrentUserAsync(_userManager, User);
+
             if (user != null)
             {
                 user.Email = model.Email;
@@ -142,7 +142,7 @@ namespace SportEventManagementSystem.Controllers
             {
                 return View(model);
             }
-            var user = GetCurrentUserAsync();
+            var user = QueryController.GetCurrentUserAsync(_userManager, User);
             if (user != null)
             {
                 var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
@@ -177,7 +177,7 @@ namespace SportEventManagementSystem.Controllers
                 return View(model);
             }
 
-            var user = GetCurrentUserAsync();
+            var user = QueryController.GetCurrentUserAsync(_userManager,User);
             if (user != null)
             {
                 var result = await _userManager.AddPasswordAsync(user, model.NewPassword);
@@ -214,12 +214,6 @@ namespace SportEventManagementSystem.Controllers
             UpdatedInfoSuccess,
             Error
         }
-
-        private ApplicationUser GetCurrentUserAsync()
-        {
-            return _userManager.Users.Include(x => x.details).FirstOrDefault(x => x.Id == _userManager.GetUserId(User));
-        }
-
         #endregion
     }
 }
