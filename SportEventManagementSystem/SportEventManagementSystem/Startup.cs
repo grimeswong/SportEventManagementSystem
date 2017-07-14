@@ -17,6 +17,8 @@ namespace SportEventManagementSystem
 {
     public class Startup
     {
+        public static string ConnectionString;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -32,6 +34,8 @@ namespace SportEventManagementSystem
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            ConnectionString = Configuration.GetConnectionString("DefaultConnection");
         }
 
         public IConfigurationRoot Configuration { get; }
