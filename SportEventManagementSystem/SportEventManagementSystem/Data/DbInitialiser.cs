@@ -56,7 +56,7 @@ namespace SportEventManagementSystem.Data
             /*** sport type ***/
             var sportType = new SportType
             {
-                Name = "soccer",
+                Name = "Soccer",
                 Description = "type 1 description"
             };
 
@@ -115,7 +115,7 @@ namespace SportEventManagementSystem.Data
                 OrginiserClub = "Aspley Rugby Club"
             };
 
-            context.Events.Add(_event);
+            //context.Events.Add(_event);
 
             // Looking into using GenFu to generate Data
             // var evnets GenFu.GenFu.ListOf<Event>(200);

@@ -15,7 +15,7 @@ using SportEventManagementSystem.Services;
 
 namespace SportEventManagementSystem.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class EventController : Controller
     {
 
@@ -23,8 +23,16 @@ namespace SportEventManagementSystem.Controllers
         {
         }
 
+        public IActionResult Index()    // Anyone can see this event page
+        {
+            ViewData["Message"] = "This is event page";
+            return View();
+        }
+
+
         //
         // GET: /Event/CreateEvent
+        [Authorize] // Only authorize user can create an event
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Create(string returnUrl = null)
