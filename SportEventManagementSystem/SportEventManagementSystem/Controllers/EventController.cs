@@ -29,17 +29,24 @@ namespace SportEventManagementSystem.Controllers
             return View();
         }
 
+        [Authorize]
+        public IActionResult CreateEvent()
+        {
+            ViewData["Message"] = "This is create event page";
+            return View();
+        }
+         
 
         //
         // GET: /Event/CreateEvent
-        [Authorize] // Only authorize user can create an event
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> Create(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
+        //[Authorize] // Only authorize user can create an event
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> Create(string returnUrl = null)
+        //{
+        //    ViewData["ReturnUrl"] = returnUrl;
+        //    return View();
+        //}
 
         ////
         //// POST: /Create/Event
