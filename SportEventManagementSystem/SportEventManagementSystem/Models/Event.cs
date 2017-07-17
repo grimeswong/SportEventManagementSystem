@@ -29,6 +29,7 @@ namespace SportEventManagementSystem.Models
         public string OrginiserClub { get; set; }
         public string ownerID { get; set; }
     }
+
     public class Competition
     {
         [Key]
@@ -36,7 +37,7 @@ namespace SportEventManagementSystem.Models
 
         public string Name { get; set; }
         public Division Division { get; set; }
-        public Participants Participants = new Participants();
+        public List<Team> Teams { get; set; }
         public SportType SportType { get; set; }
         public string Location { get; set; }
         public int TeamSizeMin { get; set; }
@@ -84,14 +85,6 @@ namespace SportEventManagementSystem.Models
 
         public string DivisionName { get; set; }
         public string DivisionDescription { get; set; }
-    }
-
-    public class Participants
-    {
-        [Key]
-        public string id { get; set; }
-
-        public List<Team> Teams { get; set; }
     }
 
     public class Team
