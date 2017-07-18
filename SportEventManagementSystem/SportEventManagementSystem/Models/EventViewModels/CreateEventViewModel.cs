@@ -46,13 +46,13 @@ namespace SportEventManagementSystem.Models.EventViewModels
         public string PostCode { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Event Start Date")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yy}")]
         public DateTime StartTime { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Event End Date")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yy}")]
         public DateTime EndTime { get; set; }
