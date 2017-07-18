@@ -71,8 +71,8 @@ textarea {
 
 
 /*** Avoid overlap by the fixed top navbar ***/
-.maincontent {
-    margin-top: 50px;
+body {
+    margin-top: 35px;
 }
 
 /* Carousel image*/
