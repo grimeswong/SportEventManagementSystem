@@ -15,51 +15,69 @@ using SportEventManagementSystem.Services;
 
 namespace SportEventManagementSystem.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class EventController : Controller
-    {
 
-        public EventController()
+    {
+        private readonly Data.ApplicationDbContext _context;
+
+        public EventController(Data.ApplicationDbContext context)
         {
+            _context = context;
         }
 
-        //
-        // GET: /Event/CreateEvent
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> Create(string returnUrl = null)
+        public IActionResult Index()    // Anyone can see this event page
         {
-            ViewData["ReturnUrl"] = returnUrl;
+            ViewData["Message"] = "This is event page";
             return View();
         }
 
-        ////
-        //// POST: /Create/Event
-        //[HttpPost]
+        [Authorize]
+        public IActionResult CreateEvent()
+        {
+            ViewData["Message"] = "This is create event page";
+            return View();
+        }
+
+
+
+        //GET: /Event/CreateEvent
+        //[Authorize] // Only authorize user can create an event
+        //[HttpGet]
         //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Login(EventViewModel model, string returnUrl = null)
+        // public async Task<IActionResult> CreateEvent(string returnUrl = null)
+        // {
+        //     ViewData["ReturnUrl"] = returnUrl;
+        //     return View();
+        // }
+
+        ////
+        //// post: /create/event
+        //[httppost]
+        //[allowanonymous]
+        //[validateantiforgerytoken]
+        //public async task<iactionresult> login(eventviewmodel model, string returnurl = null)
         //{
-        //    ViewData["ReturnUrl"] = returnUrl;
-        //    if (ModelState.IsValid)
+        //    viewdata["returnurl"] = returnurl;
+        //    if (modelstate.isvalid)
         //    {
-        //        // This doesn't count login failures towards account lockout
-        //        // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-        //        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-        //        if (result.Succeeded)
+        //        // this doesn't count login failures towards account lockout
+        //        // to enable password failures to trigger account lockout, set lockoutonfailure: true
+        //        var result = await _signinmanager.passwordsigninasync(model.email, model.password, model.rememberme, lockoutonfailure: false);
+        //        if (result.succeeded)
         //        {
-        //            _logger.LogInformation(1, "User logged in.");
-        //            return RedirectToLocal(returnUrl);
+        //            _logger.loginformation(1, "user logged in.");
+        //            return redirecttolocal(returnurl);
         //        }
-        //        if (result.IsLockedOut)
+        //        if (result.islockedout)
         //        {
-        //            _logger.LogWarning(2, "User account locked out.");
-        //            return View("Lockout");
+        //            _logger.logwarning(2, "user account locked out.");
+        //            return view("lockout");
         //        }
         //        else
         //        {
-        //            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-        //            return View(model);
+        //            modelstate.addmodelerror(string.empty, "invalid login attempt.");
+        //            return view(model);
         //        }
         //    }
 
