@@ -4,6 +4,25 @@
     ViewData["Title"] = "CreateEvent";
 }
 
+@*DateTime Picker Templates
+
+<div class="editor-field">
+    <div class="form-group">
+        <div class="input-group date">
+            @Html.TextBoxFor(m => m.StartTime, new { @class = "form-control datetimepicker" })
+        </div>
+    </div>
+</div>
+
+<div class='input-group date'>
+    <input type='text' class="form-control datetimepicker" />
+    <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+</div>*@
+
+
+
 <div class="row maincontent">
     <form asp-action="CreateEvent">
         <p><h2>1. Event Details</h2></p>
@@ -17,12 +36,12 @@
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
                         <label asp-for="RegStartTime" class="control-label">Regristry Open</label>
-                        <input asp-for="RegStartTime" class="form-control" placeholder="Date & time" />
+                        <input asp-for="RegStartTime" class="form-control datetimepicker" placeholder="Date & time" />
                         <span asp-validation-for="RegStartTime" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
                         <label asp-for="RegEndTime" class="control-label">Registry Closed</label>
-                        <input asp-for="RegEndTime" class="form-control" placeholder="Date & time" />
+                        <input asp-for="RegEndTime" class="form-control datetimepicker" placeholder="Date & time" />
                         <span asp-validation-for="RegEndTime" class="text-danger"></span>
                     </div>
                 </div>
@@ -33,41 +52,41 @@
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="StartTime" class="control-label">Start Date</label>
-                        <input asp-for="StartTime" class="form-control" />
+                        <label asp-for="StartTime" class="control-label">Start Date and Time</label>
+                        <input asp-for="StartTime" class="form-control datetimepicker" placeholder="Date & time" />
                         <span asp-validation-for="StartTime" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-3 col-sm-6">
+                    @*<div class="form-group col-md-3 col-sm-6">
                         <label asp-for="StartTime" class="control-label">Start Time</label>
                         <input asp-for="StartTime" class="form-control" />
                         <span asp-validation-for="StartTime" class="text-danger"></span>
-                    </div>
+                    </div>*@
                     <div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="EndTime" class="control-label">End Date</label>
-                        <input asp-for="EndTime" class="form-control" />
+                        <label asp-for="EndTime" class="control-label">End Date and Time</label>
+                        <input asp-for="EndTime" class="form-control datetimepicker" placeholder="Date & time" />
                         <span asp-validation-for="EndTime" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-3 col-sm-6">
+                    @*<div class="form-group col-md-3 col-sm-6">
                         <label asp-for="EndTime" class="control-label">End Time</label>
                         <input asp-for="EndTime" class="form-control" />
                         <span asp-validation-for="EndTime" class="text-danger"></span>
-                    </div>
+                    </div>*@
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label asp-for="OrganiserName" class="control-label"></label>
-                        <input asp-for="OrganiserName" class="form-control" />
+                        <input asp-for="OrganiserName" class="form-control" placeholder="Organiser Name" />
                         <span asp-validation-for="OrganiserName" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-md-6">
                         <label asp-for="EntryCapacity" class="control-label">Event Capacity</label>
-                        <input asp-for="EntryCapacity" class="form-control" />
+                        <input asp-for="EntryCapacity" class="form-control" placeholder="Event Capacity"/>
                         <span asp-validation-for="EntryCapacity" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6">
-                        <label asp-for="OrganiserClub" class="control-label"></label>
-                        <input asp-for="OrganiserClub" class="form-control" />
+                        <label asp-for="OrganiserClub" class="control-label">Organiser Club</label>
+                        <input asp-for="OrganiserClub" class="form-control" placeholder="Organiser Club" />
                         <span asp-validation-for="OrganiserClub" class="text-danger"></span>
                     </div>
                 </div>
@@ -83,27 +102,27 @@
             <div class="col-md-8">
                 <div class="row">
                     <div class="form-group col-md-12">
-                        <label asp-for="VenueName" class="control-label"></label>
-                        <input asp-for="VenueName" class="form-control" />
+                        <label asp-for="VenueName" class="control-label">Event Venue Name</label>
+                        <input asp-for="VenueName" class="form-control" placeholder="Event Venue Name"/>
                         <span asp-validation-for="VenueName" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-12">
                         <label asp-for="StreetAddress" class="control-label">Event Address</label>
-                        <input asp-for="StreetAddress" class="form-control" />
+                        <input asp-for="StreetAddress" class="form-control" placeholder="Event Address"/>
                         <span asp-validation-for="StreetAddress" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6">
                         <label asp-for="Suburb" class="control-label"></label>
-                        <input asp-for="Suburb" class="form-control" />
+                        <input asp-for="Suburb" class="form-control" placeholder="Suburb"/>
                         <span asp-validation-for="Suburb" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6">
                         <label asp-for="PostCode" class="control-label"></label>
-                        <input asp-for="PostCode" class="form-control" />
+                        <input asp-for="PostCode" class="form-control" placeholder="Postcode"/>
                         <span asp-validation-for="Suburb" class="text-danger"></span>
                     </div>
-
                 </div>
+
             </div>
 
             <div class="col-md-4">
@@ -112,21 +131,135 @@
             </div>
         </div>  <!-- end of event location part -->
 
-
+        <!-- Confirm to create an event -->
         <div class="row">
-            <div class="col=md-6">
-                <div class="form-group">
-                    <input type="submit" value="Confirm to create an event" class="btn btn-primary" />
-                    <button asp-action="Index" class="btn btn-default">Cancel</button>
-                </div>
+            <div class="col-md-12">
+                    <input type="submit" value="Confirm to create an event" class="btn btn-primary btn-lg" />
+                    <button asp-action="Index" class="btn btn-default btn-lg">Cancel</button>  
             </div>
-            
-        </div>
+        </div>  <!-- end of create event -->
 
-    </form>
+        <br/><br/>
+        <div class="separater-Line"></div>
+        <h2>3. Create Competitions</h2>
+        <button class="btn btn-danger compbtn-bottom" id="compAdd">Add A Competition</button>
+
+        
+        <div class="row" id="compForm">   <!-- Toggle Competition Form -->
+            
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label class="control-label">Competition Name</label>
+                        <input class="form-control" placeholder="Competition Name" />
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label class="control-label">Division</label>
+                        <input class="form-control" placeholder="Division" />
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label class="control-label">Sport Type</label>
+                        <input class="form-control" placeholder="Sport Type" />
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label class="control-label">Competition Location</label>
+                        <input class="form-control" placeholder="Competition Name" />
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label class="control-label">Start Time</label>
+                        <input class="form-control" placeholder="Start Time" />
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label class="control-label">End Time</label>
+                        <input class="form-control" placeholder="End Time" />
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4 col-sm-4">
+                        <label class="control-label">Entry Capacity</label>
+                        <input class="form-control" placeholder="Entry Capacity" />
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                    <div class="form-group col-md-4 col-sm-4">
+                        <label class="control-label">Team Minimum No.</label>
+                        <input class="form-control" placeholder="Team Minimum No." />
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                    <div class="form-group col-md-4 col-sm-4">
+                        <label class="control-label">Team Maximum No.</label>
+                        <input class="form-control" placeholder="Team Maximum No." />
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4 col-sm-4">
+                        <label class="control-label">Minimum Age</label>
+                        <input class="form-control" placeholder="Minimum Age" />
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                    <div class="form-group col-md-4 col-sm-4">
+                        <label class="control-label">Maxmium Age</label>
+                        <input class="form-control" placeholder="Maximum Age" />
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                    <div class="form-group col-md-4 col-sm-4">
+                        <label class="control-label">Gender Restriction</label>
+                        <select>
+                            <option value="0" selected>Please select an option.</option>
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+                            <option value="3">Mixed</option>
+                        </select>
+                        <span class="text-danger"></span>
+                        @*<input class="form-control" placeholder="Gender Restriction" />*@
+                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+                    </div>
+                   
+                
+                </div>
+            </div> <!-- end of left details column -->
+            <div class="col-md-4">
+                <img class="create-img" src="~/images/banner1.jpg" alt="Image not available" />
+                <p>Add a photo</p>
+            </div> <!-- end of right image column -->
+            
+            <!-- Save Competition Buttons -->
+            <div class="col-md-12">
+                <input type="submit" value="Save Competition Details" class="btn btn-primary btn-lg" />
+                <button asp-action="Index" class="btn btn-default btn-lg">Cancel</button>
+            </div> <!-- End of save cpmpetition buttons-->
+            
+            
+        </div>  <!-- end of competition form -->
+    </form> <!-- end of the event and competition form -->
+
 </div> <!-- end row maincontent-->
 
+<!-- Datetime picker Script -->
+<script type="text/javascript">
+    $('.datetimepicker').datetimepicker({ sideBySide: true, locale: 'en' });
+</script>
+<!-- Hide the competition form -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#compForm').hide();
+    }) 
+    </script>
 
+<script type="text/javascript">    
+    $('#compAdd').on("click", function (e) {
+        e.preventDefault(); // Avoid to reload the current page
+        $('#compForm').slideDown(500);
+    })
+</script>
 
 
 
