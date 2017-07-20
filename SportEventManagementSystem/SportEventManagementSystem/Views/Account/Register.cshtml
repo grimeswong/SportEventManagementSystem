@@ -40,7 +40,7 @@
     <div class="form-group">
         <label asp-for="DateOfBirth" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input type="date" asp-for="DateOfBirth" class="form-control" />
+            <input asp-for="DateOfBirth" class="form-control datetimepicker" placeholder="Pick a date"/>
             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
         </div>
     </div>
@@ -128,3 +128,11 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
+
+<!-- Datetime picker Script -->
+<script type="text/javascript">
+    $('.datetimepicker').datetimepicker({ sideBySide: true, locale: 'en-us', format:'YYYY-MM-DD'});
+</script>
+@*<script type="text/javascript">
+    $('.datepicker').datepicker();
+</script>*@
