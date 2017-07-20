@@ -38,14 +38,7 @@ namespace SportEventManagementSystem.Data
             };
             _teams.Add(team);
 
-            // Participants
-            var _participants = new Participants
-            {
-                Teams = _teams
-            };
-
-
-
+   
             /*** division ***/
             var division = new Division
             {
@@ -83,7 +76,7 @@ namespace SportEventManagementSystem.Data
 
                 Name = "Test Comp 1",
                 Division = division,
-                Participants = _participants,
+                Teams = _teams,
                 SportType = sportType,
                 Location = "Brisbane",
                 TeamSizeMin = 1,
@@ -105,14 +98,14 @@ namespace SportEventManagementSystem.Data
                 Description = "Description event 1",
                 StreetAddress = "188 GoodView St",
                 Suburb = "Good View",
-                Postcode = "4000",
+                PostCode = "4000",
                 StartTime = new DateTime(17, 10, 02, 15, 0, 0), // 1-Oct-17 15:00:00
                 EndTime = new DateTime(17, 10, 02, 18, 0, 0), // 1-Oct-17 18:00:00
                 RegStartTime = new DateTime(17, 08, 01, 0, 0, 0), // 1-Aug-17 00:00:00
                 RegEndTime = new DateTime(17, 08, 10, 23, 59, 59), // 1-Aug-17 23:59:59
                 EntryCapacity = 100,
-                OrginiserName = "Alan Smith",
-                OrginiserClub = "Aspley Rugby Club"
+                OrganiserName = "Alan Smith",
+                OrganiserClub = "Aspley Rugby Club"
             };
 
             //context.Events.Add(_event);

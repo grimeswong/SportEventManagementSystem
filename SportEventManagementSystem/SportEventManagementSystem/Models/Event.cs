@@ -19,14 +19,14 @@ namespace SportEventManagementSystem.Models
         public string Description { get; set; }
         public string StreetAddress { get; set; }
         public string Suburb { get; set; }
-        public string Postcode { get; set; }
+        public string PostCode { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public DateTime RegStartTime { get; set; }
         public DateTime RegEndTime { get; set; }
         public int EntryCapacity { get; set; }
-        public string OrginiserName { get; set; }
-        public string OrginiserClub { get; set; }
+        public string OrganiserName { get; set; }
+        public string OrganiserClub { get; set; }
         public string ownerID { get; set; }
     }
 
