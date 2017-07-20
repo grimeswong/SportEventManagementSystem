@@ -46,27 +46,30 @@ namespace SportEventManagementSystem.Models.EventViewModels
         public string PostCode { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
-        [Display(Name = "Event Start Date")]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yy}")]
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Event Start Date & Time")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")]
         public DateTime StartTime { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
-        [Display(Name = "Event End Date")]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yy}")]
+        [DataType(DataType.DateTime)]
+        [CustomAttributes.IsEndDateAfter("{0} must be a later date / time then event start.","StartTime","Event End Date & Time")]
+        [Display(Name = "Event End Date & Time")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")]
         public DateTime EndTime { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
         [Display(Name = "Registration Start Date & Time")]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss zzz}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
+        [CustomAttributes.IsDateBetween("'{0}' must be a later date / time then event start and an earlier date / time than event end.","StartTime","EndTime", "Registration State Date & Time")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
         public DateTime RegStartTime { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
+        [CustomAttributes.IsDateBetween("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "StartTime", "EndTime", "Registration End Date & Time")]
         [Display(Name = "Registration End Date & Time")]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss zzz}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
         public DateTime RegEndTime { get; set; }
 
         [Required]
