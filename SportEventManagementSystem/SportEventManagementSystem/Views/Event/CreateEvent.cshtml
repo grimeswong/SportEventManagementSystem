@@ -4,25 +4,6 @@
     ViewData["Title"] = "CreateEvent";
 }
 
-@*DateTime Picker Templates
-
-<div class="editor-field">
-    <div class="form-group">
-        <div class="input-group date">
-            @Html.TextBoxFor(m => m.StartTime, new { @class = "form-control datetimepicker" })
-        </div>
-    </div>
-</div>
-
-<div class='input-group date'>
-    <input type='text' class="form-control datetimepicker" />
-    <span class="input-group-addon">
-        <span class="glyphicon glyphicon-calendar"></span>
-    </span>
-</div>*@
-
-
-
 <div class="row maincontent">
     <form asp-action="CreateEvent">
         <p><h2>1. Event Details</h2></p>
@@ -35,14 +16,14 @@
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="RegStartTime" class="control-label">Regristry Open</label>
-                        <input asp-for="RegStartTime" class="form-control datetimepicker" placeholder="Date & time" />
-                        <span asp-validation-for="RegStartTime" class="text-danger"></span>
+                        <label asp-for="StartTime" class="control-label">Start Date and Time</label>
+                        <input asp-for="StartTime" class="form-control datetimepicker" placeholder="Date & time" />
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="RegEndTime" class="control-label">Registry Closed</label>
-                        <input asp-for="RegEndTime" class="form-control datetimepicker" placeholder="Date & time" />
-                        <span asp-validation-for="RegEndTime" class="text-danger"></span>
+                        <label asp-for="EndTime" class="control-label">End Date and Time</label>
+                        <input asp-for="EndTime" class="form-control datetimepicker" placeholder="Date & time" />
+                        <span asp-validation-for="EndTime" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
@@ -52,25 +33,15 @@
                         <span class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="StartTime" class="control-label">Start Date and Time</label>
-                        <input asp-for="StartTime" class="form-control datetimepicker" placeholder="Date & time" />
-                        <span asp-validation-for="StartTime" class="text-danger"></span>
+                        <label asp-for="RegStartTime" class="control-label">Registration Open</label>
+                        <input asp-for="RegStartTime" class="form-control datetimepicker" placeholder="Date & time" />
+                        <span asp-validation-for="RegStartTime" class="text-danger"></span>
                     </div>
-                    @*<div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="StartTime" class="control-label">Start Time</label>
-                        <input asp-for="StartTime" class="form-control" />
-                        <span asp-validation-for="StartTime" class="text-danger"></span>
-                    </div>*@
                     <div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="EndTime" class="control-label">End Date and Time</label>
-                        <input asp-for="EndTime" class="form-control datetimepicker" placeholder="Date & time" />
-                        <span asp-validation-for="EndTime" class="text-danger"></span>
+                        <label asp-for="RegEndTime" class="control-label">Registration Closed</label>
+                        <input asp-for="RegEndTime" class="form-control datetimepicker" placeholder="Date & time" />
+                        <span asp-validation-for="RegEndTime" class="text-danger"></span>
                     </div>
-                    @*<div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="EndTime" class="control-label">End Time</label>
-                        <input asp-for="EndTime" class="form-control" />
-                        <span asp-validation-for="EndTime" class="text-danger"></span>
-                    </div>*@
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
@@ -173,12 +144,12 @@
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
                         <label class="control-label">Start Time</label>
-                        <input class="form-control" placeholder="Start Time" />
+                        <input class="form-control datetimepicker" placeholder="Start Time" />
                         @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
                         <label class="control-label">End Time</label>
-                        <input class="form-control" placeholder="End Time" />
+                        <input class="form-control datetimepicker" placeholder="End Time" />
                         @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
                     </div>
                 </div>
@@ -245,7 +216,7 @@
 
 <!-- Datetime picker Script -->
 <script type="text/javascript">
-    $('.datetimepicker').datetimepicker({ sideBySide: true, locale: 'en' });
+    $('.datetimepicker').datetimepicker({ sideBySide: true, locale: 'en-au' });
 </script>
 <!-- Hide the competition form -->
 <script type="text/javascript">
@@ -260,111 +231,3 @@
         $('#compForm').slideDown(500);
     })
 </script>
-
-
-
-<!--- Old code below -->
-
-@*<h2>CreateEvent</h2>
-
-    <form asp-action="CreateEvent">
-        <div class="form-horizontal">
-            <h4>CreateEventViewModel</h4>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="EventName" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="EventName" class="form-control" />
-                    <span asp-validation-for="EventName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="EventVenueName" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="EventVenueName" class="form-control" />
-                    <span asp-validation-for="EventVenueName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="EventStreetName" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="EventStreetName" class="form-control" />
-                    <span asp-validation-for="EventStreetName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Suburb" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="Suburb" class="form-control" />
-                    <span asp-validation-for="Suburb" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostCode" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="PostCode" class="form-control" />
-                    <span asp-validation-for="PostCode" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartDate" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="StartDate" class="form-control" />
-                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndDate" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="EndDate" class="form-control" />
-                    <span asp-validation-for="EndDate" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="RegStartDateTime" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="RegStartDateTime" class="form-control" />
-                    <span asp-validation-for="RegStartDateTime" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="RegEndDateTime" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="RegEndDateTime" class="form-control" />
-                    <span asp-validation-for="RegEndDateTime" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="EntryCapacity" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="EntryCapacity" class="form-control" />
-                    <span asp-validation-for="EntryCapacity" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="OrganiserName" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="OrganiserName" class="form-control" />
-                    <span asp-validation-for="OrganiserName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="OrganiserClub" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="OrganiserClub" class="form-control" />
-                    <span asp-validation-for="OrganiserClub" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Confirm Create An Event" class="btn btn-danger" />
-                </div>
-            </div>
-        </div>
-    </form>
-
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>*@
-
