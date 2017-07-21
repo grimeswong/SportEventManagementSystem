@@ -88,6 +88,9 @@ namespace SportEventManagementSystem.Models.EventViewModels
         [Display(Name = "Organiser Club")]
         public string OrganiserClub { get; set; }
 
+        [Display(Name = "Public or Private Event?")]
+        public bool IsPrivate { get; set; }
+
     }
 
 }

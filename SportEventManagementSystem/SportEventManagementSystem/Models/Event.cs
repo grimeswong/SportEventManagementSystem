@@ -13,6 +13,7 @@ namespace SportEventManagementSystem.Models
         [Key]
         public string id { get; set; }
 
+        public bool IsPrivate { get; set; }
         public List<Competition> Competitions { get; set; }
         public string Name { get; set; }
         public string VenueName { get; set; }
