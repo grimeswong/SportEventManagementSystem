@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SportEventManagementSystem.Models;
-using SportEventManagementSystem.Models.AccountViewModels;
+using SportEventManagementSystem.Models.EventViewModels;
 using SportEventManagementSystem.Services;
 
 namespace SportEventManagementSystem.Controllers
@@ -19,71 +19,82 @@ namespace SportEventManagementSystem.Controllers
     public class EventController : Controller
 
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IEmailSender _emailSender;
+        private readonly ISmsSender _smsSender;
+        private readonly ILogger _logger;
+        private readonly string _externalCookieScheme;
         private readonly Data.ApplicationDbContext _context;
 
-        public EventController(Data.ApplicationDbContext context)
+        public EventController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IOptions<IdentityCookieOptions> identityCookieOptions,
+            IEmailSender emailSender,
+            ISmsSender smsSender,
+            ILoggerFactory loggerFactory, Data.ApplicationDbContext context)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
+            _logger = loggerFactory.CreateLogger<EventController>();
             _context = context;
         }
-
+       
         public IActionResult Index()    // Anyone can see this event page
         {
             ViewData["Message"] = "This is event page";
             return View();
         }
 
+        //
+        // GET: /Event/Create
         [Authorize]
         public IActionResult CreateEvent()
         {
-            ViewData["Message"] = "This is create event page";
+            ViewData["Message"] = "Create event page";
             return View();
         }
 
+        //
+        // POST: /Event/Create
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateEvent(CreateEventViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var e = new Event
+                {
+                    Name = model.Name,
+                    VenueName = model.VenueName,
+                    Description = model.Description,
+                    StreetAddress = model.StreetAddress,
+                    Suburb = model.Suburb,
+                    PostCode = model.PostCode,
+                    StartTime = model.StartTime,
+                    EndTime = model.EndTime,
+                    RegStartTime = model.RegStartTime,
+                    RegEndTime = model.RegEndTime,
+                    EntryCapacity = model.EntryCapacity,
+                    OrganiserName = model.OrganiserName,
+                    OrganiserClub = model.OrganiserClub,
+                    ownerID = QueryController.GetCurrentUserAsync(_userManager, User).Id
+                };
 
+               _context.Events.Add(e);
+                await _context.SaveChangesAsync();
+            } else
+            {
+                // If we got this far, something failed, redisplay form
+                return View(model);
+            }
 
-        //GET: /Event/CreateEvent
-        //[Authorize] // Only authorize user can create an event
-        //[HttpGet]
-        //[AllowAnonymous]
-        // public async Task<IActionResult> CreateEvent(string returnUrl = null)
-        // {
-        //     ViewData["ReturnUrl"] = returnUrl;
-        //     return View();
-        // }
-
-        ////
-        //// post: /create/event
-        //[httppost]
-        //[allowanonymous]
-        //[validateantiforgerytoken]
-        //public async task<iactionresult> login(eventviewmodel model, string returnurl = null)
-        //{
-        //    viewdata["returnurl"] = returnurl;
-        //    if (modelstate.isvalid)
-        //    {
-        //        // this doesn't count login failures towards account lockout
-        //        // to enable password failures to trigger account lockout, set lockoutonfailure: true
-        //        var result = await _signinmanager.passwordsigninasync(model.email, model.password, model.rememberme, lockoutonfailure: false);
-        //        if (result.succeeded)
-        //        {
-        //            _logger.loginformation(1, "user logged in.");
-        //            return redirecttolocal(returnurl);
-        //        }
-        //        if (result.islockedout)
-        //        {
-        //            _logger.logwarning(2, "user account locked out.");
-        //            return view("lockout");
-        //        }
-        //        else
-        //        {
-        //            modelstate.addmodelerror(string.empty, "invalid login attempt.");
-        //            return view(model);
-        //        }
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
+            return RedirectToLocal(returnUrl);
+        }
 
         #region Helpers
 
