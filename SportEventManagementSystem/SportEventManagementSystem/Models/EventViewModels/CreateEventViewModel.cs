@@ -23,7 +23,7 @@ namespace SportEventManagementSystem.Models.EventViewModels
 
         [Required]
         [StringLength(300, ErrorMessage = "Your {0} must be at max {1} character long.", MinimumLength = 1)]
-        [DataType(DataType.Text)]
+        [DataType(DataType.MultilineText)]
         [Display(Name = "Event Description")]
         public string Description { get; set; }
 
@@ -88,7 +88,8 @@ namespace SportEventManagementSystem.Models.EventViewModels
         [Display(Name = "Organiser Club")]
         public string OrganiserClub { get; set; }
 
-        [Display(Name = "Public or Private Event?")]
+        [Required]
+        [Display(Name = "Private Event?")]
         public bool IsPrivate { get; set; }
 
     }

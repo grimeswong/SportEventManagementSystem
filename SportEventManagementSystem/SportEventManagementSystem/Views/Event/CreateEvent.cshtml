@@ -5,7 +5,7 @@
 }
 
 <div class="row maincontent">
-    <form asp-action="CreateEvent">
+    <form  asp-controller="Event" asp-action="CreateEvent" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
         <p><h2>1. Event Details</h2></p>
         <div class="row"> <!-- Event content row start -->
             <div class="col-md-8">
@@ -16,29 +16,29 @@
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="StartTime" class="control-label">Start Date and Time</label>
+                        <label asp-for="StartTime" class="control-label"></label>
                         <input asp-for="StartTime" class="form-control datetimepicker" placeholder="Date & time" />
                         <span asp-validation-for="StartTime" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="EndTime" class="control-label">End Date and Time</label>
+                        <label asp-for="EndTime" class="control-label"></label>
                         <input asp-for="EndTime" class="form-control datetimepicker" placeholder="Date & time" />
                         <span asp-validation-for="EndTime" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label class="control-label">Event Description</label>
-                        <textarea class="event-description" asp-for="Description" name="eventdescription" rows="5" placeholder="Description of Event"></textarea>
-                        <span class="text-danger"></span>
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="event-description" rows="5" placeholder="Description of Event"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="RegStartTime" class="control-label">Registration Open</label>
+                        <label asp-for="RegStartTime" class="control-label"></label>
                         <input asp-for="RegStartTime" class="form-control datetimepicker" placeholder="Date & time" />
                         <span asp-validation-for="RegStartTime" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-3 col-sm-6">
-                        <label asp-for="RegEndTime" class="control-label">Registration Closed</label>
+                        <label asp-for="RegEndTime" class="control-label"></label>
                         <input asp-for="RegEndTime" class="form-control datetimepicker" placeholder="Date & time" />
                         <span asp-validation-for="RegEndTime" class="text-danger"></span>
                     </div>
@@ -51,14 +51,19 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label asp-for="EntryCapacity" class="control-label">Event Capacity</label>
+                        <label asp-for="EntryCapacity" class="control-label"></label>
                         <input asp-for="EntryCapacity" class="form-control" placeholder="Event Capacity"/>
                         <span asp-validation-for="EntryCapacity" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6">
-                        <label asp-for="OrganiserClub" class="control-label">Organiser Club</label>
+                        <label asp-for="OrganiserClub" class="control-label"></label>
                         <input asp-for="OrganiserClub" class="form-control" placeholder="Organiser Club" />
                         <span asp-validation-for="OrganiserClub" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="IsPrivate" class="control-label"></label>
+                        <input type="checkbox" asp-for="IsPrivate" class="form-control"/>
+                        <span asp-validation-for="IsPrivate" class="text-danger"></span>
                     </div>
                 </div>
             </div> <!-- end row col-md-8 -->
@@ -213,6 +218,10 @@
     </form> <!-- end of the event and competition form -->
 
 </div> <!-- end row maincontent-->
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
 
 <!-- Datetime picker Script -->
 <script type="text/javascript">

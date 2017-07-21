@@ -82,6 +82,7 @@ namespace SportEventManagementSystem.Controllers
                     EntryCapacity = model.EntryCapacity,
                     OrganiserName = model.OrganiserName,
                     OrganiserClub = model.OrganiserClub,
+                    IsPrivate = model.IsPrivate,
                     ownerID = QueryController.GetCurrentUserAsync(_userManager, User).Id
                 };
 
