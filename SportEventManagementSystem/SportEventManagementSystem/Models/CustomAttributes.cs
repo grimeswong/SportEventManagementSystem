@@ -164,8 +164,6 @@ namespace SportEventManagementSystem.Models
                 {
                     return new ValidationResult("Invalid date time format for {0}.", new[] { ErrorFieldName });
                 }
-                //If it gets to here something went very wrong
-                return null;
             }
         }
     }
