@@ -33,7 +33,7 @@ namespace SportEventManagementSystem.Controllers
             optionsBuilder.UseSqlServer(Startup.ConnectionString);
             using (var context = new ApplicationDbContext(optionsBuilder.Options))
             {
-                List<Event> events = context.Events.Include("Participants.Teams").ToList();
+                List<Event> events = context.Events.Include("Competitions.Teams").ToList();
                 return null;
             }
         }
