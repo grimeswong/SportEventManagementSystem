@@ -92,6 +92,18 @@ namespace SportEventManagementSystem.Models.EventViewModels
         [Display(Name = "Private Event?")]
         public bool IsPrivate { get; set; }
 
+        [Required]
+        public List<CompetitionModel> Competitions { get; set; }
+
+        public int CompetitionCount { get; set; }
+
     }
 
+    public class CompetitionModel
+    {
+        [Required]
+        [StringLength(4, ErrorMessage = "Please enter a valid competition name. {1} characters long.", MinimumLength = 4)]
+        [Display(Name="Competition Name")]
+        public string CompName { get; set; }
+    }
 }
