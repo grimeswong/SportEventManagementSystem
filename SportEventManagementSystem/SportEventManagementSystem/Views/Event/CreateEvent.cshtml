@@ -1,11 +1,12 @@
-@model SportEventManagementSystem.Models.EventViewModels.CreateEventViewModel
+@model CreateEventViewModel
 
 @{
     ViewData["Title"] = "CreateEvent";
 }
 
 <div class="row maincontent">
-    <form  asp-controller="Event" asp-action="CreateEvent" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+    <form  asp-controller="Event" asp-action="CreateEvent" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="EventForm">
+        <input asp-for="CompetitionCount" type="hidden" value="0"/>
         <p><h2>1. Event Details</h2></p>
         <div class="row"> <!-- Event content row start -->
             <div class="col-md-8">
@@ -106,7 +107,16 @@
                 <p>Goolge Map</p>
             </div>
         </div>  <!-- end of event location part -->
+        <div class="separater-Line"></div>
+        <h2>3. Create Competitions</h2>
 
+        <button class="btn btn-danger compbtn-bottom" id="compAdd" type="button">Add A Competition</button>
+
+
+        <div class="row" id="compFormMain">
+
+        </div>
+    <br />
         <!-- Confirm to create an event -->
         <div class="row">
             <div class="col-md-12">
@@ -116,105 +126,7 @@
         </div>  <!-- end of create event -->
 
         <br/><br/>
-        <div class="separater-Line"></div>
-        <h2>3. Create Competitions</h2>
-        <button class="btn btn-danger compbtn-bottom" id="compAdd">Add A Competition</button>
 
-        
-        <div class="row" id="compForm">   <!-- Toggle Competition Form -->
-            
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="form-group col-md-6 col-sm-12">
-                        <label class="control-label">Competition Name</label>
-                        <input class="form-control" placeholder="Competition Name" />
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                    <div class="form-group col-md-3 col-sm-6">
-                        <label class="control-label">Division</label>
-                        <input class="form-control" placeholder="Division" />
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                    <div class="form-group col-md-3 col-sm-6">
-                        <label class="control-label">Sport Type</label>
-                        <input class="form-control" placeholder="Sport Type" />
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6 col-sm-12">
-                        <label class="control-label">Competition Location</label>
-                        <input class="form-control" placeholder="Competition Name" />
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                    <div class="form-group col-md-3 col-sm-6">
-                        <label class="control-label">Start Time</label>
-                        <input class="form-control datetimepicker" placeholder="Start Time" />
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                    <div class="form-group col-md-3 col-sm-6">
-                        <label class="control-label">End Time</label>
-                        <input class="form-control datetimepicker" placeholder="End Time" />
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-4 col-sm-4">
-                        <label class="control-label">Entry Capacity</label>
-                        <input class="form-control" placeholder="Entry Capacity" />
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                    <div class="form-group col-md-4 col-sm-4">
-                        <label class="control-label">Team Minimum No.</label>
-                        <input class="form-control" placeholder="Team Minimum No." />
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                    <div class="form-group col-md-4 col-sm-4">
-                        <label class="control-label">Team Maximum No.</label>
-                        <input class="form-control" placeholder="Team Maximum No." />
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-4 col-sm-4">
-                        <label class="control-label">Minimum Age</label>
-                        <input class="form-control" placeholder="Minimum Age" />
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                    <div class="form-group col-md-4 col-sm-4">
-                        <label class="control-label">Maxmium Age</label>
-                        <input class="form-control" placeholder="Maximum Age" />
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                    <div class="form-group col-md-4 col-sm-4">
-                        <label class="control-label">Gender Restriction</label>
-                        <select>
-                            <option value="0" selected>Please select an option.</option>
-                            <option value="1">Male</option>
-                            <option value="2">Female</option>
-                            <option value="3">Mixed</option>
-                        </select>
-                        <span class="text-danger"></span>
-                        @*<input class="form-control" placeholder="Gender Restriction" />*@
-                        @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
-                    </div>
-                   
-                
-                </div>
-            </div> <!-- end of left details column -->
-            <div class="col-md-4">
-                <img class="create-img" src="~/images/banner1.jpg" alt="Image not available" />
-                <p>Add a photo</p>
-            </div> <!-- end of right image column -->
-            
-            <!-- Save Competition Buttons -->
-            <div class="col-md-12">
-                <input type="submit" value="Save Competition Details" class="btn btn-primary btn-lg" />
-                <button asp-action="Index" class="btn btn-default btn-lg">Cancel</button>
-            </div> <!-- End of save cpmpetition buttons-->
-            
-            
-        </div>  <!-- end of competition form -->
     </form> <!-- end of the event and competition form -->
 
 </div> <!-- end row maincontent-->
@@ -230,13 +142,41 @@
 <!-- Hide the competition form -->
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#compForm').hide();
+        
     }) 
     </script>
 
-<script type="text/javascript">    
+<script type="text/javascript">
+    function reValidate() {
+        var form = $("#EventForm")
+            .removeData("validator") /* added by the raw jquery.validate plugin */
+            .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
+
+        $.validator.unobtrusive.parse(form);
+    }
     $('#compAdd').on("click", function (e) {
         e.preventDefault(); // Avoid to reload the current page
-        $('#compForm').slideDown(500);
+        var url = "/Event/NewCompetition/";
+        $.ajax({
+            url: url,
+            cache: false,
+            type: "POST",
+            data: $("#EventForm").serialize(),
+            success: function (data) {
+                console.log(data);
+                var compCount = parseInt($("#CompetitionCount").val());
+                $("#CompetitionCount").val(++compCount);
+                var compDiv = "<div id='compForm" + compCount + "' </div>";
+                $('#compFormMain').append(compDiv);
+                $('#compForm' + compCount).html(data);
+                /* little fade in effect */
+                $('#compForm' + compCount).fadeIn('slow');
+                reValidate();
+
+            },
+            error: function (reponse) {
+                console.log(reponse);
+            }
+        });
     })
 </script>
