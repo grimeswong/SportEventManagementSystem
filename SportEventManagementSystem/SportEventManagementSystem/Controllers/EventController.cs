@@ -49,11 +49,22 @@ namespace SportEventManagementSystem.Controllers
         }
 
         //
+        // POST: /Event/NewCompetition
+        [Authorize]
+        [HttpPost]
+        public IActionResult NewCompetition(CreateEventViewModel model)
+        {
+            ViewData["compCount"] = model.CompetitionCount;
+            return PartialView("CompetitionForm");
+        }
+
+        //
         // GET: /Event/Create
         [Authorize]
         public IActionResult CreateEvent()
         {
             ViewData["Message"] = "Create event page";
+            ViewData["ReturnUrl"] = "/Event/";
             return View();
         }
 
