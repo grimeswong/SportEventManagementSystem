@@ -83,6 +83,18 @@ namespace SportEventManagementSystem.Data
                 ManagerID = "",
                 TeamMembers = _goldTeamMembers
             };
+            var _participants2Team = new Participants  // two team
+            {
+                Teams = _2teams
+            };
+            var _participants3Team = new Participants  // three team
+            {
+                Teams = _3teams
+            };
+            var _participants4Team = new Participants  // four team
+            {
+                Teams = _4teams
+            };
 
             _teams.Add(team); // One team set
             _2teams.Add(blueTeam);  // Two team set
@@ -119,36 +131,6 @@ namespace SportEventManagementSystem.Data
             var individual_10 = new Team { TeamName = "", ManagerID = "Lawrie Woodrow" };
             var individual_11 = new Team { TeamName = "", ManagerID = "Wade Harding" };
             var individual_12 = new Team { TeamName = "", ManagerID = "Zed Charley" };
-
-
-            // Participants
-            var _participants = new Participants  // one team
-            {
-                Teams = _teams
-            };
-            var _participants2Team = new Participants  // two team
-            {
-                Teams = _2teams
-            };
-            var _participants3Team = new Participants  // three team
-            {
-                Teams = _3teams
-            };
-            var _participants4Team = new Participants  // four team
-            {
-                Teams = _4teams
-            };
-
-            var _participants8In = new Participants  // Eight Individual
-            {
-                Teams = _individual8
-            };
-            var _participants4In = new Participants  // Eight Individual
-            {
-                Teams = _individual4
-            };
-
-
 
             /*** division ***/
             var division = new Division { DivisionName = "Division one", DivisionDescription = "Division One description" };
@@ -190,7 +172,7 @@ namespace SportEventManagementSystem.Data
             {
                 Name = "Test Comp 1",
                 Division = division,
-                Participants = _participants,
+                Teams = _teams,
                 SportType = sportType,
                 Location = "Brisbane",
                 TeamSizeMin = 1,
@@ -207,7 +189,7 @@ namespace SportEventManagementSystem.Data
             {
                 Name = "100 Meters Sprint",
                 Division = divisionMenElite,
-                Participants = _participants8In,
+                Teams = _individual8,
                 SportType = _100Meter,
                 Location = "Running Track at QSAC",
                 TeamSizeMin = 1,
@@ -222,7 +204,7 @@ namespace SportEventManagementSystem.Data
             {
                 Name = "200 Meters Sprint",
                 Division = divisionMenElite,
-                Participants = _participants8In,
+                Teams = _individual8,
                 SportType = _200Meter,
                 Location = "Running Track at QSAC",
                 TeamSizeMin = 1,
@@ -237,7 +219,7 @@ namespace SportEventManagementSystem.Data
             {
                 Name = "400 Meters Sprint",
                 Division = divisionMenElite,
-                Participants = _participants8In,
+                Teams = _individual8,
                 SportType = _400Meter,
                 Location = "Running Track at QSAC",
                 TeamSizeMin = 1,
@@ -252,7 +234,7 @@ namespace SportEventManagementSystem.Data
             {
                 Name = "800 Meters Sprint",
                 Division = divisionMenElite,
-                Participants = _participants8In,
+                Teams = _individual8,
                 SportType = _800Meter,
                 Location = "Running Track at QSAC",
                 TeamSizeMin = 1,
@@ -267,7 +249,7 @@ namespace SportEventManagementSystem.Data
             {
                 Name = "4 x 400 Meters Relay",
                 Division = divisionMenElite,
-                Participants = _participants4Team,
+                Teams = _4teams,
                 SportType = _4x400mRelay,
                 Location = "Running Track at QSAC",
                 TeamSizeMin = 4,
@@ -288,7 +270,7 @@ namespace SportEventManagementSystem.Data
             {
                 Name = "Long Jump",
                 Division = divisionMenElite,
-                Participants = _participants8In,
+                Teams = _individual8,
                 SportType = LongJump,
                 Location = "Long Jump Track at QSAC",
                 TeamSizeMin = 1,
@@ -303,7 +285,7 @@ namespace SportEventManagementSystem.Data
             {
                 Name = "High Jump",
                 Division = divisionMenElite,
-                Participants = _participants8In,
+                Teams = _individual8,
                 SportType = HighJump,
                 Location = "High Jump Mats at QSAC",
                 TeamSizeMin = 1,
@@ -318,7 +300,7 @@ namespace SportEventManagementSystem.Data
             {
                 Name = "Shotput",
                 Division = divisionMenElite,
-                Participants = _participants8In,
+                Teams =_individual8,
                 SportType = Shotput,
                 Location = "Shotput Field at QSAC",
                 TeamSizeMin = 1,
@@ -333,7 +315,7 @@ namespace SportEventManagementSystem.Data
             {
                 Name = "DiscusThrow",
                 Division = divisionMenElite,
-                Participants = _participants8In,
+                Teams = _individual8,
                 SportType = DiscusThrow,
                 Location = "Discus Field at QSAC",
                 TeamSizeMin = 1,
@@ -348,7 +330,7 @@ namespace SportEventManagementSystem.Data
             {
                 Name = "Javelin",
                 Division = divisionMenElite,
-                Participants = _participants8In,
+                Teams = _individual8,
                 SportType = Javelin,
                 Location = "Javelin Field at QSAC",
                 TeamSizeMin = 1,
@@ -373,14 +355,14 @@ namespace SportEventManagementSystem.Data
                 Description = "Description event 1",
                 StreetAddress = "188 GoodView St",
                 Suburb = "Good View",
-                Postcode = "4000",
+                PostCode = "4000",
                 StartTime = new DateTime(17, 10, 02, 15, 0, 0), // 1-Oct-17 15:00:00
                 EndTime = new DateTime(17, 10, 02, 18, 0, 0), // 1-Oct-17 18:00:00
                 RegStartTime = new DateTime(17, 08, 01, 0, 0, 0), // 1-Aug-17 00:00:00
                 RegEndTime = new DateTime(17, 08, 10, 23, 59, 59), // 1-Aug-17 23:59:59
                 EntryCapacity = 100,
-                OrginiserName = "Alan Smith",
-                OrginiserClub = "Aspley Rugby Club"
+                OrganiserName = "Alan Smith",
+                OrganiserClub = "Aspley Rugby Club"
             };
 
             var _eventTrack = new Event  // Track Event
@@ -391,14 +373,14 @@ namespace SportEventManagementSystem.Data
                 Description = "Ttrack Carnival for Juniors",
                 StreetAddress = "Kessels Road",
                 Suburb = "Nathan",
-                Postcode = "4111",
+                PostCode = "4111",
                 StartTime = new DateTime(17, 10, 01, 09, 00, 00), // 1-Oct-17 15:00:00
                 EndTime = new DateTime(17, 10, 01, 16, 0, 0), // 1-Oct-17 18:00:00
                 RegStartTime = new DateTime(17, 08, 01, 0, 0, 0), // 1-Aug-17 00:00:00
                 RegEndTime = new DateTime(17, 09, 15, 23, 59, 59), // 1-Aug-17 23:59:59
                 EntryCapacity = 400,
-                OrginiserName = "Queensland Athletic Association",
-                OrginiserClub = "Junior Nathan Athletic's"
+                OrganiserName = "Queensland Athletic Association",
+                OrganiserClub = "Junior Nathan Athletic's"
             };
 
             var _eventField = new Event  // Track Event
@@ -409,14 +391,14 @@ namespace SportEventManagementSystem.Data
                 Description = "Ttrack Carnival for Juniors",
                 StreetAddress = "Kessels Road",
                 Suburb = "Nathan",
-                Postcode = "4111",
+                PostCode = "4111",
                 StartTime = new DateTime(17, 10, 02, 09, 00, 00), // 1-Oct-17 15:00:00
                 EndTime = new DateTime(17, 10, 02, 16, 0, 0), // 1-Oct-17 18:00:00
                 RegStartTime = new DateTime(17, 08, 01, 0, 0, 0), // 1-Aug-17 00:00:00
                 RegEndTime = new DateTime(17, 09, 15, 23, 59, 59), // 1-Aug-17 23:59:59
                 EntryCapacity = 400,
-                OrginiserName = "Queensland Athletic Association",
-                OrginiserClub = "Junior Nathan Athletic's"
+                OrganiserName = "Queensland Athletic Association",
+                OrganiserClub = "Junior Nathan Athletic's"
             };
 
             //context.Events.Add(_event); // This work

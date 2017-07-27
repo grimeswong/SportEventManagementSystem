@@ -13,22 +13,24 @@ namespace SportEventManagementSystem.Models
         [Key]
         public string id { get; set; }
 
+        public bool IsPrivate { get; set; }
         public List<Competition> Competitions { get; set; }
         public string Name { get; set; }
         public string VenueName { get; set; }
         public string Description { get; set; }
         public string StreetAddress { get; set; }
         public string Suburb { get; set; }
-        public string Postcode { get; set; }
+        public string PostCode { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public DateTime RegStartTime { get; set; }
         public DateTime RegEndTime { get; set; }
         public int EntryCapacity { get; set; }
-        public string OrginiserName { get; set; }
-        public string OrginiserClub { get; set; }
+        public string OrganiserName { get; set; }
+        public string OrganiserClub { get; set; }
         public string ownerID { get; set; }
     }
+
     public class Competition
     {
         [Key]
@@ -36,7 +38,7 @@ namespace SportEventManagementSystem.Models
 
         public string Name { get; set; }
         public Division Division { get; set; }
-        public Participants Participants = new Participants();
+        public List<Team> Teams { get; set; }
         public SportType SportType { get; set; }
         public string Location { get; set; }
         public int TeamSizeMin { get; set; }
@@ -84,14 +86,6 @@ namespace SportEventManagementSystem.Models
 
         public string DivisionName { get; set; }
         public string DivisionDescription { get; set; }
-    }
-
-    public class Participants
-    {
-        [Key]
-        public string id { get; set; }
-
-        public List<Team> Teams { get; set; }
     }
 
     public class Team
