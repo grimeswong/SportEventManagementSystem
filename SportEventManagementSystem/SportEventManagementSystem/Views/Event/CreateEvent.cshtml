@@ -4,7 +4,7 @@
     ViewData["Title"] = "CreateEvent";
 }
 
-<div class="row maincontent">
+<div class="row body-content">
     <form  asp-controller="Event" asp-action="CreateEvent" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="EventForm">
         <input asp-for="CompetitionCount" type="hidden" value="0"/>
         <p><h2>1. Event Details</h2></p>
