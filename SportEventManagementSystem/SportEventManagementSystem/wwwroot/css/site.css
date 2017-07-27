@@ -110,3 +110,10 @@ textarea {
 .compbtn-bottom {
     margin-bottom: 15px;
 }
+
+/*** Input Validation ***/
+/*** Border alert for retyping required field ***/
+.input-validation-error {
+    border-color: red;
+    font-weight: bold;
+}
