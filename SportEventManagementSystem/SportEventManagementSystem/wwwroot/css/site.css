@@ -14,9 +14,7 @@
 input,
 select,
 textarea {
-    /*max-width: 280px;*/
-    max-width:100%; /* shadowG*/
- 
+    max-width: 280px;
 }
 
 /* Carousel */
@@ -55,13 +53,21 @@ textarea {
 
 /*** shadowG created following css files ***/
 
-@media screen and (max-width: 767px) {
-    .body-content {
-        max-width: 80%;
+/* Set widths on the form inputs 100% wide override the original 280px*/
+input,
+select,
+textarea {
+    max-width: 100%; 
+}
+
+/*** Apply limit 280px for the input field for register and login page for tablet and desktop ***/
+@media screen and (min-width: 480px) {
+    .limitwidth {
+        max-width: 350px;
     }
 }
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
+/* Set widths on the form inputs for mobile */
 @media screen and (max-width: 480px) {
 
     input, select, textarea {
