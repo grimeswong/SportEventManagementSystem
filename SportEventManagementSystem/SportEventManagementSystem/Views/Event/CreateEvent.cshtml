@@ -123,7 +123,7 @@
                     <input type="submit" value="Confirm to create an event" class="btn btn-primary btn-lg" />
                     <button asp-action="Index" class="btn btn-default btn-lg">Cancel</button>  
             </div>
-        </div>  <!-- end of create event -->
+        </div>
 
         <br/><br/>
 
@@ -155,7 +155,6 @@
         $.validator.unobtrusive.parse(form);
     }
     $('#compAdd').on("click", function (e) {
-        e.preventDefault(); // Avoid to reload the current page
         var url = "/Event/NewCompetition/";
         $.ajax({
             url: url,
@@ -165,18 +164,17 @@
             success: function (data) {
                 console.log(data);
                 var compCount = parseInt($("#CompetitionCount").val());
-                $("#CompetitionCount").val(++compCount);
+                $("#CompetitionCount").val(compCount+1);
                 var compDiv = "<div id='compForm" + compCount + "' </div>";
                 $('#compFormMain').append(compDiv);
                 $('#compForm' + compCount).html(data);
                 /* little fade in effect */
                 $('#compForm' + compCount).fadeIn('slow');
                 reValidate();
-
             },
             error: function (reponse) {
                 console.log(reponse);
             }
         });
-    })
+    });
 </script>
