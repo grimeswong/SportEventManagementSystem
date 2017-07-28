@@ -83,6 +83,18 @@ namespace SportEventManagementSystem.Data
                 ManagerID = "",
                 TeamMembers = _goldTeamMembers
             };
+            var _participants2Team = new Participants  // two team
+            {
+                Teams = _2teams
+            };
+            var _participants3Team = new Participants  // three team
+            {
+                Teams = _3teams
+            };
+            var _participants4Team = new Participants  // four team
+            {
+                Teams = _4teams
+            };
 
             _teams.Add(team); // One team set
             _2teams.Add(blueTeam);  // Two team set
