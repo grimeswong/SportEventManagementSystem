@@ -78,6 +78,11 @@ namespace SportEventManagementSystem.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                List<Competition> competitions = new List<Competition>();
+                foreach(CompetitionModel c in model.Competitions)
+                {
+                    competitions.Add(new Competition { Name = c.CompName });
+                }
                 var e = new Event
                 {
                     Name = model.Name,
@@ -94,7 +99,8 @@ namespace SportEventManagementSystem.Controllers
                     OrganiserName = model.OrganiserName,
                     OrganiserClub = model.OrganiserClub,
                     IsPrivate = model.IsPrivate,
-                    ownerID = QueryController.GetCurrentUserAsync(_userManager, User).Id
+                    ownerID = QueryController.GetCurrentUserAsync(_userManager, User).Id,
+                    Competitions = competitions
                 };
 
                _context.Events.Add(e);
