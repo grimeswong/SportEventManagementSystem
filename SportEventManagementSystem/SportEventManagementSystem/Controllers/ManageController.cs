@@ -56,12 +56,11 @@ namespace SportEventManagementSystem.Controllers
                 : "";
 
             var user = QueryController.GetCurrentUserAsync(_userManager, User);
-            QueryController.GetUserEvents(user);
             if (user == null)
             {
                 return View("Error");
             } 
-                var model = new Models.AccountViewModels.RegisterViewModel
+                var model = new UpdateViewModel
                 {
                     Email = user.Email,
                     FirstName = user.details.FirstName,
@@ -71,7 +70,6 @@ namespace SportEventManagementSystem.Controllers
                     Street = user.details.Street,
                     Suburb = user.details.Suburb,
                     PostCode = user.details.PostCode,
-                    Gender = user.details.Gender,
                     HomePhone = user.details.HomePhone,
                     MobilePhone = user.details.MobilePhone,
                     EmergencyContact = user.details.EmergencyContact,
@@ -93,7 +91,7 @@ namespace SportEventManagementSystem.Controllers
         // POST: /Manage/Index
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateInfo(Models.AccountViewModels.RegisterViewModel model)
+        public async Task<IActionResult> Index(UpdateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -104,6 +102,7 @@ namespace SportEventManagementSystem.Controllers
             if (user != null)
             {
                 user.Email = model.Email;
+                user.UserName = model.Email;
                 user.details = new UserDetails
                 {
                     FirstName = model.FirstName,
@@ -116,7 +115,7 @@ namespace SportEventManagementSystem.Controllers
                     DateOfBirth = model.DateOfBirth,
                     Street = model.Street,
                     Suburb = model.Suburb,
-                    Gender = model.Gender,
+                    Gender = user.details.Gender,
                     PostCode = model.PostCode
                 };
                 var result = await _userManager.UpdateAsync(user);
@@ -136,6 +135,7 @@ namespace SportEventManagementSystem.Controllers
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -169,6 +169,7 @@ namespace SportEventManagementSystem.Controllers
         //
         // POST: /Manage/SetPassword
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
         {
