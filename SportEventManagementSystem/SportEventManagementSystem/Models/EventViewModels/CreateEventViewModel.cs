@@ -102,8 +102,63 @@ namespace SportEventManagementSystem.Models.EventViewModels
     public class CompetitionModel
     {
         [Required]
-        [StringLength(4, ErrorMessage = "Please enter a valid competition name. {1} characters long.", MinimumLength = 4)]
+        [StringLength(30, ErrorMessage = "Please enter a valid competition name. {1} characters long.", MinimumLength = 4)]
         [Display(Name="Competition Name")]
         public string CompName { get; set; }
+
+        [Required]
+        [StringLength(30, ErrorMessage = "Please enter a valid division name. {1} characters long.", MinimumLength = 1)]
+        [Display(Name = "Division Name")]
+        public Division DivisionName{ get; set; }
+
+        [Required]
+        [StringLength(30, ErrorMessage = "Please enter a valid sport type. {1} characters long.", MinimumLength = 1)]
+        [Display(Name = "Sport Type")]
+        public SportType SportName{ get; set; }
+
+        [Required]
+        [StringLength(4, ErrorMessage = "Please enter a valid location. {1} characters long.", MinimumLength = 1)]
+        [Display(Name = "Compeition Location")]
+        public string Location { get; set; }
+
+        [Required]
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Competition Start Date & Time")]
+        [CustomAttributes.IsDateBetween("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "StartTime", "EndTime", "Registration State Date & Time")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
+        public DateTime StartTime { get; set; }
+
+        [Required]
+        [DataType(DataType.DateTime)]
+        [CustomAttributes.IsDateBetween("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "StartTime", "EndTime", "Registration End Date & Time")]
+        [Display(Name = "Competition End Date & Time")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
+        public DateTime EndTime { get; set; }
+
+        [Required]
+        [Range(1, 1000)]    // Range from 1 to 1000 (need to see work or not) or need to use custom one
+        [Display(Name = "Entry Capacity")]
+        public int EntryCapacity { get; set; }
+
+        [Required]
+        [Range(1, 1000)]    // Range from 1 to 1000 
+        [Display(Name = "Team Minimum Number")]
+        public int TeamSizeMin { get; set; }
+
+        [Required]
+        [Range(1, 1000)]    // Range from 1 to 1000 
+        [Display(Name = "Team Maximum Number")]
+        public int TeamSizeMax { get; set; }
+
+        [Range(0, 130)]    // Range from 0 to 130 (Age maximum) 
+        [Display(Name = "Minimum Age")]
+        public Restriction MinimumAge { get; set; }
+
+        [Range(0, 130)]    // Range from 0 to 130 (Age maximum) 
+        [Display(Name = "Maximum Age")]
+        public Restriction MaximumAge { get; set; }
+
+        [Display(Name = "Gender Restriction")]
+        public Restriction Gender { get; set; }
     }
 }
