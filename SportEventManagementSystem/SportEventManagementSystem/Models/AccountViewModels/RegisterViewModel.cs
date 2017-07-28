@@ -58,7 +58,7 @@ namespace SportEventManagementSystem.Models.AccountViewModels
         [Required]
         [DataType("Gender")]
         [Display(Name = "Gender")]
-        [IsGender(ErrorMessage = "Please select a gender.")]
+        [CustomAttributes.IsGender(ErrorMessage = "Please select a gender.")]
         public int Gender { get; set; }
 
         [Required]
@@ -94,20 +94,5 @@ namespace SportEventManagementSystem.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-    }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public sealed class IsGender : ValidationAttribute
-    {
-        private const string defaultError = "'{0}' must have at least one element.";
-        public IsGender() : base(defaultError)
-        {
-        }
-
-        public override bool IsValid(object value)
-        {
-            int v = (int)value;
-            return (v > 0 && v < 2) || false;
-        }
     }
 }
