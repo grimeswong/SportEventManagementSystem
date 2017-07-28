@@ -105,5 +105,7 @@ namespace SportEventManagementSystem.Models.EventViewModels
         [StringLength(4, ErrorMessage = "Please enter a valid competition name. {1} characters long.", MinimumLength = 4)]
         [Display(Name="Competition Name")]
         public string CompName { get; set; }
+
+        public int RestrictionCount { get; set; }
     }
 }

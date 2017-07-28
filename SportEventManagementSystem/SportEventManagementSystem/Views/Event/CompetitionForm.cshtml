@@ -85,5 +85,14 @@
 </div> <!-- end of right image column -->
 <!-- Save Competition Buttons -->
 <div class="col-md-12">
-    <button asp-action="Index" class="btn btn-default btn-lg">Remove Competition</button>
+    <button class="btn btn-default btn-lg removeCompetitionBtn" competitionId='@ViewData["compCount"]' type="button">Remove Competition</button>
 </div> <!-- End of save cpmpetition buttons-->
+
+<script>
+    $('.removeCompetitionBtn').on("click", function (e) {
+        var num = e.currentTarget.getAttribute("competitionId");
+        $('#compForm' + num).remove();
+        var newCompCount = parseInt($("#CompetitionCount").val()) - 1;
+        $("#CompetitionCount").val(newCompCount);
+    });
+</script>
