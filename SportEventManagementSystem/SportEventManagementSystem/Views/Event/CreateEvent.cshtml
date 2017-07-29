@@ -139,15 +139,9 @@
 <script type="text/javascript">
     $('.datetimepicker').datetimepicker({ sideBySide: true, locale: 'en-au' });
 </script>
-<!-- Hide the competition form -->
-<script type="text/javascript">
-    $(document).ready(function () {
-        
-    }) 
-    </script>
 
 <script type="text/javascript">
-    function reValidate() {
+    function reInitValidation() {
         var form = $("#EventForm")
             .removeData("validator") /* added by the raw jquery.validate plugin */
             .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
@@ -162,19 +156,20 @@
             type: "POST",
             data: $("#EventForm").serialize(),
             success: function (data) {
-                console.log(data);
                 var compCount = parseInt($("#CompetitionCount").val());
                 $("#CompetitionCount").val(compCount+1);
-                var compDiv = "<div id='compForm" + compCount + "' </div>";
+                var compDiv = "<div id='compForm" + compCount + "' >" + data + " </div>";
                 $('#compFormMain').append(compDiv);
-                $('#compForm' + compCount).html(data);
-                /* little fade in effect */
-                $('#compForm' + compCount).fadeIn('slow');
-                reValidate();
             },
             error: function (reponse) {
                 console.log(reponse);
             }
         });
+    });
+    
+    $('#EventForm').submit(function () {
+        //Re-initialise validation before submit to take into consideration dynamically generated competition forms
+        reInitValidation();
+        return true;
     });
 </script>
