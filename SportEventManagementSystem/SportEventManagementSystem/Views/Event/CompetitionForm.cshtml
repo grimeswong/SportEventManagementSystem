@@ -1,6 +1,7 @@
 ﻿@model CreateEventViewModel
 
 <div class="col-md-8">
+    <h1 id='title_@ViewData["compCount"]'> Competition @((int)ViewData["compCount"] + 1)</h1>
     <div class="row">
         <div class="form-group col-md-6 col-sm-12">
             <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].CompName" class="control-label"></label>
@@ -85,14 +86,59 @@
 </div> <!-- end of right image column -->
 <!-- Save Competition Buttons -->
 <div class="col-md-12">
-    <button class="btn btn-default btn-lg removeCompetitionBtn" competitionId='@ViewData["compCount"]' type="button">Remove Competition</button>
+    <button class="btn btn-default btn-lg" id='removeCompetitionBtn_@ViewData["compCount"]' type="button">Remove Competition</button>
 </div> <!-- End of save cpmpetition buttons-->
 
 <script>
-    $('.removeCompetitionBtn').on("click", function (e) {
+    var removeBtn = $("#removeCompetitionBtn_" +@ViewData["compCount"]);
+    removeBtn.on("click", function (e) {
+        console.log("checking form");
+        //Remove compForm from main event form
         var num = e.currentTarget.getAttribute("competitionId");
-        $('#compForm' + num).remove();
+        $(this).parents("[id ^= 'compForm']").eq(0).remove();
+        //Update competition counter
         var newCompCount = parseInt($("#CompetitionCount").val()) - 1;
         $("#CompetitionCount").val(newCompCount);
+
+        //Fix indexes of remaining elements
+        var i = 0;
+        $("#EventForm").find("#compFormMain [id ^='compForm']").each(function () { //Loop over each Competition Form
+            //Update comp form class name
+            this.id = this.id.replace(/compForm.*/, "compForm" + i);
+            $(this).find("h1, input, label, span, button").each(function () { //Loop over each form element
+                //Update elements to new sequential indexes
+                //Loop over each attribute and see if it matches our regex
+                for (var j = 0; j < $(this)[0].attributes.length; j++) {
+
+                    //Replace banner id and update value
+                    if ($(this)[0].attributes[j].value.startsWith("title_")) {
+                        console.log("running");
+                        $(this)[0].attributes[j].value.replace(/title_.*/, "title_" + i);
+                        $(this)[0].innerText = "Competition " + (i+1);
+                    }
+
+                    //Regex to get index from string in format of _index__
+
+                    var matches = $(this)[0].attributes[j].value.match(/_(.*?)__/);
+                    //Since regex matches full string plus second occurance is the one we are looking for check its longer then one
+                    if (matches && matches.length > 1) {
+                        //If it is longer then 1 then replace the matched index with our new updated index
+                        $(this)[0].attributes[j].value = $(this)[0].attributes[j].value.replace(matches[1], i);
+                    }
+
+                    //Regex to get index from string in format of Competitions[index]
+                    matches = $(this)[0].attributes[j].value.match(/Competitions\[(.*?)\]/);
+                    if (matches && matches.length > 1) {
+                        //If it is longer then 1 then replace the matched index with our new updated index
+                        $(this)[0].attributes[j].value = $(this)[0].attributes[j].value.replace(matches[1], i);
+                    }
+                    if ($(this)[0].attributes[j].value.indexOf(/removeCompetitionBtn_.*/) != -1) {
+                        $(this)[0].attributes[j].value.replace(/removeCompetitionBtn_.*/, "removeCompetitionBtn_" + i);
+                    }
+
+                }
+            })
+            i++;
+        });
     });
 </script>
