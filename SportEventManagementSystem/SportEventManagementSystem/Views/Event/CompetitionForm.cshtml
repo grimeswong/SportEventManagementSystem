@@ -1,83 +1,81 @@
 ﻿@model CreateEventViewModel
 
 <div class="col-md-8">
+    <h1 id='title_@ViewData["compCount"]'> Competition @((int)ViewData["compCount"] + 1)</h1>
     <div class="row">
         <div class="form-group col-md-6 col-sm-12">
             <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].CompName" class="control-label"></label>
-            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].CompName" class="form-control" placeholder="Competition Name" />
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].CompName" class="form-control" placeholder="Compeition Name"/>
             <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].CompName" class="text-danger"></span>
         </div>
         <div class="form-group col-md-3 col-sm-6">
-            <label class="control-label">Division</label>
-            <input class="form-control" placeholder="Division" />
-            @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].DivisionName" class="control-label"></label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].DivisionName"class="form-control" placeholder="Division Name" />
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].DivisionName" class="text-danger"></span>  
         </div>
         <div class="form-group col-md-3 col-sm-6">
-            <label class="control-label">Sport Type</label>
-            <input class="form-control" placeholder="Sport Type" />
-            @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].SportName" class="control-label"></label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].SportName" class="form-control" placeholder="Sport Name"/>
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].SportName" class="text-danger"></span>  
         </div>
     </div>
     <div class="row">
         <div class="form-group col-md-6 col-sm-12">
-            <label class="control-label">Competition Location</label>
-            <input class="form-control" placeholder="Competition Name" />
-            @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].Location" class="control-label"></label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].Location" class="form-control" placeholder="Competition Location" />
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].Location" class="text-danger"></span>  
         </div>
         <div class="form-group col-md-3 col-sm-6">
-            <label class="control-label">Start Time</label>
-            <input class="form-control datetimepicker" placeholder="Start Time" />
-            @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].StartTime" class="control-label"></label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].StartTime" class="form-control datetimepicker" placeholder="Start Time" />
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].StartTime" class="text-danger"></span>  
         </div>
         <div class="form-group col-md-3 col-sm-6">
-            <label class="control-label">End Time</label>
-            <input class="form-control datetimepicker" placeholder="End Time" />
-            @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].EndTime" class="control-label"></label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].EndTime" class="form-control datetimepicker" placeholder="End Time" />
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].EndTime" class="text-danger"></span>  
         </div>
     </div>
     <div class="row">
         <div class="form-group col-md-4 col-sm-4">
-            <label class="control-label">Entry Capacity</label>
-            <input class="form-control" placeholder="Entry Capacity" />
-            @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].EntryCapacity" class="control-label"></label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].EntryCapacity" class="form-control" placeholder="Entry Capacity" />
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].EntryCapacity" class="text-danger"></span>  
         </div>
         <div class="form-group col-md-4 col-sm-4">
-            <label class="control-label">Team Minimum No.</label>
-            <input class="form-control" placeholder="Team Minimum No." />
-            @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].TeamSizeMin" class="control-label"></label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].TeamSizeMin" class="form-control" placeholder="Team Minimum No." />
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].TeamSizeMin" class="text-danger"></span>  
         </div>
         <div class="form-group col-md-4 col-sm-4">
-            <label class="control-label">Team Maximum No.</label>
-            <input class="form-control" placeholder="Team Maximum No." />
-            @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].TeamSizeMax" class="control-label"></label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].TeamSizeMax" class="form-control" placeholder="Team Maximum No." />
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].TeamSizeMax" class="text-danger"></span>  
         </div>
     </div>
     <div class="row">
         <div class="form-group col-md-4 col-sm-4">
-            <label class="control-label">Minimum Age</label>
-            <input class="form-control" placeholder="Minimum Age" />
-            @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].MinimumAge" class="control-label">Minimum Age</label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].MinimumAge" class="form-control" placeholder="Minimum Age" />
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].MinimumAge" class="text-danger"></span>  
         </div>
         <div class="form-group col-md-4 col-sm-4">
-            <label class="control-label">Maxmium Age</label>
-            <input class="form-control" placeholder="Maximum Age" />
-            @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].MaximumAge" class="control-label">Maximum Age</label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].MaximumAge" class="form-control" placeholder="Maximum age" />
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].MaximumAge" class="text-danger"></span>
         </div>
         <div class="form-group col-md-4 col-sm-4">
-            <label class="control-label">Gender Restriction</label>
-            <select>
-                <option value="0" selected>Please select an option.</option>
-                <option value="1">Male</option>
-                <option value="2">Female</option>
-                <option value="3">Mixed</option>
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].Gender" class="control-label"></label>
+            <select asp-for="@Model.Competitions[(int)ViewData["compCount"]].Gender">
+                <option value=0 selected>Please select an option.</option>
+                <option value=1>Male</option>
+                <option value=2>Female</option>
+                <option value=3>Mixed</option>
             </select>
-            <span class="text-danger"></span>
-            @*<input class="form-control" placeholder="Gender Restriction" />*@
-            @*<span asp-validation-for="CompName" class="text-danger"></span>*@  <!-- For data validation -->
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].Gender" class="text-danger"></span>
         </div>
-
-
     </div>
+
 </div> <!-- end of left details column -->
 <div class="col-md-4">
     <img class="create-img" src="~/images/banner1.jpg" alt="Image not available" />
@@ -85,5 +83,20 @@
 </div> <!-- end of right image column -->
 <!-- Save Competition Buttons -->
 <div class="col-md-12">
-    <button asp-action="Index" class="btn btn-default btn-lg">Remove Competition</button>
+    <button class="btn btn-default btn-lg" id='removeCompetitionBtn_@ViewData["compCount"]' type="button">Remove Competition</button>
 </div> <!-- End of save cpmpetition buttons-->
+
+
+<!-- Datetime picker Script -->
+@*<script type="text/javascript">
+    $('.datetimepicker').datetimepicker({ sideBySide: true, locale: 'en-au' });
+</script>*@
+
+<script>
+    $('.removeCompetitionBtn').on("click", function (e) {
+        var num = e.currentTarget.getAttribute("competitionId");
+        $('#compForm' + num).remove();
+        var newCompCount = parseInt($("#CompetitionCount").val()) - 1;
+        $("#CompetitionCount").val(newCompCount);
+    });
+</script>
