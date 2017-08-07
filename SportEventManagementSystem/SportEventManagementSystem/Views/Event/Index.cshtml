@@ -12,3 +12,75 @@
     </div>
 </div>
 
+<hr />
+
+
+@*Render the created event card*@
+<div class="panel-group">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h4>Created Event List</h4></div>
+
+        <div class="panel-body">
+            <div class="col-md-10 col-md-offset-2">
+                <h5> Event 1 Title </h5>
+            </div>
+            <div class="col-md-2">
+                <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
+            </div>
+            <div class="col-md-7">
+                Event Description
+            </div>
+            <div class="col-md-3">
+                <a href="#" class="btn btn-info ">View Event</a>
+                <button class="btn btn-default" data-toggle="collapse" data-target="#comp1">More Info <span class="glyphicon glyphicon-chevron-down"></span></button>
+            </div>
+        </div>
+
+        @*Render the competition card*@
+        <div id="comp1" class="panel-collapse collapse">
+            <div class="panel-footer"><h2>Event 1 Comp 1</h2></div>
+        </div>
+    </div>
+</div>
+
+
+@*Render the participant event card*@
+<div class="panel-group">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h4>Participant Event List</h4></div>
+
+        <div class="panel-body">
+            <div class="col-md-10 col-md-offset-2">
+                <h5> Event 1 Title </h5>
+            </div>
+            <div class="col-md-2">
+                <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
+            </div>
+            <div class="col-md-7">
+                Event Description
+            </div>
+            <div class="col-md-3">
+                <a href="#" class="btn btn-info">View Event</a>
+                <button id="listItem" class="btn btn-default moreinfo" data-toggle="collapse" data-target="#comp2">More Info <span id="up" class="glyphicon glyphicon-chevron-down"></span></button>
+            </div>
+        </div>
+
+        @*Render the competition card*@
+        <div id="comp2" class="panel-collapse collapse complist">
+            <div class="panel-footer"><h2>Event 2 Comp1</h2></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#listItem").click(function () {
+        if ($("#listItem span").hasClass("glyphicon-chevron-down"))
+        {
+            $("#up").removeClass("glyphicon-chevron-down");
+            $("#up").addClass("glyphicon-chevron-up");
+        } else { 
+            $("#up").removeClass("glyphicon-chevron-up");
+            $("#up").addClass("glyphicon-chevron-down");
+        }
+    });
+</script>
