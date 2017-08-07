@@ -61,7 +61,7 @@ namespace SportEventManagementSystem.Models.EventViewModels
         [Required]
         [DataType(DataType.DateTime)]
         [Display(Name = "Registration Start Date & Time")]
-        [CustomAttributes.IsDateBetween("'{0}' must be a later date / time then event start and an earlier date / time than event end.","StartTime","EndTime", "Registration State Date & Time")]
+        [CustomAttributes.IsDateBetween("'{0}' must be a later date / time then event start and an earlier date / time than event end.","StartTime","EndTime", "Registration Start Date & Time")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
         public DateTime RegStartTime { get; set; }
 
@@ -103,18 +103,18 @@ namespace SportEventManagementSystem.Models.EventViewModels
     {
         [Required]
         [StringLength(30, ErrorMessage = "Please enter a valid competition name. {1} characters long.", MinimumLength = 4)]
-        [Display(Name="Competition Name")]
+        [Display(Name = "Competition Name")]
         public string CompName { get; set; }
 
         [Required]
         [StringLength(30, ErrorMessage = "Please enter a valid division name. {1} characters long.", MinimumLength = 1)]
         [Display(Name = "Division Name")]
-        public Division DivisionName{ get; set; }
+        public Division DivisionName { get; set; }
 
         [Required]
         [StringLength(30, ErrorMessage = "Please enter a valid sport type. {1} characters long.", MinimumLength = 1)]
         [Display(Name = "Sport Type")]
-        public SportType SportName{ get; set; }
+        public SportType SportName { get; set; }
 
         [Required]
         [StringLength(4, ErrorMessage = "Please enter a valid location. {1} characters long.", MinimumLength = 1)]
@@ -124,41 +124,42 @@ namespace SportEventManagementSystem.Models.EventViewModels
         [Required]
         [DataType(DataType.DateTime)]
         [Display(Name = "Competition Start Date & Time")]
-        [CustomAttributes.IsDateBetween("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "StartTime", "EndTime", "Registration State Date & Time")]
+        [CustomAttributes.IsDateBetween("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "StartTime", "EndTime", "Competition Start Date & Time")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
         public DateTime StartTime { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
-        [CustomAttributes.IsDateBetween("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "StartTime", "EndTime", "Registration End Date & Time")]
+        [CustomAttributes.IsDateBetween("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "StartTime", "EndTime", "Competition End Date & Time")]
         [Display(Name = "Competition End Date & Time")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
         public DateTime EndTime { get; set; }
 
         [Required]
-        [Range(1, 1000)]    // Range from 1 to 1000 (need to see work or not) or need to use custom one
+        [Range(1, 1000, ErrorMessage = "Entry Capacity must be between 1 to 1000")]    // Range from 1 to 1000 (need to see work or not) or need to use custom one
         [Display(Name = "Entry Capacity")]
         public int EntryCapacity { get; set; }
 
         [Required]
-        [Range(1, 1000)]    // Range from 1 to 1000 
+        [Range(1, 1000, ErrorMessage = "Team Minimum Number must be between 1 to 1000")]    // Range from 1 to 1000 
         [Display(Name = "Team Minimum Number")]
         public int TeamSizeMin { get; set; }
 
         [Required]
-        [Range(1, 1000)]    // Range from 1 to 1000 
+        [Range(1, 1000, ErrorMessage = "Team Maximum Number must be between 1 to 1000")]    // Range from 1 to 1000 
         [Display(Name = "Team Maximum Number")]
         public int TeamSizeMax { get; set; }
 
-        [Range(0, 130)]    // Range from 0 to 130 (Age maximum) 
+        [Range(0, 130, ErrorMessage = "Age must be between 0 to 130")]  // Range from 0 to 130 (Age minimum) 
         [Display(Name = "Minimum Age")]
-        public Restriction MinimumAge { get; set; }
+        public int MinimumAge { get; set; }
 
-        [Range(0, 130)]    // Range from 0 to 130 (Age maximum) 
+        [Range(0, 130, ErrorMessage = "Age must be between 0 to 130")]  // Range from 0 to 130 (Age maximum) 
         [Display(Name = "Maximum Age")]
-        public Restriction MaximumAge { get; set; }
-
+        public int MaximumAge { get; set; }
+        
         [Display(Name = "Gender Restriction")]
-        public Restriction Gender { get; set; }
+        [Range(1,3, ErrorMessage = "Please select one of the options")]  // 0=no selection, 1=male, 2=female, 3=mixed  
+        public int Gender { get; set; } 
     }
 }
