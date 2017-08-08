@@ -14,9 +14,19 @@
             <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].DivisionName" class="text-danger"></span>
         </div>
         <div class="form-group col-md-3 col-sm-6">
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].DivisionDescription" class="control-label"></label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].DivisionDescription" class="form-control" placeholder="Sport Name" />
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].DivisionDescription" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3 col-sm-6">
             <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].SportName" class="control-label"></label>
             <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].SportName" class="form-control" placeholder="Sport Name" />
             <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].SportName" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3 col-sm-6">
+            <label asp-for="@Model.Competitions[(int)ViewData["compCount"]].SportDescription" class="control-label"></label>
+            <input asp-for="@Model.Competitions[(int)ViewData["compCount"]].SportDescription" class="form-control" placeholder="Sport Name" />
+            <span asp-validation-for="@Model.Competitions[(int)ViewData["compCount"]].SportDescription" class="text-danger"></span>
         </div>
     </div>
     <div class="row">
