@@ -44,8 +44,14 @@ namespace SportEventManagementSystem.Controllers
 
         public IActionResult Index()    // Anyone can see this event page
         {
+            ApplicationUser user = QueryController.GetCurrentUserAsync(_userManager, User);
+            EventIndexViewModel indexModel = new EventIndexViewModel
+            {
+                CreatedEvents = QueryController.GetUserEvents(user),
+                ParticipatingEvents = QueryController.GetUserParticipation(user)
+            };
             ViewData["Message"] = "This is event page";
-            return View();
+            return View(indexModel);
         }
 
         //
