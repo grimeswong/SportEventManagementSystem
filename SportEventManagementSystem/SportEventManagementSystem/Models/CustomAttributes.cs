@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Collections;
 
 namespace SportEventManagementSystem.Models
 {
@@ -25,18 +26,18 @@ namespace SportEventManagementSystem.Models
         }
 
         [AttributeUsage(AttributeTargets.Property)]
-        public sealed class IsDateBetween : ValidationAttribute
+        public sealed class IsDateBetweenTwoFields : ValidationAttribute
         {
-            public string EventStart { get; private set; }
-            public string EventEnd { get; private set; }
+            public string StartDateField { get; private set; }
+            public string EndDateField { get; private set; }
             public string ErrorFieldName { get; private set; }
-            public IsDateBetween(string defaultError,string eventStartName, string eventEndName,string errorFieldName) : base(defaultError)
+            public IsDateBetweenTwoFields(string defaultError,string startDateField, string endDateField,string errorFieldName) : base(defaultError)
             {
-                if (string.IsNullOrEmpty(eventStartName))
+                if (string.IsNullOrEmpty(startDateField))
                 {
                     throw new ArgumentNullException("eventStartName");
                 }
-                if (string.IsNullOrEmpty(eventEndName))
+                if (string.IsNullOrEmpty(endDateField))
                 {
                     throw new ArgumentNullException("eventEndName");
                 }
@@ -44,8 +45,8 @@ namespace SportEventManagementSystem.Models
                 {
                     throw new ArgumentNullException("errorFieldName");
                 }
-                EventStart = eventStartName;
-                EventEnd = eventEndName;
+                StartDateField = startDateField;
+                EndDateField = endDateField;
                 ErrorFieldName = errorFieldName;
             }
 
@@ -61,19 +62,19 @@ namespace SportEventManagementSystem.Models
                     {
                         try
                         { // Try to reflect event start and event end dates and do validation
-                            var eventStart = validationContext.ObjectInstance.GetType()
-                            .GetProperty(EventStart);
+                            var startDate = validationContext.ObjectInstance.GetType()
+                            .GetProperty(StartDateField);
 
-                            DateTime eventStartValue = (DateTime)eventStart.GetValue(validationContext.ObjectInstance, null);
+                            DateTime startDateValue = (DateTime)startDate.GetValue(validationContext.ObjectInstance, null);
 
-                            var eventEnd = validationContext.ObjectInstance.GetType()
-                                .GetProperty(EventEnd);
+                            var endDate = validationContext.ObjectInstance.GetType()
+                                .GetProperty(EndDateField);
 
-                            DateTime eventEndValue = (DateTime)eventStart.GetValue(validationContext.ObjectInstance, null);
+                            DateTime endDateValue = (DateTime)endDate.GetValue(validationContext.ObjectInstance, null);
 
-                            if (time.CompareTo(eventStartValue) >= 0)
+                            if (time.CompareTo(startDateValue) >= 0)
                             {
-                                if (time.CompareTo(eventEndValue) <= 0)
+                                if (time.CompareTo(endDateValue) <= 0)
                                 {
                                     //Validation successful
                                     return ValidationResult.Success;
@@ -98,6 +99,76 @@ namespace SportEventManagementSystem.Models
                 else
                 {
                     return new ValidationResult("Invalid date time format for {0}.",new[] { ErrorFieldName });
+                }
+                //If it gets to here something went very wrong
+                return null;
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.Property)]
+        public sealed class IsDateBetweenNowAndField : ValidationAttribute
+        {
+            public string EndTimeField { get; private set; }
+            public string ErrorFieldName { get; private set; }
+            public IsDateBetweenNowAndField(string defaultError, string endTimeField, string errorFieldName) : base(defaultError)
+            {
+                if (string.IsNullOrEmpty(endTimeField))
+                {
+                    throw new ArgumentNullException("endTimeField");
+                }
+                if (string.IsNullOrEmpty(errorFieldName))
+                {
+                    throw new ArgumentNullException("errorFieldName");
+                }
+                EndTimeField = endTimeField;
+                ErrorFieldName = errorFieldName;
+            }
+
+            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            {
+                DateTime time;
+                //If value is of type DateTime
+                if (value is DateTime)
+                {
+                    time = (DateTime)value;
+
+                    if (value != null)
+                    {
+                        try
+                        { // Try to reflect end time from field name and do validation
+
+                            var endTime = validationContext.ObjectInstance.GetType()
+                                .GetProperty(EndTimeField);
+
+                            DateTime eventEndValue = (DateTime)endTime.GetValue(validationContext.ObjectInstance, null);
+
+                            if (time.CompareTo(DateTime.Now) >= 0)
+                            {
+                                if (time.CompareTo(eventEndValue) <= 0)
+                                {
+                                    //Validation successful
+                                    return ValidationResult.Success;
+                                }
+                            }
+                            else
+                            {
+                                return new ValidationResult("Please enter a value for {0} that is after or equal to the Event Start.", new[] { ErrorFieldName });
+                            }
+
+                        }
+                        catch (InvalidCastException e)
+                        { // If the event start / event end strings given to the validation class is wrong this will happen
+                            throw e;
+                        }
+                    }
+                    else
+                    {
+                        return new ValidationResult("Please enter a value for {0}.", new[] { ErrorFieldName });
+                    }
+                }
+                else
+                {
+                    return new ValidationResult("Invalid date time format for {0}.", new[] { ErrorFieldName });
                 }
                 //If it gets to here something went very wrong
                 return null;
@@ -141,6 +212,69 @@ namespace SportEventManagementSystem.Models
                             DateTime firstDateValue = (DateTime)firstDate.GetValue(validationContext.ObjectInstance, null);
 
                             if (time.CompareTo(firstDateValue) > 0)
+                            {
+                                return ValidationResult.Success;
+                            }
+                            else
+                            {
+                                return new ValidationResult("Please enter a value for {0} that is after End Date / Time.", new[] { ErrorFieldName });
+                            }
+
+                        }
+                        catch (InvalidCastException e)
+                        { // If the event start / event end strings given to the validation class is wrong this will happen
+                            throw e;
+                        }
+                    }
+                    else
+                    {
+                        return new ValidationResult("Please enter a value for {0}.", new[] { ErrorFieldName });
+                    }
+                }
+                else
+                {
+                    return new ValidationResult("Invalid date time format for {0}.", new[] { ErrorFieldName });
+                }
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.Property)]
+        public sealed class IsDateBefore : ValidationAttribute
+        {
+            public string EndDateField { get; private set; }
+            public string ErrorFieldName { get; private set; }
+            public IsDateBefore(string defaultError, string endDateField, string errorFieldName) : base(defaultError)
+            {
+                if (string.IsNullOrEmpty(endDateField))
+                {
+                    throw new ArgumentNullException("endDateField");
+                }
+                if (string.IsNullOrEmpty(errorFieldName))
+                {
+                    throw new ArgumentNullException("errorFieldName");
+                }
+                EndDateField = endDateField;
+                ErrorFieldName = errorFieldName;
+            }
+
+            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            {
+                DateTime time;
+                //If value is of type DateTime
+                if (value is DateTime)
+                {
+                    time = (DateTime)value;
+
+                    if (value != null)
+                    {
+                        try
+                        { // Try to reflect event start and event end dates and do validation
+                            var endDate = validationContext.ObjectInstance.GetType()
+                            .GetProperty(EndDateField);
+
+                            DateTime firstDateValue = (DateTime)endDate.GetValue(validationContext.ObjectInstance, null);
+
+                            if (time.CompareTo(firstDateValue) < 0)
                             {
                                 return ValidationResult.Success;
                             }
