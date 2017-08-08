@@ -4,7 +4,7 @@
     ViewData["Title"] = "CreateEvent";
 }
 
-<div class="row maincontent">
+<div class="row body-content">
     <form  asp-controller="Event" asp-action="CreateEvent" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="EventForm">
         <input asp-for="CompetitionCount" type="hidden" value="0"/>
         <p><h2>1. Event Details</h2></p>
@@ -108,7 +108,8 @@
             </div>
         </div>  <!-- end of event location part -->
         <div class="separater-Line"></div>
-        <h2>3. Create Competitions</h2>
+        <h2 asp-for="Competitions"></h2>
+        <span asp-validation-for="Competitions" class="text-danger"></span>
 
         <button class="btn btn-danger compbtn-bottom" id="compAdd" type="button">Add A Competition</button>
 
@@ -137,7 +138,7 @@
 
 <!-- Datetime picker Script -->
 <script type="text/javascript">
-    $('.datetimepicker').datetimepicker({ sideBySide: true, locale: 'en-au' });
+        $('.datetimepicker').datetimepicker({ sideBySide: true, locale: 'en-au' });
 </script>
 
 <script type="text/javascript">
@@ -148,7 +149,8 @@
 
         $.validator.unobtrusive.parse(form);
     }
-    $('#compAdd').on("click", function (e) {
+
+    function addCompetition() {
         var url = "/Event/NewCompetition/";
         $.ajax({
             url: url,
@@ -157,7 +159,7 @@
             data: $("#EventForm").serialize(),
             success: function (data) {
                 var compCount = parseInt($("#CompetitionCount").val());
-                $("#CompetitionCount").val(compCount+1);
+                $("#CompetitionCount").val(compCount + 1);
                 var compDiv = "<div id='compForm" + compCount + "' >" + data + " </div>";
                 $('#compFormMain').append(compDiv);
             },
@@ -165,6 +167,9 @@
                 console.log(reponse);
             }
         });
+    }
+    $('#compAdd').on("click", function (e) {
+        addCompetition();
     });
     
     $('#EventForm').submit(function () {
@@ -172,4 +177,6 @@
         reInitValidation();
         return true;
     });
+    //Add one competition on page load as each event needs a minimum of one
+    addCompetition();
 </script>
