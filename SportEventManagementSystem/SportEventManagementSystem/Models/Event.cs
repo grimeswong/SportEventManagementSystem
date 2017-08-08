@@ -25,7 +25,6 @@ namespace SportEventManagementSystem.Models
         public DateTime EndTime { get; set; }
         public DateTime RegStartTime { get; set; }
         public DateTime RegEndTime { get; set; }
-        public int EntryCapacity { get; set; }
         public string OrganiserName { get; set; }
         public string OrganiserClub { get; set; }
         public string ownerID { get; set; }
@@ -37,47 +36,36 @@ namespace SportEventManagementSystem.Models
         public string id { get; set; }
 
         public string Name { get; set; }
-        public Division Division { get; set; }
+        public Division DivisionType { get; set; }
         public List<Team> Teams { get; set; }
-        public SportType SportType { get; set; }
+        public Sport SportType { get; set; }
         public string Location { get; set; }
         public int TeamSizeMin { get; set; }
         public int TeamSizeMax { get; set; }
-        public List<Restriction> Restrictions { get; set; }
+        public int MinimumAge { get; set; }
+        public int MaximumAge { get; set; }
+        public int GenderRestriction { get; set; }
+        //public List<Restriction> Restrictions { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int EntryCapacity { get; set; }
     }
 
-    public enum RestrictionTypes
-    {
-        MinimumAge,
-        MaximumAge,
-        Gender
-    }
+    //public enum RestrictionTypes
+    //{
+    //    MinimumAge,
+    //    MaximumAge,
+    //    Gender
+    //}
 
-    public class Restriction
-    {
-        [Key]
-        public string id { get; set; }
+    //public class Restriction
+    //{
+    //    [Key]
+    //    public string id { get; set; }
 
-        public RestrictionTypes restrictionType { get; set; }
-        public int restrictionValue { get; set; }
-
-
-        //!!!!!!USE THIS IN OUT CREATE EVENT MODEL TO CHECK FOR VALUE RESTRICTION!!!!!!!!
-
-        //for (Restriction restriction in Restriction)
-        //{
-        //    if(restriction.restrictionType == RestrictionTypes.Age)
-        //    {
-        //        return <currentValue>.restrictionValue <= restrictionValue;
-        //    } else if(restriction.restrictionType == RestrictionTypes.Gender)
-        //    {
-        //        return < currentValue >.restrictionValue == restrictionValue;
-        //    }
-        //}
-    }
+    //    public RestrictionTypes restrictionType { get; set; }
+    //    public int restrictionValue { get; set; }
+    //}
 
     public class Division
     {
@@ -106,7 +94,7 @@ namespace SportEventManagementSystem.Models
         public string MemberName { get; set; }
     }
 
-    public class SportType
+    public class Sport
     {
         [Key]
         public string Name { get; set; }
