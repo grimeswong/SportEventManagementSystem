@@ -41,7 +41,7 @@ namespace SportEventManagementSystem.Controllers
             _logger = loggerFactory.CreateLogger<EventController>();
             _context = context;
         }
-       
+
         public IActionResult Index()    // Anyone can see this event page
         {
             ViewData["Message"] = "This is event page";
@@ -79,10 +79,41 @@ namespace SportEventManagementSystem.Controllers
             if (ModelState.IsValid)
             {
                 List<Competition> competitions = new List<Competition>();
-                foreach(CompetitionModel c in model.Competitions)
+                if (model.Competitions != null)
                 {
-                    competitions.Add(new Competition { Name = c.CompName });
+                    foreach (CompetitionValidationModel c in model.Competitions)
+                    {
+                        Sport sportType = new Sport
+                        {
+                            Name = c.SportName,
+                            Description = c.SportDescription
+                        };
+
+                        Division div = new Division
+                        {
+                            DivisionName = c.DivisionName,
+                            DivisionDescription = c.DivisionDescription
+                        };
+
+                        Competition comp = new Competition
+                        {
+                            Name = c.CompName,
+                            DivisionType = div,
+                            SportType = sportType,
+                            Location = c.Location,
+                            StartTime = c.CompStartTime,
+                            EndTime = c.CompEndTime,
+                            EntryCapacity = c.EntryCapacity,
+                            TeamSizeMin = c.TeamSizeMin,
+                            TeamSizeMax = c.TeamSizeMax,
+                            MinimumAge = c.MinimumAge,
+                            MaximumAge = c.MaximumAge,
+                            GenderRestriction = c.GenderRestriction
+                        };
+                        competitions.Add(comp);
+                    }
                 }
+
                 var e = new Event
                 {
                     Name = model.Name,
@@ -95,7 +126,6 @@ namespace SportEventManagementSystem.Controllers
                     EndTime = model.EndTime,
                     RegStartTime = model.RegStartTime,
                     RegEndTime = model.RegEndTime,
-                    EntryCapacity = model.EntryCapacity,
                     OrganiserName = model.OrganiserName,
                     OrganiserClub = model.OrganiserClub,
                     IsPrivate = model.IsPrivate,
@@ -103,13 +133,74 @@ namespace SportEventManagementSystem.Controllers
                     Competitions = competitions
                 };
 
-               _context.Events.Add(e);
+                _context.Events.Add(e);
                 await _context.SaveChangesAsync();
-            } else
+            }
+            else
             {
                 // If we got this far, something failed, redisplay form
                 return View(model);
             }
+
+            return RedirectToLocal(returnUrl);
+        }
+
+        //
+        // POST: /Event/Join
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Join(string eventId, string competitionId, JoinEventViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                List<TeamMember> members = new List<TeamMember>();
+                foreach (TeamMemberValidationModel m in model.members)
+                {
+                    members.Add(new TeamMember { MemberName = m.MemberName });
+                }
+                ApplicationUser user = QueryController.GetCurrentUserAsync(_userManager, User);
+                Team team = new Team
+                {
+                    ManagerID = user.Id,
+                    TeamName = model.TeamName,
+                    TeamMembers = members
+                };
+                Event evnt = QueryController.GetEventFromId(eventId);
+                Competition comp = evnt.Competitions.Where(o => o.id == competitionId).First();
+
+                comp.Teams.Add(team);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                return View(model);
+            }
+            return RedirectToLocal(returnUrl);
+        }
+
+        //
+        // POST: /Event/Leave
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Leave(string eventId, string competitionId, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            try
+            {
+                Event evnt = QueryController.GetEventFromId(eventId);
+
+                Competition comp = evnt.Competitions.Where(o => o.id == competitionId).First();
+                Team team = comp.Teams.First(o => o.ManagerID == QueryController.GetCurrentUserAsync(_userManager, User).Id);
+                comp.Teams.Remove(team);
+            } catch(ArgumentNullException e)
+            {
+                Console.WriteLine("Invalid"+e.Message);
+            }
+           
+            await _context.SaveChangesAsync();
 
             return RedirectToLocal(returnUrl);
         }
