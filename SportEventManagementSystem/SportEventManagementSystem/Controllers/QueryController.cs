@@ -26,15 +26,48 @@ namespace SportEventManagementSystem.Controllers
             return _userManager.Users.Include(x => x.details).FirstOrDefault(x => x.Id == _userManager.GetUserId(User));
         }
 
-        //Static function to get current users events - not finished yet
+        //Static function to get current users events that were created by User
         public static List<Event> GetUserEvents(ApplicationUser user)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseSqlServer(Startup.ConnectionString);
             using (var context = new ApplicationDbContext(optionsBuilder.Options))
             {
-                List<Event> events = context.Events.Include("Competitions.Teams").ToList();
-                return null;
+                var Events = context.Events;
+                List<Event> q = (from e in Events
+                                 where e.ownerID == user.Id
+                                 select e).ToList();
+
+                return q;
+            }
+        }
+
+        public static Event GetEventFromId(string id)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseSqlServer(Startup.ConnectionString);
+            using (var context = new ApplicationDbContext(optionsBuilder.Options))
+            {
+                var Events = context.Events;
+                return Events.First(o => o.id == id);
+            }
+        }
+
+        public static List<Event> GetUserParticipation(ApplicationUser user)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseSqlServer(Startup.ConnectionString);
+            using (var context = new ApplicationDbContext(optionsBuilder.Options))
+            {
+                var Events = context.Events;
+                List<Event> q = (from e in Events
+                        from c in e.Competitions
+                        from t in c.Teams
+                        where t.ManagerID == user.Id
+                        select  e ).ToList();
+
+                
+                return q;
             }
         }
     }
