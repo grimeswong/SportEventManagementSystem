@@ -33,7 +33,7 @@ namespace SportEventManagementSystem.Controllers
             optionsBuilder.UseSqlServer(Startup.ConnectionString);
             using (var context = new ApplicationDbContext(optionsBuilder.Options))
             {
-                var Events = context.Events;
+                var Events = GetFullEventsInfo();
                 List<Event> q = (from e in Events
                                  where e.ownerID == user.Id
                                  select e).ToList();
@@ -42,6 +42,25 @@ namespace SportEventManagementSystem.Controllers
             }
         }
 
+        //Function to eager load all event data
+        private static List<Event> GetFullEventsInfo()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseSqlServer(Startup.ConnectionString);
+            using (var context = new ApplicationDbContext(optionsBuilder.Options))
+            {
+                var events = context.Events
+                    .Include(e => e.Competitions)
+                        .ThenInclude(c => c.DivisionType)
+                    .Include(e => e.Competitions)
+                        .ThenInclude(c => c.Teams)
+                    .Include(e => e.Competitions)
+                        .ThenInclude(c => c.SportType);
+
+                return events.ToList();
+            }
+
+        }
         public static Event GetEventFromId(string id)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -64,7 +83,7 @@ namespace SportEventManagementSystem.Controllers
                         from c in e.Competitions
                         from t in c.Teams
                         where t.ManagerID == user.Id
-                        select  e ).ToList();
+                        select  e).Include(c => c.Competitions).ToList();
 
                 
                 return q;
