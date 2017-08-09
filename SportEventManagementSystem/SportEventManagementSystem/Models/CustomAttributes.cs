@@ -176,11 +176,11 @@ namespace SportEventManagementSystem.Models
         }
 
         [AttributeUsage(AttributeTargets.Property)]
-        public sealed class IsEndDateAfter : ValidationAttribute
+        public sealed class IsDateAfter : ValidationAttribute
         {
             public string FirstDateField { get; private set; }
             public string ErrorFieldName { get; private set; }
-            public IsEndDateAfter(string defaultError,string firstDateField, string errorFieldName) : base(defaultError)
+            public IsDateAfter(string defaultError,string firstDateField, string errorFieldName) : base(defaultError)
             {
                 if (string.IsNullOrEmpty(firstDateField))
                 {
