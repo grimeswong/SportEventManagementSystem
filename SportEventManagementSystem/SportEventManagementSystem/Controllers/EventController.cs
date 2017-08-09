@@ -71,7 +71,56 @@ namespace SportEventManagementSystem.Controllers
         {
             ViewData["Message"] = "Create event page";
             ViewData["ReturnUrl"] = "/Event/";
-            return View();
+            return View("CreateEvent");
+        }
+
+        [Authorize]
+        public IActionResult EditEvent(string id)
+        {
+            ViewData["Message"] = "Edit event page";
+            ViewData["ReturnUrl"] = "/Event/";
+            var evnt = QueryController.GetEventFromId(id);
+            List<CompetitionValidationModel> competitions = new List<CompetitionValidationModel>();
+            foreach(Competition c in evnt.Competitions)
+            {
+                competitions.Add(new CompetitionValidationModel
+                {
+                    CompName = c.Name,
+                    DivisionName = c.DivisionType.DivisionName,
+                    DivisionDescription = c.DivisionType.DivisionDescription,
+                    SportName = c.SportType.Name,
+                    SportDescription = c.SportType.Description,
+                    Location = c.Location,
+                    CompStartTime = c.StartTime,
+                    CompEndTime = c.EndTime,
+                    EntryCapacity = c.EntryCapacity,
+                    TeamSizeMin = c.TeamSizeMin,
+                    TeamSizeMax = c.TeamSizeMax,
+                    MinimumAge = c.MinimumAge,
+                    MaximumAge = c.MaximumAge,
+                    GenderRestriction = c.GenderRestriction
+                });
+            }
+
+            var model = new CreateEventViewModel
+            {
+                Name = evnt.Name,
+                VenueName = evnt.VenueName,
+                Description = evnt.Description,
+                StreetAddress = evnt.StreetAddress,
+                Suburb = evnt.Suburb,
+                PostCode = evnt.PostCode,
+                StartTime = evnt.StartTime,
+                EndTime = evnt.EndTime,
+                RegStartTime = evnt.RegStartTime,
+                RegEndTime = evnt.RegEndTime,
+                OrganiserName = evnt.OrganiserName,
+                OrganiserClub = evnt.OrganiserClub,
+                IsPrivate = evnt.IsPrivate,
+                Competitions = competitions
+            };
+
+            return View("CreateEvent", model);
         }
 
         //
@@ -141,14 +190,13 @@ namespace SportEventManagementSystem.Controllers
 
                 _context.Events.Add(e);
                 await _context.SaveChangesAsync();
+                return RedirectToLocal(returnUrl);
             }
             else
             {
                 // If we got this far, something failed, redisplay form
                 return View(model);
             }
-
-            return RedirectToLocal(returnUrl);
         }
 
         //
