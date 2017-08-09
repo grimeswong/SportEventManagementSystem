@@ -53,7 +53,7 @@ namespace SportEventManagementSystem.Models.EventViewModels
 
         [Required]
         [DataType(DataType.DateTime)]
-        [CustomAttributes.IsEndDateAfter("{0} must be a later date / time then event start.","StartTime","Event End Date & Time")]
+        [CustomAttributes.IsDateAfter("{0} must be a later date / time then event start.","StartTime","Event End Date & Time")]
         [Display(Name = "Event End Date & Time")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")]
         public DateTime EndTime { get; set; }
@@ -129,13 +129,13 @@ namespace SportEventManagementSystem.Models.EventViewModels
         [Required]
         [DataType(DataType.DateTime)]
         [Display(Name = "Competition Start Date & Time")]
-        [CustomAttributes.IsDateBetweenTwoFields("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "StartTime", "EndTime", "Competition Start Date & Time")]
+        //[CustomAttributes.IsDateBetweenTwoFields("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "StartTime", "EndTime", "Competition Start Date & Time")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
         public DateTime CompStartTime { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
-        [CustomAttributes.IsDateBetweenTwoFields("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "CompStartTime", "EndTime", "Competition End Date & Time")]
+        [CustomAttributes.IsDateAfter("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "CompStartTime", "Competition End Date & Time")]
         [Display(Name = "Competition End Date & Time")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
         public DateTime CompEndTime { get; set; }
