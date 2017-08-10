@@ -51,13 +51,13 @@ textarea {
 
 
 
-/*** shadowG created following css files ***/
+/*** Customised CSS files ***/
 
 /* Set widths on the form inputs 100% wide override the original 280px*/
 input,
 select,
 textarea {
-    max-width: 100%; 
+    max-width: 100%;
 }
 
 /*** Apply limit 280px for the input field for register and login page for tablet and desktop ***/
@@ -88,16 +88,56 @@ body {
 }
 
 /* Fix the height consistance with form-control*/
-select {    
-   padding: 6px;
-   height: 34px;
+select {
+    padding: 6px;
+    height: 34px;
 }
+
+/*hr {
+    border: 1px solid grey;
+}*/
+
+/*** Event Page ***/
+.panel-body h4 {
+    background-color: #26739d;
+    color: white;
+    padding: 5px;
+}
+
+event-separator {
+    border: 1px solid lightBlue;
+}
+
+.event-listing {
+    width: 100%;
+}
+
+.error-message {
+    text-align: center;
+}
+
+/*** Event Detail Page ***/
+.list-group li:nth-child(odd){
+    background-color:cornflowerblue;
+}
+
+.panel-heading {
+    font-size:2em;
+}
+
+.event-list-title-font li:nth-child(odd) {
+    font-weight:bold;
+    font-size:1.5em;
+    background-color:lightblue;
+}
+
 
 
 /*** Create Event Page ***/
 textarea {
     padding-left: 12px;
 }
+
 .event-description {
     width: 100%;
 }
