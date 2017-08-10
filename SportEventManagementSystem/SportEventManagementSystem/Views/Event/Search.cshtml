@@ -1,0 +1,26 @@
+@model SearchViewModel
+
+@{
+    ViewData["Title"] = "Search for events";
+}
+
+<div class="row">
+    <h2>@ViewData["Title"].</h2>
+    <div class="col-md-9">
+        <h3>@ViewData["Message"]</h3>
+    </div>
+    <div class="col-md-12 col-sd-12">
+        <form asp-controller="Event" asp-action="Search" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <input asp-for="@Model.param" />
+            <span asp-validation-for="@Model.param" class="text-danger"></span>
+            <br />
+            <button class="btn btn-danger">Search events</button>
+        </form>
+
+        @if(@Model != null && @Model.results != null && @Model.results.Count > 0)
+        {
+           
+
+        }
+    </div>
+</div>

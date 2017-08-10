@@ -18,7 +18,6 @@ namespace SportEventManagementSystem.Controllers
 {
     //[Authorize]
     public class EventController : Controller
-
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -44,13 +43,13 @@ namespace SportEventManagementSystem.Controllers
         }
 
         [Authorize]
-        public IActionResult Index()    // Anyone can see this event page
+        public IActionResult Index()
         {
             ApplicationUser user = QueryController.GetCurrentUserAsync(_userManager, User);
             EventIndexViewModel indexModel = new EventIndexViewModel
             {
-                CreatedEvents = QueryController.GetUserEvents(_context,user),
-                ParticipatingEvents = QueryController.GetUserParticipation(_context,user)
+                CreatedEvents = QueryController.GetUserEvents(_context, user),
+                ParticipatingEvents = QueryController.GetUserParticipation(_context, user)
             };
             ViewData["Message"] = "This is event page";
             return View(indexModel);
@@ -81,9 +80,9 @@ namespace SportEventManagementSystem.Controllers
         {
             ViewData["Message"] = "Edit event page";
             ViewData["ReturnUrl"] = "/Event/";
-            var evnt = QueryController.GetEventFromId(_context,id);
+            var evnt = QueryController.GetEventFromId(_context, id);
             List<CompetitionValidationModel> competitions = new List<CompetitionValidationModel>();
-            foreach(Competition c in evnt.Competitions)
+            foreach (Competition c in evnt.Competitions)
             {
                 competitions.Add(new CompetitionValidationModel
                 {
@@ -223,7 +222,7 @@ namespace SportEventManagementSystem.Controllers
                     TeamName = model.TeamName,
                     TeamMembers = members
                 };
-                Event evnt = QueryController.GetEventFromId(_context,eventId);
+                Event evnt = QueryController.GetEventFromId(_context, eventId);
                 Competition comp = evnt.Competitions.Where(o => o.id == competitionId).First();
 
                 comp.Teams.Add(team);
@@ -251,14 +250,39 @@ namespace SportEventManagementSystem.Controllers
                 Competition comp = evnt.Competitions.Where(o => o.id == competitionId).First();
                 Team team = comp.Teams.First(o => o.ManagerID == QueryController.GetCurrentUserAsync(_userManager, User).Id);
                 comp.Teams.Remove(team);
-            } catch(ArgumentNullException e)
-            {
-                Console.WriteLine("Invalid"+e.Message);
             }
-           
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine("Invalid" + e.Message);
+            }
+
             await _context.SaveChangesAsync();
 
             return RedirectToLocal(returnUrl);
+        }
+
+        //
+        // Get: /Event/Search
+        [Authorize]
+        public IActionResult Search()
+        {
+            ViewData["Message"] = "Create event page";
+            return View("Search");
+        }
+
+        //
+        // POST: /Event/Search
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search(SearchViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                model.results = QueryController.ReturnMatchingEvents(_context, model.param);
+            }
+            return View(model);
         }
 
         #region Helpers
