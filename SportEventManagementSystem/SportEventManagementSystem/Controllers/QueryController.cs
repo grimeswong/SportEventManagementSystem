@@ -29,44 +29,66 @@ namespace SportEventManagementSystem.Controllers
         //Static function to get current users events that were created by User
         public static List<Event> GetUserEvents(ApplicationDbContext context, ApplicationUser user)
         {
-                var Events = GetFullEventsInfo(context);
-                List<Event> q = (from e in Events
-                                 where e.ownerID == user.Id
-                                 select e).ToList();
+            var Events = GetFullEventsInfo(context);
+            List<Event> q = (from e in Events
+                             where e.ownerID == user.Id
+                             select e).ToList();
 
-                return q;
+            return q;
         }
 
         //Function to eager load all event data
         private static List<Event> GetFullEventsInfo(ApplicationDbContext context)
         {
-                var events = context.Events
-                    .Include(e => e.Competitions)
-                        .ThenInclude(c => c.DivisionType)
-                    .Include(e => e.Competitions)
-                        .ThenInclude(c => c.Teams)
-                    .Include(e => e.Competitions)
-                        .ThenInclude(c => c.SportType);
+            var events = context.Events
+                .Include(e => e.Competitions)
+                    .ThenInclude(c => c.DivisionType)
+                .Include(e => e.Competitions)
+                    .ThenInclude(c => c.Teams)
+                .Include(e => e.Competitions)
+                    .ThenInclude(c => c.SportType);
 
-                return events.ToList();
+            return events.ToList();
         }
 
         public static Event GetEventFromId(ApplicationDbContext context, string id)
         {
-                var Events = GetFullEventsInfo(context);
-                return Events.First(o => o.id == id);
+            var Events = GetFullEventsInfo(context);
+            return Events.First(o => o.id == id);
         }
 
+        //Really generic searching algorithm, should be remade to search specific subsets of parameters to enhance user usability
+        public static List<Event> ReturnMatchingEvents(ApplicationDbContext context, string param)
+        {
+            var events = GetFullEventsInfo(context);
+
+            List<Event> q = (from e in events
+                             from c in e.Competitions
+                             where e.Description.Contains(param) ||
+                             e.Name.Contains(param) ||
+                             e.OrganiserClub.Contains(param) ||
+                             e.OrganiserName.Contains(param) ||
+                             e.PostCode.Contains(param) ||
+                             e.Suburb.Contains(param) ||
+                             e.VenueName.Contains(param) ||
+                             c.SportType.Description.Contains(param) ||
+                             c.SportType.Name.Contains(param)
+                             select e).ToList();
+
+            return events;
+
+        }
+
+        //Searches for competitions that a user has registered a team in and returns the relevant events
         public static List<Event> GetUserParticipation(ApplicationDbContext context,ApplicationUser user)
         {
-                var Events = GetFullEventsInfo(context);
-                List<Event> q = (from e in Events
+                var events = GetFullEventsInfo(context);
+                List<Event> q = (from e in events
                         from c in e.Competitions
                         from t in c.Teams
                         where t.ManagerID == user.Id
                         select  e).ToList();
 
-                
                 return q;
         }
     }
