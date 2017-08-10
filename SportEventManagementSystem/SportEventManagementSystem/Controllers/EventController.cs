@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using SportEventManagementSystem.Models;
 using SportEventManagementSystem.Models.EventViewModels;
 using SportEventManagementSystem.Services;
+using SportEventManagementSystem.Data;
 
 namespace SportEventManagementSystem.Controllers
 {
@@ -25,7 +26,7 @@ namespace SportEventManagementSystem.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly string _externalCookieScheme;
-        private readonly Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public EventController(
             UserManager<ApplicationUser> userManager,
@@ -42,13 +43,14 @@ namespace SportEventManagementSystem.Controllers
             _context = context;
         }
 
+        [Authorize]
         public IActionResult Index()    // Anyone can see this event page
         {
             ApplicationUser user = QueryController.GetCurrentUserAsync(_userManager, User);
             EventIndexViewModel indexModel = new EventIndexViewModel
             {
-                CreatedEvents = QueryController.GetUserEvents(user),
-                ParticipatingEvents = QueryController.GetUserParticipation(user)
+                CreatedEvents = QueryController.GetUserEvents(_context,user),
+                ParticipatingEvents = QueryController.GetUserParticipation(_context,user)
             };
             ViewData["Message"] = "This is event page";
             return View(indexModel);
@@ -79,7 +81,7 @@ namespace SportEventManagementSystem.Controllers
         {
             ViewData["Message"] = "Edit event page";
             ViewData["ReturnUrl"] = "/Event/";
-            var evnt = QueryController.GetEventFromId(id);
+            var evnt = QueryController.GetEventFromId(_context,id);
             List<CompetitionValidationModel> competitions = new List<CompetitionValidationModel>();
             foreach(Competition c in evnt.Competitions)
             {
@@ -221,7 +223,7 @@ namespace SportEventManagementSystem.Controllers
                     TeamName = model.TeamName,
                     TeamMembers = members
                 };
-                Event evnt = QueryController.GetEventFromId(eventId);
+                Event evnt = QueryController.GetEventFromId(_context,eventId);
                 Competition comp = evnt.Competitions.Where(o => o.id == competitionId).First();
 
                 comp.Teams.Add(team);
@@ -244,7 +246,7 @@ namespace SportEventManagementSystem.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             try
             {
-                Event evnt = QueryController.GetEventFromId(eventId);
+                Event evnt = QueryController.GetEventFromId(_context, eventId);
 
                 Competition comp = evnt.Competitions.Where(o => o.id == competitionId).First();
                 Team team = comp.Teams.First(o => o.ManagerID == QueryController.GetCurrentUserAsync(_userManager, User).Id);
