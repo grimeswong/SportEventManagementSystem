@@ -1,14 +1,7 @@
 @model EventIndexViewModel
 
-@{
-    ViewData["Title"] = "Event";
-}
-
 <div class="row">
-    <h2>@ViewData["Title"].</h2>
-    <div class="col-md-9">
-        <h3>@ViewData["Message"]</h3>
-    </div>
+    <h2>@ViewData["Message"].</h2>
 
     <a class="btn btn-danger" asp-controller="Event" asp-action="CreateEvent">Create Event</a>
 </div>
@@ -18,10 +11,12 @@
 <div class="panel-group">
     <div class="panel panel-primary">
         <div class="panel-heading"><h4>Participant Event List</h4></div>
-        @if (Model.ParticipatingEvents.Count > 0)
+    </div>
+    @if (Model.ParticipatingEvents.Count > 0)
+    {
+        @for (int i = 0; i < Model.ParticipatingEvents.Count; i++)
         {
-            @for (int i = 0; i < Model.ParticipatingEvents.Count; i++)
-            {
+            <div class="panel panel-primary">
                 <div class="panel-body">
                     <h4> Event Name: @Model.ParticipatingEvents[i].Name </h4>
                     <div class="col-sm-2">
@@ -69,68 +64,71 @@
                         </script>
                     </div>
                 </div> <!-- end panel body -->
-                    @if (Model.ParticipatingEvents[i].Competitions.Count > 0)
+                @if (Model.ParticipatingEvents[i].Competitions.Count > 0)
                     {
-                        <div id="participatingMoreInfo@(@i)" class="panel-body panel-collapse collapse">
-                            @for (int j = 0; j < Model.ParticipatingEvents[i].Competitions.Count; j++)
-                            /*Render the competition card*/
-                            {
-                                <div id="participatingComp@(@j)">
-                                    <h4>Competition Name: @Model.ParticipatingEvents[i].Competitions[j].Name</h4>
-                                    <div class="col-sm-2">
-                                        <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
-                                    </div>
-                                    <div class="col-sm-10">
-                                        <table class="event-listing">
-                                            <tr><th>Competition Location</th><th>Start Time</th><th>End Time</th></tr>
-                                            <tr>
-                                                <td>@Model.ParticipatingEvents[i].Competitions[j].Location</td>
-                                                <td>@Model.ParticipatingEvents[i].Competitions[j].StartTime</td>
-                                                <td>@Model.ParticipatingEvents[i].Competitions[j].EndTime</td>
-
-                                            </tr>
-                                            <tr><th>Entry Capacity</th><th>Sport Type</th><th>Sport Description</th></tr>
-                                            <tr>
-                                                <td>@Model.ParticipatingEvents[i].Competitions[j].EntryCapacity</td>
-                                                <td>@Model.ParticipatingEvents[i].Competitions[j].SportType.Name</td>
-                                                <td>@Model.ParticipatingEvents[i].Competitions[j].SportType.Description</td>
-                                            </tr>
-                                            <tr><th>Division Type</th><th>Division Description</th><th>Gender Restriction</th></tr>
-                                            <tr>
-                                                <td>@Model.ParticipatingEvents[i].Competitions[j].DivisionType.DivisionName</td>
-                                                <td>@Model.ParticipatingEvents[i].Competitions[j].DivisionType.DivisionDescription</td>
-                                                @if (@Model.ParticipatingEvents[i].Competitions[j].GenderRestriction == 1)
-                                                {
-                                                    <td>Male</td>
-                                                }
-                                                else if (@Model.ParticipatingEvents[i].Competitions[j].GenderRestriction == 2)
-                                                {
-                                                    <td>Female</td>
-                                                }
-                                                else
-                                                {
-                                                    <td>Mixed</td>
-                                                }
-                                            </tr>
-                                            <tr><th>Team Minimum Number</th><th>Team Maximum Number</th></tr>
-                                            <tr><th>@Model.ParticipatingEvents[i].Competitions[j].TeamSizeMin</th><th>@Model.ParticipatingEvents[i].Competitions[j].TeamSizeMax</th></tr>
-                                            <tr><th>Minimum Age</th><th>Maximum Age</th></tr>
-                                            <tr><th>@Model.ParticipatingEvents[i].Competitions[j].MinimumAge</th><th>@Model.ParticipatingEvents[i].Competitions[j].MaximumAge</th></tr>
-                                        </table>
-                                    </div>
+                    <div id="participatingMoreInfo@(@i)" class="panel-body panel-collapse collapse">
+                        @for (int j = 0; j < Model.ParticipatingEvents[i].Competitions.Count; j++)
+                        /*Render the competition card*/
+                        {
+                            <div id="participatingComp@(@j)">
+                                <h4>Competition Name: @Model.ParticipatingEvents[i].Competitions[j].Name</h4>
+                                <div class="col-sm-2">
+                                    <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
                                 </div>
-                            }
-                        </div>
+                                <div class="col-sm-10">
+                                    <table class="event-listing">
+                                        <tr><th>Competition Location</th><th>Start Time</th><th>End Time</th></tr>
+                                        <tr>
+                                            <td>@Model.ParticipatingEvents[i].Competitions[j].Location</td>
+                                            <td>@Model.ParticipatingEvents[i].Competitions[j].StartTime</td>
+                                            <td>@Model.ParticipatingEvents[i].Competitions[j].EndTime</td>
 
-                    }
-            }
+                                        </tr>
+                                        <tr><th>Entry Capacity</th><th>Sport Type</th><th>Sport Description</th></tr>
+                                        <tr>
+                                            <td>@Model.ParticipatingEvents[i].Competitions[j].EntryCapacity</td>
+                                            <td>@Model.ParticipatingEvents[i].Competitions[j].SportType.Name</td>
+                                            <td>@Model.ParticipatingEvents[i].Competitions[j].SportType.Description</td>
+                                        </tr>
+                                        <tr><th>Division Type</th><th>Division Description</th><th>Gender Restriction</th></tr>
+                                        <tr>
+                                            <td>@Model.ParticipatingEvents[i].Competitions[j].DivisionType.DivisionName</td>
+                                            <td>@Model.ParticipatingEvents[i].Competitions[j].DivisionType.DivisionDescription</td>
+                                            @if (@Model.ParticipatingEvents[i].Competitions[j].GenderRestriction == 1)
+                                            {
+                                                <td>Male</td>
+                                            }
+                                            else if (@Model.ParticipatingEvents[i].Competitions[j].GenderRestriction == 2)
+                                            {
+                                                <td>Female</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Mixed</td>
+                                            }
+                                        </tr>
+                                        <tr><th>Team Minimum Number</th><th>Team Maximum Number</th></tr>
+                                        <tr><th>@Model.ParticipatingEvents[i].Competitions[j].TeamSizeMin</th><th>@Model.ParticipatingEvents[i].Competitions[j].TeamSizeMax</th></tr>
+                                        <tr><th>Minimum Age</th><th>Maximum Age</th></tr>
+                                        <tr><th>@Model.ParticipatingEvents[i].Competitions[j].MinimumAge</th><th>@Model.ParticipatingEvents[i].Competitions[j].MaximumAge</th></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                }
+            </div>
+
         }
-        else
-        { <!--end if (count event <= 0) -->
-            <h4 class="error-message"> No events created</h4>
-        }
-    </div>
+    }
+    else
+    { <!--end if (count event <= 0) -->
+        <h4 class="error-message"> Not participating in any events.</h4>
+    }
 </div>
+
+
 
 @*Render the created event card*@
 <div class="panel-group">
