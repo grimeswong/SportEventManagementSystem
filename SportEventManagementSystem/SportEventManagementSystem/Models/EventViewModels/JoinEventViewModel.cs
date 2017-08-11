@@ -5,8 +5,9 @@ using System.Linq;
 
 namespace SportEventManagementSystem.Models.EventViewModels
 {
-    public class JoinEventViewModel
+    public class JoinCompetitionViewModel
     { 
+        public Competition Competition { get; set; }
         public string TeamName { get; set; }
         public List<TeamMemberValidationModel> members { get; set; }
     }
