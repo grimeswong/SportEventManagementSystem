@@ -7,8 +7,6 @@ namespace SportEventManagementSystem.Models.EventViewModels
 {
     public class SearchViewModel
     {
-        public string param { get; set; }
-
         public List<Event> results { get; set; }
 
     }

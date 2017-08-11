@@ -52,7 +52,7 @@ namespace SportEventManagementSystem.Controllers
                 CreatedEvents = QueryController.GetUserEvents(_context, user),
                 ParticipatingEvents = QueryController.GetUserParticipation(_context, user)
             };
-            ViewData["Message"] = "This is event page";
+            ViewData["Message"] = "Event Dashboard";
             return View(indexModel);
         }
 
@@ -405,25 +405,22 @@ namespace SportEventManagementSystem.Controllers
         //
         // Get: /Event/Search
         [Authorize]
-        public IActionResult Search()
+        public IActionResult Search(string param = null)
         {
-            ViewData["Message"] = "Create event page";
-            return View("Search");
-        }
+            ViewData["param"] = param;
+            ViewData["Message"] = "Search for events.";
 
-        //
-        // POST: /Event/Search
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Search(SearchViewModel model, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
+            //If user entered param in url fetch results and display
+            if (param != null)
             {
-                model.results = QueryController.ReturnMatchingEvents(_context, model.param);
+                SearchViewModel model = new SearchViewModel
+                {
+                    results = QueryController.ReturnMatchingEvents(_context, param)
+                };
+            return View("Search",model);
             }
-            return View(model);
+            //Else no param just display form
+            return View("Search");
         }
 
         #region Helpers
