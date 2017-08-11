@@ -26,6 +26,11 @@ namespace SportEventManagementSystem.Controllers
             return _userManager.Users.Include(x => x.details).FirstOrDefault(x => x.Id == _userManager.GetUserId(User));
         }
 
+        public static ApplicationUser GetUserFromUserID(UserManager<ApplicationUser> _userManager, string userID)
+        {
+            return _userManager.Users.Include(x => x.details).FirstOrDefault(x => x.Id == userID);
+        }
+
         //Static function to get current users events that were created by User
         public static List<Event> GetUserEvents(ApplicationDbContext context, ApplicationUser user)
         {
@@ -53,10 +58,27 @@ namespace SportEventManagementSystem.Controllers
 
         public static Event GetEventFromId(ApplicationDbContext context, string id)
         {
-            var Events = GetFullEventsInfo(context);
-            return Events.First(o => o.id == id);
+            try
+            {
+                var evnt = GetFullEventsInfo(context).First(o => o.id == id);
+                return evnt;
+            } catch(InvalidOperationException)
+            {
+                return null;
+            }            
         }
 
+        public static Competition GetCompetitionFromId(Event evnt, string id)
+        {
+            try
+            {
+                return evnt.Competitions.First(c => c.id == id);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         //Really generic searching algorithm, should be remade to search specific subsets of parameters to enhance user usability
         public static List<Event> ReturnMatchingEvents(ApplicationDbContext context, string param)
         {
