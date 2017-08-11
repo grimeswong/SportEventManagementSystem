@@ -9,17 +9,246 @@
     <div class="col-md-9">
         <h3>@ViewData["Message"]</h3>
     </div>
-    <div class="col-md-3">
-        @foreach(Event e in Model.CreatedEvents)
-        {
-            
-        }
 
-        @foreach(Event e in Model.ParticipatingEvents)
-        {
+    <a class="btn btn-danger" asp-controller="Event" asp-action="CreateEvent">Create Event</a>
+</div>
+<hr />
 
+@*Render the participant event card*@
+<div class="panel-group">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h4>Participant Event List</h4></div>
+        @if (Model.ParticipatingEvents.Count > 0)
+        {
+            @for (int i = 0; i < Model.ParticipatingEvents.Count; i++)
+            {
+                <div class="panel-body">
+                    <h4> Event Name: @Model.ParticipatingEvents[i].Name </h4>
+                    <div class="col-sm-2">
+                        <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
+                    </div>
+                    <div class="col-sm-7">
+                        <table class="event-listing">
+                            <tr><th>Event Description</th></tr>
+                            <tr><td>@Model.ParticipatingEvents[i].Description</td></tr>
+                            <tr><th>Event Start Time</th><th>Event End Time</th></tr>
+                            <tr><td>@Model.ParticipatingEvents[i].StartTime</td><td>@Model.ParticipatingEvents[i].EndTime</td></tr>
+                            <tr><th>Registration Start Time</th><th>Registration End Time</th></tr>
+                            <tr><td>@Model.ParticipatingEvents[i].RegStartTime</td><td>@Model.ParticipatingEvents[i].RegEndTime</td></tr>
+                            <tr><th>Organiser Name</th><th>Organiser Club</th></tr>
+                            <tr><td>@Model.ParticipatingEvents[i].OrganiserName</td><td>@Model.ParticipatingEvents[i].OrganiserClub</td></tr>
+                            <tr><th>Event Venue Name</th><th>Event Address</th></tr>
+                            <tr><td>@Model.ParticipatingEvents[i].VenueName</td><td>@Model.ParticipatingEvents[i].StreetAddress</td></tr>
+                            <tr><th>Suburb</th><th>Postcode</th></tr>
+                            <tr><td>@Model.ParticipatingEvents[i].Suburb</td><td>@Model.ParticipatingEvents[i].PostCode</td></tr>
+                            <tr><th>Event Type</th></tr>
+                            @if (@Model.ParticipatingEvents[i].IsPrivate == false)
+                            {
+                                <tr><td>Public</td></tr>
+                            }
+                            else
+                            {
+                                <tr><td>Private</td></tr>
+                            }
+                        </table>
+                    </div>
+                    <div class="col-sm-3">
+                        <a class="btn btn-info" href="@Url.Action("ViewEvent", "Event", new { eventID = Model.ParticipatingEvents[@i].id })">View Event</a>
+                        <button class="btn btn-default" id="btnParticipatingMoreInfo@(@i)" data-event-num="@i" data-toggle="collapse" data-target="#participatingMoreInfo@(@i)">More Info <span id="chevron" class="glyphicon glyphicon-chevron-down"></span></button>
+                        <script>
+                            $("#btnParticipatingMoreInfo@(@i)").click(function () {
+                                 var chevron = $(this).children("#chevron")[0];
+                                 if ($(chevron).hasClass("glyphicon-chevron-down")) {
+                                     $(chevron).removeClass("glyphicon-chevron-down");
+                                     $(chevron).addClass("glyphicon-chevron-up");
+                                 } else {
+                                     $(chevron).removeClass("glyphicon-chevron-up");
+                                     $(chevron).addClass("glyphicon-chevron-down");
+                                 }
+                            });
+                        </script>
+                    </div>
+                </div> <!-- end panel body -->
+                    @if (Model.ParticipatingEvents[i].Competitions.Count > 0)
+                    {
+                        <div id="participatingMoreInfo@(@i)" class="panel-body panel-collapse collapse">
+                            @for (int j = 0; j < Model.ParticipatingEvents[i].Competitions.Count; j++)
+                            /*Render the competition card*/
+                            {
+                                <div id="participatingComp@(@j)">
+                                    <h4>Competition Name: @Model.ParticipatingEvents[i].Competitions[j].Name</h4>
+                                    <div class="col-sm-2">
+                                        <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <table class="event-listing">
+                                            <tr><th>Competition Location</th><th>Start Time</th><th>End Time</th></tr>
+                                            <tr>
+                                                <td>@Model.ParticipatingEvents[i].Competitions[j].Location</td>
+                                                <td>@Model.ParticipatingEvents[i].Competitions[j].StartTime</td>
+                                                <td>@Model.ParticipatingEvents[i].Competitions[j].EndTime</td>
+
+                                            </tr>
+                                            <tr><th>Entry Capacity</th><th>Sport Type</th><th>Sport Description</th></tr>
+                                            <tr>
+                                                <td>@Model.ParticipatingEvents[i].Competitions[j].EntryCapacity</td>
+                                                <td>@Model.ParticipatingEvents[i].Competitions[j].SportType.Name</td>
+                                                <td>@Model.ParticipatingEvents[i].Competitions[j].SportType.Description</td>
+                                            </tr>
+                                            <tr><th>Division Type</th><th>Division Description</th><th>Gender Restriction</th></tr>
+                                            <tr>
+                                                <td>@Model.ParticipatingEvents[i].Competitions[j].DivisionType.DivisionName</td>
+                                                <td>@Model.ParticipatingEvents[i].Competitions[j].DivisionType.DivisionDescription</td>
+                                                @if (@Model.ParticipatingEvents[i].Competitions[j].GenderRestriction == 1)
+                                                {
+                                                    <td>Male</td>
+                                                }
+                                                else if (@Model.ParticipatingEvents[i].Competitions[j].GenderRestriction == 2)
+                                                {
+                                                    <td>Female</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Mixed</td>
+                                                }
+                                            </tr>
+                                            <tr><th>Team Minimum Number</th><th>Team Maximum Number</th></tr>
+                                            <tr><th>@Model.ParticipatingEvents[i].Competitions[j].TeamSizeMin</th><th>@Model.ParticipatingEvents[i].Competitions[j].TeamSizeMax</th></tr>
+                                            <tr><th>Minimum Age</th><th>Maximum Age</th></tr>
+                                            <tr><th>@Model.ParticipatingEvents[i].Competitions[j].MinimumAge</th><th>@Model.ParticipatingEvents[i].Competitions[j].MaximumAge</th></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                    }
+            }
         }
-        <a class="btn btn-danger" asp-controller="Event" asp-action="CreateEvent">Create Event</a>
+        else
+        { <!--end if (count event <= 0) -->
+            <h4 class="error-message"> No events created</h4>
+        }
     </div>
 </div>
 
+@*Render the created event card*@
+<div class="panel-group">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h4>Created Event List</h4></div>
+    </div>
+        @if (Model.CreatedEvents.Count > 0)
+        {
+            @for (int i = 0; i < Model.CreatedEvents.Count; i++)
+            {
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <h4> Event Name: @Model.CreatedEvents[i].Name </h4>
+                        <div class="col-sm-2">
+                            <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
+                        </div>
+                        <div class="col-sm-7">
+                            <table class="event-listing">
+                                <tr><th>Event Description</th></tr>
+                                <tr><td>@Model.CreatedEvents[i].Description</td></tr>
+                                <tr><th>Event Start Time</th><th>Event End Time</th></tr>
+                                <tr><td>@Model.CreatedEvents[i].StartTime</td><td>@Model.CreatedEvents[i].EndTime</td></tr>
+                                <tr><th>Registration Start Time</th><th>Registration End Time</th></tr>
+                                <tr><td>@Model.CreatedEvents[i].RegStartTime</td><td>@Model.CreatedEvents[i].RegEndTime</td></tr>
+                                <tr><th>Organiser Name</th><th>Organiser Club</th></tr>
+                                <tr><td>@Model.CreatedEvents[i].OrganiserName</td><td>@Model.CreatedEvents[i].OrganiserClub</td></tr>
+                                <tr><th>Event Venue Name</th><th>Event Address</th></tr>
+                                <tr><td>@Model.CreatedEvents[i].VenueName</td><td>@Model.CreatedEvents[i].StreetAddress</td></tr>
+                                <tr><th>Suburb</th><th>Postcode</th></tr>
+                                <tr><td>@Model.CreatedEvents[i].Suburb</td><td>@Model.CreatedEvents[i].PostCode</td></tr>
+                                <tr><th>Event Type</th></tr>
+                                @if (@Model.CreatedEvents[i].IsPrivate == false)
+                                {
+                                    <tr><td>Public</td></tr>
+                                }
+                                else
+                                {
+                                    <tr><td>Private</td></tr>
+                                }
+                            </table>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-info" href="@Url.Action("ViewEvent", "Event", new { eventID = Model.CreatedEvents[@i].id })">View Event</a>
+                            <button class="btn btn-default" id="btnCreatedMoreInfo@(@i)" data-event-num="@i" data-toggle="collapse" data-target="#createdMoreInfo@(@i)">More Info <span id="chevron" class="glyphicon glyphicon-chevron-down"></span></button>
+                            <script>
+                            $("#btnCreatedMoreInfo@(@i)").click(function () {
+                                 var chevron = $(this).children("#chevron")[0];
+                                 if ($(chevron).hasClass("glyphicon-chevron-down")) {
+                                     $(chevron).removeClass("glyphicon-chevron-down");
+                                     $(chevron).addClass("glyphicon-chevron-up");
+                                 } else {
+                                     $(chevron).removeClass("glyphicon-chevron-up");
+                                     $(chevron).addClass("glyphicon-chevron-down");
+                                 }
+                            });
+                            </script>
+                        </div>
+                    </div> <!-- end panel body -->
+                    @if (Model.CreatedEvents[i].Competitions.Count > 0)
+                    {
+                        <div id="createdMoreInfo@(@i)" class="panel-body panel-collapse collapse">
+                            @for (int j = 0; j < Model.CreatedEvents[i].Competitions.Count; j++)
+                            /*Render the competition card*/
+                            {
+                                <div id="createdComp@(@j)">
+                                    <h4>Competition Name: @Model.CreatedEvents[i].Competitions[j].Name</h4>
+                                    <div class="col-sm-2">
+                                        <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <table class="event-listing">
+                                            <tr><th>Competition Location</th><th>Start Time</th><th>End Time</th></tr>
+                                            <tr>
+                                                <td>@Model.CreatedEvents[i].Competitions[j].Location</td>
+                                                <td>@Model.CreatedEvents[i].Competitions[j].StartTime</td>
+                                                <td>@Model.CreatedEvents[i].Competitions[j].EndTime</td>
+
+                                            </tr>
+                                            <tr><th>Entry Capacity</th><th>Sport Type</th><th>Sport Description</th></tr>
+                                            <tr>
+                                                <td>@Model.CreatedEvents[i].Competitions[j].EntryCapacity</td>
+                                                <td>@Model.CreatedEvents[i].Competitions[j].SportType.Name</td>
+                                                <td>@Model.CreatedEvents[i].Competitions[j].SportType.Description</td>
+                                            </tr>
+                                            <tr><th>Division Type</th><th>Division Description</th><th>Gender Restriction</th></tr>
+                                            <tr>
+                                                <td>@Model.CreatedEvents[i].Competitions[j].DivisionType.DivisionName</td>
+                                                <td>@Model.CreatedEvents[i].Competitions[j].DivisionType.DivisionDescription</td>
+                                                @if (@Model.CreatedEvents[i].Competitions[j].GenderRestriction == 1)
+                                                {
+                                                    <td>Male</td>
+                                                }
+                                                else if (@Model.CreatedEvents[i].Competitions[j].GenderRestriction == 2)
+                                                {
+                                                    <td>Female</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Mixed</td>
+                                                }
+                                            </tr>
+                                            <tr><th>Team Minimum Number</th><th>Team Maximum Number</th></tr>
+                                            <tr><th>@Model.CreatedEvents[i].Competitions[j].TeamSizeMin</th><th>@Model.CreatedEvents[i].Competitions[j].TeamSizeMax</th></tr>
+                                            <tr><th>Minimum Age</th><th>Maximum Age</th></tr>
+                                            <tr><th>@Model.CreatedEvents[i].Competitions[j].MinimumAge</th><th>@Model.CreatedEvents[i].Competitions[j].MaximumAge</th></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                    }
+                </div>
+
+            }
+        }
+        else
+        { <!--end if (count event < 1) -->
+            <h4 class="error-message"> No events created</h4>
+        }
+    </div>
