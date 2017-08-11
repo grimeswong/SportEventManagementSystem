@@ -82,23 +82,28 @@ namespace SportEventManagementSystem.Controllers
         //Really generic searching algorithm, should be remade to search specific subsets of parameters to enhance user usability
         public static List<Event> ReturnMatchingEvents(ApplicationDbContext context, string param)
         {
-            var events = GetFullEventsInfo(context);
+            try
+            {
+                var events = GetFullEventsInfo(context);
 
-            List<Event> q = (from e in events
-                             from c in e.Competitions
-                             where e.Description.Contains(param) ||
-                             e.Name.Contains(param) ||
-                             e.OrganiserClub.Contains(param) ||
-                             e.OrganiserName.Contains(param) ||
-                             e.PostCode.Contains(param) ||
-                             e.Suburb.Contains(param) ||
-                             e.VenueName.Contains(param) ||
-                             c.SportType.Description.Contains(param) ||
-                             c.SportType.Name.Contains(param)
-                             select e).ToList();
-
-            return events;
-
+                List<Event> q = (from e in events
+                                 from c in e.Competitions
+                                 where e.Description.Contains(param) ||
+                                 (e.Name ?? "").Contains(param) ||
+                                 (e.OrganiserClub ?? "").Contains(param) ||
+                                 (e.OrganiserName ?? "").Contains(param) ||
+                                 (e.PostCode ?? "").Contains(param) ||
+                                 (e.Suburb ?? "").Contains(param) ||
+                                 (e.VenueName ?? "").Contains(param) ||
+                                 ((c.SportType.Description ?? "").Contains(param) ||
+                                 (c.SportType.Name ?? "").Contains(param))
+                                 select e).ToList();
+                return q;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         //Searches for competitions that a user has registered a team in and returns the relevant events
