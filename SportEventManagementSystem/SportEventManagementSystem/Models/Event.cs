@@ -51,22 +51,6 @@ namespace SportEventManagementSystem.Models
         public int EntryCapacity { get; set; }
     }
 
-    //public enum RestrictionTypes
-    //{
-    //    MinimumAge,
-    //    MaximumAge,
-    //    Gender
-    //}
-
-    //public class Restriction
-    //{
-    //    [Key]
-    //    public string id { get; set; }
-
-    //    public RestrictionTypes restrictionType { get; set; }
-    //    public int restrictionValue { get; set; }
-    //}
-
     public class Division
     {
         [Key]
@@ -84,6 +68,11 @@ namespace SportEventManagementSystem.Models
         public string TeamName { get; set; }
         public string ManagerID { get; set; }
         public List<TeamMember> TeamMembers { get; set; }
+
+        public bool IsIndividual()
+        {
+            return this.TeamMembers.Count > 0;
+        }
     }
 
     public class TeamMember
@@ -100,4 +89,21 @@ namespace SportEventManagementSystem.Models
         public string Name { get; set; }
         public string Description { get; set; }
     }
+
+    //Unused code for having an extensible list of restrictions - non hard coded.. May be used in the future
+    //public enum RestrictionTypes
+    //{
+    //    MinimumAge,
+    //    MaximumAge,
+    //    Gender
+    //}
+
+    //public class Restriction
+    //{
+    //    [Key]
+    //    public string id { get; set; }
+
+    //    public RestrictionTypes restrictionType { get; set; }
+    //    public int restrictionValue { get; set; }
+    //}
 }
