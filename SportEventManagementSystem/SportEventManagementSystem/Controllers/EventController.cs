@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SportEventManagementSystem.Models;
@@ -55,6 +53,7 @@ namespace SportEventManagementSystem.Controllers
                 CreatedEvents = QueryController.GetUserEvents(_context, user),
                 ParticipatingEvents = QueryController.GetUserParticipation(_context, user)
             };
+            
             ViewData["Message"] = "Event Dashboard";
             return View(indexModel);
         }
@@ -165,6 +164,7 @@ namespace SportEventManagementSystem.Controllers
 
                 _context.Events.Add(e);
                 await _context.SaveChangesAsync();
+                TempData["modal"] = "Successfully created event.";
                 return RedirectToLocal(returnUrl);
             }
             else
@@ -325,6 +325,7 @@ namespace SportEventManagementSystem.Controllers
                     }
                    
                 }
+                TempData["modal"] = "Successfully modified event details. Participants have been removed and notified via email to rejoin.";
                 return RedirectToLocal(returnUrl);
             }
             else
@@ -383,12 +384,14 @@ namespace SportEventManagementSystem.Controllers
 
                 comp.Teams.Add(team);
                 await _context.SaveChangesAsync();
+                TempData["modal"] = "Successfully joined competition.";
+                return RedirectToLocal(returnUrl);
             }
             else
             {
                 return View(model);
             }
-            return RedirectToLocal(returnUrl);
+
         }
 
         //
@@ -407,6 +410,8 @@ namespace SportEventManagementSystem.Controllers
                 Team team = comp.Teams.First(o => o.ManagerID == QueryController.GetCurrentUserAsync(_userManager, User).Id);
                 comp.Teams.Remove(team);
                 await _context.SaveChangesAsync();
+                TempData["modal"] = "Successfully left competition.";
+
             }
             catch (ArgumentNullException e)
             {
