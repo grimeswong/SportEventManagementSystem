@@ -19,6 +19,7 @@ namespace SportEventManagementSystem.Controllers
     //[Authorize]
     public class EventController : Controller
     {
+        #region Declaration
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -41,6 +42,8 @@ namespace SportEventManagementSystem.Controllers
             _logger = loggerFactory.CreateLogger<EventController>();
             _context = context;
         }
+        #endregion
+
         //
         // GET: /Event/
         [Authorize]
@@ -84,166 +87,15 @@ namespace SportEventManagementSystem.Controllers
             return PartialView("CompetitionForm");
         }
 
+        #region CreateEvent
         //
-        // GET: /Event/Create
+        // GET: /Event/CreateEvent
         [Authorize]
         public IActionResult CreateEvent()
         {
             ViewData["Message"] = "Create event page";
             ViewData["ReturnUrl"] = "/Event/";
             return View("CreateEvent");
-        }
-
-        [Authorize]
-        public IActionResult EditEvent(string eventID)
-        {
-            ViewData["Message"] = "Edit event page";
-            ViewData["ReturnUrl"] = "/Event/";
-            var evnt = QueryController.GetEventFromId(_context, eventID);
-            if(evnt != null)
-            {
-                if(evnt.ownerID ==  _userManager.GetUserId(User))
-                {
-                    List<CompetitionValidationModel> competitions = new List<CompetitionValidationModel>();
-                    foreach (Competition c in evnt.Competitions)
-                    {
-                        competitions.Add(new CompetitionValidationModel
-                        {
-                            CompName = c.Name,
-                            DivisionName = c.DivisionType.DivisionName,
-                            DivisionDescription = c.DivisionType.DivisionDescription,
-                            SportName = c.SportType.Name,
-                            SportDescription = c.SportType.Description,
-                            Location = c.Location,
-                            CompStartTime = c.StartTime,
-                            CompEndTime = c.EndTime,
-                            EntryCapacity = c.EntryCapacity,
-                            TeamSizeMin = c.TeamSizeMin,
-                            TeamSizeMax = c.TeamSizeMax,
-                            MinimumAge = c.MinimumAge,
-                            MaximumAge = c.MaximumAge,
-                            GenderRestriction = c.GenderRestriction
-                        });
-                    }
-
-                    var model = new CreateEventViewModel
-                    {
-                        Name = evnt.Name,
-                        VenueName = evnt.VenueName,
-                        Description = evnt.Description,
-                        StreetAddress = evnt.StreetAddress,
-                        Suburb = evnt.Suburb,
-                        PostCode = evnt.PostCode,
-                        StartTime = evnt.StartTime,
-                        EndTime = evnt.EndTime,
-                        RegStartTime = evnt.RegStartTime,
-                        RegEndTime = evnt.RegEndTime,
-                        OrganiserName = evnt.OrganiserName,
-                        OrganiserClub = evnt.OrganiserClub,
-                        IsPrivate = evnt.IsPrivate,
-                        Competitions = competitions
-                    };
-                    ViewData["eventID"] = eventID;
-                    return View("EditEvent", model);
-                } else
-                { //User trying to modify an event they didn't create
-                    ViewData["error"] = "You do not have permissions to edit this event.";
-                    return View("Error");
-                }
-              
-            }
-            else
-            { //If event is null
-                ViewData["error"] = "Not a valid event.";
-                return View("Error");
-            }
-            
-        }
-
-        //
-        // POST: /Event/EditEvent
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditEvent(CreateEventViewModel model,string eventID,string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
-            {
-                List<Competition> competitions = new List<Competition>();
-                if (model.Competitions != null)
-                {
-                    foreach (CompetitionValidationModel c in model.Competitions)
-                    {
-                        Sport sportType = new Sport
-                        {
-                            Name = c.SportName,
-                            Description = c.SportDescription
-                        };
-
-                        Division div = new Division
-                        {
-                            DivisionName = c.DivisionName,
-                            DivisionDescription = c.DivisionDescription
-                        };
-
-                        Competition comp = new Competition
-                        {
-                            Name = c.CompName,
-                            DivisionType = div,
-                            SportType = sportType,
-                            Location = c.Location,
-                            StartTime = c.CompStartTime,
-                            EndTime = c.CompEndTime,
-                            EntryCapacity = c.EntryCapacity,
-                            TeamSizeMin = c.TeamSizeMin,
-                            TeamSizeMax = c.TeamSizeMax,
-                            MinimumAge = c.MinimumAge,
-                            MaximumAge = c.MaximumAge,
-                            GenderRestriction = c.GenderRestriction
-                        };
-                        competitions.Add(comp);
-                    }
-                }
-                
-                var e = QueryController.GetEventFromId(_context,eventID);
-                e.Name = model.Name;
-                e.VenueName = model.VenueName;
-                e.Description = model.Description;
-                e.StreetAddress = model.StreetAddress;
-                e.Suburb = model.Suburb;
-                e.PostCode = model.PostCode;
-                e.StartTime = model.StartTime;
-                e.EndTime = model.EndTime;
-                e.RegStartTime = model.RegStartTime;
-                e.RegEndTime = model.RegEndTime;
-                e.OrganiserName = model.OrganiserName;
-                e.OrganiserClub = model.OrganiserClub;
-                e.IsPrivate = model.IsPrivate;
-                e.ownerID = QueryController.GetCurrentUserAsync(_userManager, User).Id;
-                e.Competitions = competitions;
-
-                _context.Events.Update(e);
-                await _context.SaveChangesAsync();
-
-                //Loop over each competition, notify the participating users that the events changed and remove them from the event.
-                foreach(Competition c in e.Competitions)
-                {
-                    foreach(Team t in c.Teams)
-                    {
-                        ApplicationUser manager = QueryController.GetUserFromUserID(_userManager, t.ManagerID);
-                        await _emailSender.SendEmailAsync(manager.Email, "Event details changed notice!", "Dear, " + manager.details.FirstName + " " + manager.details.LastName +
-                                                    ", \n this email is to notify you that the event you are participating in has had a change of details and thus you have been removed from the competition you registered in." +
-                                                    " Please rejoin if you wish by visiting this link: http://localhost:49494/Event/JoinCompetition?eventID="+ e.id + "&competitionID="+c.id);
-                    }
-                }
-                return RedirectToLocal(returnUrl);
-            }
-            else
-            {
-                // If we got this far, something failed, redisplay form
-                return View(model);
-            }
         }
 
         //
@@ -321,9 +173,171 @@ namespace SportEventManagementSystem.Controllers
                 return View(model);
             }
         }
+        #endregion
+
+        #region EditEvent
+        //
+        // GET: /Event/EditEvent?eventID=
+        [Authorize]
+        public IActionResult EditEvent(string eventID)
+        {
+            ViewData["Message"] = "Edit event page";
+            ViewData["ReturnUrl"] = "/Event/";
+            var evnt = QueryController.GetEventFromId(_context, eventID);
+            if(evnt != null)
+            {
+                if(evnt.ownerID ==  _userManager.GetUserId(User))
+                {
+                    List<CompetitionValidationModel> competitions = new List<CompetitionValidationModel>();
+                    foreach (Competition c in evnt.Competitions)
+                    {
+                        competitions.Add(new CompetitionValidationModel
+                        {
+                            CompName = c.Name,
+                            DivisionName = c.DivisionType.DivisionName,
+                            DivisionDescription = c.DivisionType.DivisionDescription,
+                            SportName = c.SportType.Name,
+                            SportDescription = c.SportType.Description,
+                            Location = c.Location,
+                            CompStartTime = c.StartTime,
+                            CompEndTime = c.EndTime,
+                            EntryCapacity = c.EntryCapacity,
+                            TeamSizeMin = c.TeamSizeMin,
+                            TeamSizeMax = c.TeamSizeMax,
+                            MinimumAge = c.MinimumAge,
+                            MaximumAge = c.MaximumAge,
+                            GenderRestriction = c.GenderRestriction
+                        });
+                    }
+
+                    var model = new CreateEventViewModel
+                    {
+                        Name = evnt.Name,
+                        VenueName = evnt.VenueName,
+                        Description = evnt.Description,
+                        StreetAddress = evnt.StreetAddress,
+                        Suburb = evnt.Suburb,
+                        PostCode = evnt.PostCode,
+                        StartTime = evnt.StartTime,
+                        EndTime = evnt.EndTime,
+                        RegStartTime = evnt.RegStartTime,
+                        RegEndTime = evnt.RegEndTime,
+                        OrganiserName = evnt.OrganiserName,
+                        OrganiserClub = evnt.OrganiserClub,
+                        IsPrivate = evnt.IsPrivate,
+                        Competitions = competitions
+                    };
+                    ViewData["eventID"] = eventID;
+                    return View("EditEvent", model);
+                } else
+                { //User trying to modify an event they didn't create
+                    ViewData["error"] = "You do not have permissions to edit this event.";
+                    return View("Error");
+                }
+              
+            }
+            else
+            { //If event is null
+                ViewData["error"] = "Not a valid event.";
+                return View("Error");
+            }
+            
+        }
 
         //
-        // GET: /Event/JoinCompetition
+        // POST: /Event/EditEvent?eventID=
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditEvent(CreateEventViewModel model,string eventID,string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                List<Competition> competitions = new List<Competition>();
+                if (model.Competitions != null)
+                {
+                    foreach (CompetitionValidationModel c in model.Competitions)
+                    {
+                        Sport sportType = new Sport
+                        {
+                            Name = c.SportName,
+                            Description = c.SportDescription
+                        };
+
+                        Division div = new Division
+                        {
+                            DivisionName = c.DivisionName,
+                            DivisionDescription = c.DivisionDescription
+                        };
+
+                        Competition comp = new Competition
+                        {
+                            Name = c.CompName,
+                            DivisionType = div,
+                            SportType = sportType,
+                            Location = c.Location,
+                            StartTime = c.CompStartTime,
+                            EndTime = c.CompEndTime,
+                            EntryCapacity = c.EntryCapacity,
+                            TeamSizeMin = c.TeamSizeMin,
+                            TeamSizeMax = c.TeamSizeMax,
+                            MinimumAge = c.MinimumAge,
+                            MaximumAge = c.MaximumAge,
+                            GenderRestriction = c.GenderRestriction
+                        };
+                        competitions.Add(comp);
+                    }
+                }
+                
+                var e = QueryController.GetEventFromId(_context,eventID);
+                e.Name = model.Name;
+                e.VenueName = model.VenueName;
+                e.Description = model.Description;
+                e.StreetAddress = model.StreetAddress;
+                e.Suburb = model.Suburb;
+                e.PostCode = model.PostCode;
+                e.StartTime = model.StartTime;
+                e.EndTime = model.EndTime;
+                e.RegStartTime = model.RegStartTime;
+                e.RegEndTime = model.RegEndTime;
+                e.OrganiserName = model.OrganiserName;
+                e.OrganiserClub = model.OrganiserClub;
+                e.IsPrivate = model.IsPrivate;
+                e.ownerID = QueryController.GetCurrentUserAsync(_userManager, User).Id;
+                e.Competitions = competitions;
+
+                _context.Events.Update(e);
+                await _context.SaveChangesAsync();
+
+                //Loop over each competition, notify the participating users that the events changed and remove them from the event.
+                foreach(Competition c in e.Competitions)
+                {
+                    if(c.Teams != null)
+                    {
+                        foreach (Team t in c.Teams)
+                        {
+                            ApplicationUser manager = QueryController.GetUserFromUserID(_userManager, t.ManagerID);
+                            await _emailSender.SendEmailAsync(manager.Email, "Event details changed notice!", "Dear, " + manager.details.FirstName + " " + manager.details.LastName +
+                                                        ", \n this email is to notify you that the event you are participating in has had a change of details and thus you have been removed from the competition you registered in." +
+                                                        " Please rejoin if you wish by visiting this link: http://localhost:49494/Event/JoinCompetition?eventID=" + e.id + "&competitionID=" + c.id);
+                        }
+                    }
+                   
+                }
+                return RedirectToLocal(returnUrl);
+            }
+            else
+            {
+                // If we got this far, something failed, redisplay form
+                return View(model);
+            }
+        }
+
+        #endregion Event
+
+        //
+        // GET: /Event/JoinCompetition?eventID=&competitionID=
         [Authorize]
         public IActionResult JoinCompetition(string eventID, string competitionID)
         {
@@ -341,8 +355,9 @@ namespace SportEventManagementSystem.Controllers
             ViewData["error"] = "Invalid event or competition.";
             return View("Error");
         }
+
         //
-        // POST: /Event/JoinCompetition
+        // POST: /Event/JoinCompetition?eventID=&competitionID=
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -391,19 +406,18 @@ namespace SportEventManagementSystem.Controllers
                 Competition comp = evnt.Competitions.Where(o => o.id == competitionId).First();
                 Team team = comp.Teams.First(o => o.ManagerID == QueryController.GetCurrentUserAsync(_userManager, User).Id);
                 comp.Teams.Remove(team);
+                await _context.SaveChangesAsync();
             }
             catch (ArgumentNullException e)
             {
                 Console.WriteLine("Invalid" + e.Message);
             }
 
-            await _context.SaveChangesAsync();
-
             return RedirectToLocal(returnUrl);
         }
 
         //
-        // Get: /Event/Search
+        // Get: /Event/Search?param=
         [Authorize]
         public IActionResult Search(string param = null)
         {
