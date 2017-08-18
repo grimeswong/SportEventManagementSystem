@@ -1,133 +1,175 @@
 @using SportEventManagementSystem.Controllers
 
-@model Event
+@model ViewEventViewModel
 @inject UserManager<ApplicationUser> UserManager
 
-    @{
+@{
     ViewData["Title"] = "Event Details";
-    }
-    <div class="panel panel-primary">
-            <div class="panel-heading clearfix">
-                <h2 class="pull-left">@Model.Name Details</h2>
-                <div id="buttons" class="pull-right">
-                    @if(UserManager.GetUserId(User) == @Model.ownerID)
-                {
-                        <a class="btn btn-warning pull-right" href="@Url.Action("EditEvent", "Event", new { eventID = @Model.id})">Edit Event</a>
-                }
+}
 
-                </div>
-
-            </div>
-            <h2></h2>
-            <div class="row">
-                <div class="col-sm-4">
-                    <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
-                </div>
-                <div class="col-sm-4">
-                    <ul class="list-group event-list-title-font">
-                        <li class="list-group-item">Event Description</li>
-                        <li class="list-group-item">@Model.Description</li>
-                        <li class="list-group-item">Event Start Time</li>
-                        <li class="list-group-item">@Model.StartTime</li>
-                        <li class="list-group-item">Event End Time</li>
-                        <li class="list-group-item">@Model.EndTime</li>
-                        <li class="list-group-item">Registration Start Time</li>
-                        <li class="list-group-item">@Model.RegStartTime</li>
-                        <li class="list-group-item">Registration End Time</li>
-                        <li class="list-group-item">@Model.RegEndTime</li>
-                        <li class="list-group-item">Organiser Name</li>
-                        <li class="list-group-item">@Model.OrganiserName</li>
-                    </ul>
-                </div>
-                <div class="col-sm-4">
-                    <ul class="list-group event-list-title-font">
-                        <li class="list-group-item">Organiser Club</li>
-                        <li class="list-group-item">@Model.OrganiserClub</li>
-                        <li class="list-group-item">Event Venue Name</li>
-                        <li class="list-group-item">@Model.VenueName</li>
-                        <li class="list-group-item">Event Address</li>
-                        <li class="list-group-item">@Model.StreetAddress</li>
-                        <li class="list-group-item">Suburb</li>
-                        <li class="list-group-item">@Model.Suburb</li>
-                        <li class="list-group-item">Postcode</li>
-                        <li class="list-group-item">@Model.PostCode</li>
-                        <li class="list-group-item">Event Type</li>
-                        @if (@Model.IsPrivate == false)
-                {
-                            <li class="list-group-item">Public</li>
-                }
-                else
-                {
-                            <li class="list-group-item">Private</li>
-                }
-                    </ul>
-                </div>
-
-            </div>
+<div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+        <h2 class="pull-left">@Model.CurrentEvent.Name Details</h2>
+        <div id="buttons" class="pull-right">
+            @if (UserManager.GetUserId(User) == @Model.CurrentEvent.ownerID)
+            {
+                <a class="btn btn-warning pull-right" href="@Url.Action("EditEvent", "Event", new { eventID = @Model.CurrentEvent.id})">Edit Event</a>
+                        <button class="btn btn-info pull-right" onclick="openInviteModal()"> Invite</button>
+            }
 
         </div>
 
+    </div>
+    <h2></h2>
+    <div class="row">
+        <div class="col-sm-4">
+            <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
+        </div>
+        <div class="col-sm-4">
+            <ul class="list-group event-list-title-font">
+                <li class="list-group-item">Event Description</li>
+                <li class="list-group-item">@Model.CurrentEvent.Description</li>
+                <li class="list-group-item">Event Start Time</li>
+                <li class="list-group-item">@Model.CurrentEvent.StartTime</li>
+                <li class="list-group-item">Event End Time</li>
+                <li class="list-group-item">@Model.CurrentEvent.EndTime</li>
+                <li class="list-group-item">Registration Start Time</li>
+                <li class="list-group-item">@Model.CurrentEvent.RegStartTime</li>
+                <li class="list-group-item">Registration End Time</li>
+                <li class="list-group-item">@Model.CurrentEvent.RegEndTime</li>
+                <li class="list-group-item">Organiser Name</li>
+                <li class="list-group-item">@Model.CurrentEvent.OrganiserName</li>
+            </ul>
+        </div>
+        <div class="col-sm-4">
+            <ul class="list-group event-list-title-font">
+                <li class="list-group-item">Organiser Club</li>
+                <li class="list-group-item">@Model.CurrentEvent.OrganiserClub</li>
+                <li class="list-group-item">Event Venue Name</li>
+                <li class="list-group-item">@Model.CurrentEvent.VenueName</li>
+                <li class="list-group-item">Event Address</li>
+                <li class="list-group-item">@Model.CurrentEvent.StreetAddress</li>
+                <li class="list-group-item">Suburb</li>
+                <li class="list-group-item">@Model.CurrentEvent.Suburb</li>
+                <li class="list-group-item">Postcode</li>
+                <li class="list-group-item">@Model.CurrentEvent.PostCode</li>
+                <li class="list-group-item">Event Type</li>
+                @if (@Model.CurrentEvent.IsPrivate == false)
+                {
+                    <li class="list-group-item">Public</li>
+                }
+                else
+                {
+                    <li class="list-group-item">Private</li>
+                }
+            </ul>
+        </div>
 
-    @if (Model.Competitions.Count > 0)
+    </div>
+
+</div>
+
+
+@if (@Model.CurrentEvent.Competitions.Count > 0)
+{
+    for (int j = 0; j < @Model.CurrentEvent.Competitions.Count; j++)
     {
-        for (int j = 0; j <  Model.Competitions.Count; j++)
-        {
-            <div class="panel panel-primary">
-                <div class="panel-heading clearfix">
-                    <h3 class="pull-left">@Model.Competitions[j].Name</h3>
-                    <a class="btn btn-success pull-right" href="@Url.Action("JoinCompetition", "Event", new { eventID = @Model.id, competitionID = @Model.Competitions[j].id })">Join Competition</a>
-                </div>
-                <div class="panel-body">
-                    <div class="col-sm-4"><img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" /></div>
-                    <div class="col-sm-4">
-                        <ul class="list-group">
-                            <li class="list-group-item">Competition Location</li>
-                            <li class="list-group-item">@Model.Competitions[j].Location</li>
-                            <li class="list-group-item">Start Time</li>
-                            <li class="list-group-item">@Model.Competitions[j].StartTime</li>
-                            <li class="list-group-item">End Time</li>
-                            <li class="list-group-item">@Model.Competitions[j].EndTime</li>
-                            <li class="list-group-item">Competition Sport Type</li>
-                            <li class="list-group-item">@Model.Competitions[j].SportType.Name</li>
-                            <li class="list-group-item">Competition Sport Description</li>
-                            <li class="list-group-item">@Model.Competitions[j].SportType.Description</li>
-                            <li class="list-group-item">Entry Capacity</li>
-                            <li class="list-group-item">@Model.Competitions[j].EntryCapacity</li>
-                            <li class="list-group-item">Gender Restriction</li>
-                            @if (@Model.Competitions[j].GenderRestriction == 1)
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <h3 class="pull-left">@Model.CurrentEvent.Competitions[j].Name</h3>
+                <h3 class="text-center">Participants: @Model.CurrentEvent.Competitions[j].getParticipants() / @Model.CurrentEvent.Competitions[j].EntryCapacity</h3>
+                @if (Model.CurrentEvent.Competitions[j].getParticipants() != @Model.CurrentEvent.Competitions[j].EntryCapacity)
+                {
+                    //Competition not full
+                    <a class="btn btn-success pull-right" href="@Url.Action("JoinCompetition", "Event", new { eventID = @Model.CurrentEvent.id, competitionID = @Model.CurrentEvent.Competitions[j].id })"> Join Competition</a>
+                }
+                else
+                {
+                    //Competition full disable button
+                    <a class="btn btn-success pull-right" disabled> Join Competition</a>
+                }
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-4"><img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" /></div>
+                <div class="col-sm-4">
+                    <ul class="list-group">
+                        <li class="list-group-item">Competition Location</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].Location</li>
+                        <li class="list-group-item">Start Time</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].StartTime</li>
+                        <li class="list-group-item">End Time</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].EndTime</li>
+                        <li class="list-group-item">Competition Sport Type</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].SportType.Name</li>
+                        <li class="list-group-item">Competition Sport Description</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].SportType.Description</li>
+                        <li class="list-group-item">Entry Capacity</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].EntryCapacity</li>
+                        <li class="list-group-item">Gender Restriction</li>
+                        @if (@Model.CurrentEvent.Competitions[j].GenderRestriction == 1)
                     {
-                                <li class="list-group-item">Male</li>
+                            <li class="list-group-item">Male</li>
                         }
-                        else if (@Model.Competitions[j].GenderRestriction == 2)
+                        else if (@Model.CurrentEvent.Competitions[j].GenderRestriction == 2)
                         {
 
-                                <li class="list-group-item">Female</li>
+                            <li class="list-group-item">Female</li>
                         }
                         else
                         {
-                                <li class="list-group-item">Mixed</li>
+                            <li class="list-group-item">Mixed</li>
                         }
-                        </ul>
-                    </div>
-                    <div class="col-sm-4">
-                        <ul class="list-group">
-                            <li class="list-group-item">Division Type</li>
-                            <li class="list-group-item">@Model.Competitions[j].DivisionType.DivisionName</li>
-                            <li class="list-group-item">Division Description</li>
-                            <li class="list-group-item">@Model.Competitions[j].DivisionType.DivisionDescription</li>
-                            <li class="list-group-item">Team Minimum Number</li>
-                            <li class="list-group-item">@Model.Competitions[j].TeamSizeMin</li>
-                            <li class="list-group-item">Team Maximum Number</li>
-                            <li class="list-group-item">@Model.Competitions[j].TeamSizeMax</li>
-                            <li class="list-group-item">Minimum Age</li>
-                            <li class="list-group-item">@Model.Competitions[j].MinimumAge</li>
-                            <li class="list-group-item">Maximum Age</li>
-                            <li class="list-group-item">@Model.Competitions[j].MaximumAge</li>
+                    </ul>
+                </div>
+                <div class="col-sm-4">
+                    <ul class="list-group">
+                        <li class="list-group-item">Division Type</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].DivisionType.DivisionName</li>
+                        <li class="list-group-item">Division Description</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].DivisionType.DivisionDescription</li>
+                        <li class="list-group-item">Team Minimum Number</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].TeamSizeMin</li>
+                        <li class="list-group-item">Team Maximum Number</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].TeamSizeMax</li>
+                        <li class="list-group-item">Minimum Age</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].MinimumAge</li>
+                        <li class="list-group-item">Maximum Age</li>
+                        <li class="list-group-item">@Model.CurrentEvent.Competitions[j].MaximumAge</li>
 
 
-                        </ul>
-                    </div>
+                    </ul>
                 </div>
             </div>
+        </div>
     }
 }
+<div id="inviteModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                Type an email to invite<button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Event" asp-action="Invite" method="post" id="InviteForm">
+                    <input type="hidden" asp-for="@Model.Invite.eventID" value="@Model.CurrentEvent.id" />
+                    <input asp-for="@Model.Invite.email" />
+                    <span asp-validation-for="@Model.Invite.email" class="text-danger"></span>
+                    <button class="btn-success">Invite</button>
+                </form>
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    function openInviteModal() {
+        $("#inviteModal").modal('show');
+    }
+</script>
+

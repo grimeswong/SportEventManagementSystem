@@ -21,17 +21,14 @@ namespace SportEventManagementSystem.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly string _externalCookieScheme;
         private readonly ApplicationDbContext _context;
-
         public EventController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IOptions<IdentityCookieOptions> identityCookieOptions,
             IEmailSender emailSender,
-            ISmsSender smsSender,
             ILoggerFactory loggerFactory, Data.ApplicationDbContext context)
         {
             _userManager = userManager;
@@ -39,6 +36,7 @@ namespace SportEventManagementSystem.Controllers
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
             _logger = loggerFactory.CreateLogger<EventController>();
             _context = context;
+            _emailSender = emailSender;
         }
         #endregion
 
@@ -53,7 +51,7 @@ namespace SportEventManagementSystem.Controllers
                 CreatedEvents = QueryController.GetUserEvents(_context, user),
                 ParticipatingEvents = QueryController.GetUserParticipation(_context, user)
             };
-            
+
             ViewData["Message"] = "Event Dashboard";
             return View(indexModel);
         }
@@ -63,17 +61,21 @@ namespace SportEventManagementSystem.Controllers
         [Authorize]
         public IActionResult ViewEvent(string eventID)
         {
-            var model = QueryController.GetEventFromId(_context, eventID);
+            var model = new ViewEventViewModel
+            {
+                CurrentEvent = QueryController.GetEventFromId(_context, eventID)
+            };
 
-            if(model != null)
+            if (model != null)
             {
                 return View(model);
-            } else
+            }
+            else
             {
                 ViewData["error"] = "Invalid event.";
                 return View("Error");
             }
-            
+
         }
 
         //
@@ -184,9 +186,9 @@ namespace SportEventManagementSystem.Controllers
             ViewData["Message"] = "Edit event page";
             ViewData["ReturnUrl"] = "/Event/";
             var evnt = QueryController.GetEventFromId(_context, eventID);
-            if(evnt != null)
+            if (evnt != null)
             {
-                if(evnt.ownerID ==  _userManager.GetUserId(User))
+                if (evnt.ownerID == _userManager.GetUserId(User))
                 {
                     List<CompetitionValidationModel> competitions = new List<CompetitionValidationModel>();
                     foreach (Competition c in evnt.Competitions)
@@ -229,19 +231,41 @@ namespace SportEventManagementSystem.Controllers
                     };
                     ViewData["eventID"] = eventID;
                     return View("EditEvent", model);
-                } else
+                }
+                else
                 { //User trying to modify an event they didn't create
                     ViewData["error"] = "You do not have permissions to edit this event.";
                     return View("Error");
                 }
-              
+
             }
             else
             { //If event is null
                 ViewData["error"] = "Not a valid event.";
                 return View("Error");
             }
-            
+
+        }
+
+        //
+        // POST: Event/Invite
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Invite(ViewEventViewModel model)
+        {
+            Event e = QueryController.GetEventFromId(_context, model.Invite.eventID);
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = QueryController.GetCurrentUserAsync(_userManager, User);
+
+                await _emailSender.SendEmailAsync(model.Invite.email, "You have been invited to join this event by " + user.details.FirstName + " " + user.details.LastName, "Dear future competition participant, \n \n" + user.details.FirstName + " " + user.details.LastName +
+               " has invited you to join their event: " + e.Name + ". To become a part of this event please go here: http://localhost:49494/Event/ViewEvent?eventID=" + e.id);
+                TempData["modal"] = "Invited email address: " + model.Invite.email + " to join this event";
+                return RedirectToLocal("/Event/ViewEvent?eventID=" + e.id);
+            }
+            TempData["modal"] = "Error occured whilst inviting the entered email. Please try again.";
+            return RedirectToLocal("/Event/ViewEvent?eventID=" + e.id);
         }
 
         //
@@ -249,7 +273,7 @@ namespace SportEventManagementSystem.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditEvent(CreateEventViewModel model,string eventID,string returnUrl = null)
+        public async Task<IActionResult> EditEvent(CreateEventViewModel model, string eventID, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -289,8 +313,8 @@ namespace SportEventManagementSystem.Controllers
                         competitions.Add(comp);
                     }
                 }
-                
-                var e = QueryController.GetEventFromId(_context,eventID);
+
+                var e = QueryController.GetEventFromId(_context, eventID);
                 e.Name = model.Name;
                 e.VenueName = model.VenueName;
                 e.Description = model.Description;
@@ -311,19 +335,19 @@ namespace SportEventManagementSystem.Controllers
                 await _context.SaveChangesAsync();
 
                 //Loop over each competition, notify the participating users that the events changed and remove them from the event.
-                foreach(Competition c in e.Competitions)
+                foreach (Competition c in e.Competitions)
                 {
-                    if(c.Teams != null)
+                    if (c.Teams != null)
                     {
                         foreach (Team t in c.Teams)
                         {
                             ApplicationUser manager = QueryController.GetUserFromUserID(_userManager, t.ManagerID);
                             await _emailSender.SendEmailAsync(manager.Email, "Event details changed notice!", "Dear, " + manager.details.FirstName + " " + manager.details.LastName +
-                                                        ", \n this email is to notify you that the event you are participating in has had a change of details and thus you have been removed from the competition you registered in." +
-                                                        " Please rejoin if you wish by visiting this link: http://localhost:49494/Event/JoinCompetition?eventID=" + e.id + "&competitionID=" + c.id);
+                                                        ", \n this email is to notify you that the event you are participating in has had a change of details." +
+                                                        " Please review the changed details and decide if you wish to stay participating: http://localhost:49494/Event/JoinCompetition?eventID=" + e.id + "&competitionID=" + c.id);
                         }
                     }
-                   
+
                 }
                 TempData["modal"] = "Successfully modified event details. Participants have been removed and notified via email to rejoin.";
                 return RedirectToLocal(returnUrl);
@@ -345,7 +369,7 @@ namespace SportEventManagementSystem.Controllers
             ViewData["ReturnUrl"] = "/Event/";
             var competition = QueryController.GetCompetitionFromId(QueryController.GetEventFromId(_context, eventID), competitionID);
 
-            if(competition != null)
+            if (competition != null)
             {
                 JoinCompetitionViewModel model = new JoinCompetitionViewModel
                 {
@@ -367,6 +391,17 @@ namespace SportEventManagementSystem.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                Event evnt = QueryController.GetEventFromId(_context, eventId);
+                Competition comp = evnt.Competitions.Where(o => o.id == competitionId).First();
+
+                //Server side error checking
+                //if(model.)
+                //int memberCount = 
+                // if(model.members)
+                if (comp.EntryCapacity + model.members.Count + 1 > comp.EntryCapacity)
+                { //If trying to enter
+
+                }
                 List<TeamMember> members = new List<TeamMember>();
                 foreach (TeamMemberValidationModel m in model.members)
                 {
@@ -379,8 +414,7 @@ namespace SportEventManagementSystem.Controllers
                     TeamName = model.TeamName,
                     TeamMembers = members
                 };
-                Event evnt = QueryController.GetEventFromId(_context, eventId);
-                Competition comp = evnt.Competitions.Where(o => o.id == competitionId).First();
+
 
                 comp.Teams.Add(team);
                 await _context.SaveChangesAsync();
@@ -432,11 +466,22 @@ namespace SportEventManagementSystem.Controllers
             //If user entered param in url fetch results and display
             if (param != null)
             {
+                List<Event> results = QueryController.ReturnMatchingEvents(_context, param);
+
+                //Determine is user is allowed to see them (private events)
+                foreach (Event e in results)
+                {
+                    //If the event is private and user is not the owner - don't display in results
+                    if (e.IsPrivate && e.ownerID != _userManager.GetUserId(User))
+                    {
+                        results.Remove(e);
+                    }
+                }
                 SearchViewModel model = new SearchViewModel
                 {
-                    results = QueryController.ReturnMatchingEvents(_context, param)
+                    results = results
                 };
-            return View("Search",model);
+                return View("Search", model);
             }
             //Else no param just display form
             return View("Search");
