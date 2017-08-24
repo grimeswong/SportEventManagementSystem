@@ -468,20 +468,23 @@ namespace SportEventManagementSystem.Controllers
             {
                 List<Event> results = QueryController.ReturnMatchingEvents(_context, param);
 
-                //Determine is user is allowed to see them (private events)
-                foreach (Event e in results)
+                if(results != null)
                 {
-                    //If the event is private and user is not the owner - don't display in results
-                    if (e.IsPrivate && e.ownerID != _userManager.GetUserId(User))
+                    //Determine is user is allowed to see them (private events)
+                    foreach (Event e in results)
                     {
-                        results.Remove(e);
+                        //If the event is private and user is not the owner - don't display in results
+                        if (e.IsPrivate && e.ownerID != _userManager.GetUserId(User))
+                        {
+                            results.Remove(e);
+                        }
                     }
+                    SearchViewModel model = new SearchViewModel
+                    {
+                        results = results
+                    };
+                    return View("Search", model);
                 }
-                SearchViewModel model = new SearchViewModel
-                {
-                    results = results
-                };
-                return View("Search", model);
             }
             //Else no param just display form
             return View("Search");
