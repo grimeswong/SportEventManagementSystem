@@ -79,18 +79,18 @@ namespace SportEventManagementSystem.Controllers
             try
             {
                 var events = GetFullEventsInfo(context);
-
+                var lowP = param.ToLower();
                 List<Event> q = (from e in events
                                  from c in e.Competitions
-                                 where e.Description.Contains(param) ||
-                                 (e.Name ?? "").Contains(param) ||
-                                 (e.OrganiserClub ?? "").Contains(param) ||
-                                 (e.OrganiserName ?? "").Contains(param) ||
-                                 (e.PostCode ?? "").Contains(param) ||
-                                 (e.Suburb ?? "").Contains(param) ||
-                                 (e.VenueName ?? "").Contains(param) ||
-                                 ((c.SportType.Description ?? "").Contains(param) ||
-                                 (c.SportType.Name ?? "").Contains(param))
+                                 where e.Description.Contains(lowP) ||
+                                 (e.Name.ToLower() ?? "").Contains(lowP) ||
+                                 (e.OrganiserClub.ToLower() ?? "").Contains(lowP) ||
+                                 (e.OrganiserName.ToLower() ?? "").Contains(lowP) ||
+                                 (e.PostCode.ToLower() ?? "").Contains(lowP) ||
+                                 (e.Suburb.ToLower() ?? "").Contains(lowP) ||
+                                 (e.VenueName.ToLower() ?? "").Contains(lowP) ||
+                                 ((c.SportType.Description.ToLower() ?? "").Contains(lowP) ||
+                                 (c.SportType.Name.ToLower() ?? "").Contains(lowP))
                                  select e).ToList();
                 return q;
             }
