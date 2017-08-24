@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SportEventManagementSystem.Models
 {
+    //Data model used to store events
     public class Event
     {
         [Key]
@@ -49,6 +50,20 @@ namespace SportEventManagementSystem.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int EntryCapacity { get; set; }
+
+        public int getParticipants()
+        {
+            int r = 0;
+            foreach (Team t in this.Teams)
+            {
+                if (t.ManagerParticipation == true)
+                {
+                    r++;
+                }
+                r += t.TeamMembers.Count;
+            }
+            return r;
+        }
     }
 
     public class Division
@@ -67,6 +82,7 @@ namespace SportEventManagementSystem.Models
 
         public string TeamName { get; set; }
         public string ManagerID { get; set; }
+        public bool ManagerParticipation { get; set; }
         public List<TeamMember> TeamMembers { get; set; }
 
         public bool IsIndividual()
