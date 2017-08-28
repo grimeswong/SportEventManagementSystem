@@ -90,10 +90,19 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Event" asp-action="Index">Events</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About Us</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a></li>
                     <li><a asp-area="" asp-controller="Event" asp-action="Search">Search Event</a></li>
-                    
+                    <li>
+                <form class="input-group navbar-form" style="max-width: 250px" post" asp-controller="Event" asp-action="Search">
+                    <input class="form-control" id="param main-searchbar" name="param" placeholder="Search Event..." />
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-search">
+                                <span class="sr-only">Search</span>
+                            </span>
+                        </button>
+                    </span>
+                </form>
+                    </li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
