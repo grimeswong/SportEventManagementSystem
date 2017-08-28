@@ -104,3 +104,9 @@
         $("#CompetitionCount").val(newCompCount);
     });
 </script>
+
+<!-- Reload the Datetime picker Script -->
+<script type="text/javascript">
+    $('body').append('<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"><\/script><script>src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/en-au.js"<\/script>');
+    $('.datetimepicker').datetimepicker({ sideBySide: true, locale: 'en-au' });
+</script>
