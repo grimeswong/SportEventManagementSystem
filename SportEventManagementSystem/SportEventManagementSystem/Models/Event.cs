@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SportEventManagementSystem.Models
 {
+    //Data model used to store events
     public class Event
     {
         [Key]
@@ -49,23 +50,21 @@ namespace SportEventManagementSystem.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int EntryCapacity { get; set; }
+
+        public int getParticipants()
+        {
+            int r = 0;
+            foreach (Team t in this.Teams)
+            {
+                if (t.ManagerParticipation == true)
+                {
+                    r++;
+                }
+                r += t.TeamMembers.Count;
+            }
+            return r;
+        }
     }
-
-    //public enum RestrictionTypes
-    //{
-    //    MinimumAge,
-    //    MaximumAge,
-    //    Gender
-    //}
-
-    //public class Restriction
-    //{
-    //    [Key]
-    //    public string id { get; set; }
-
-    //    public RestrictionTypes restrictionType { get; set; }
-    //    public int restrictionValue { get; set; }
-    //}
 
     public class Division
     {
@@ -83,7 +82,13 @@ namespace SportEventManagementSystem.Models
 
         public string TeamName { get; set; }
         public string ManagerID { get; set; }
+        public bool ManagerParticipation { get; set; }
         public List<TeamMember> TeamMembers { get; set; }
+
+        public bool IsIndividual()
+        {
+            return this.TeamMembers.Count > 0;
+        }
     }
 
     public class TeamMember
@@ -100,4 +105,21 @@ namespace SportEventManagementSystem.Models
         public string Name { get; set; }
         public string Description { get; set; }
     }
+
+    //Unused code for having an extensible list of restrictions - non hard coded.. May be used in the future
+    //public enum RestrictionTypes
+    //{
+    //    MinimumAge,
+    //    MaximumAge,
+    //    Gender
+    //}
+
+    //public class Restriction
+    //{
+    //    [Key]
+    //    public string id { get; set; }
+
+    //    public RestrictionTypes restrictionType { get; set; }
+    //    public int restrictionValue { get; set; }
+    //}
 }

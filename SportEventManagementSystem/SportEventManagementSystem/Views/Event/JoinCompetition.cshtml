@@ -1,0 +1,148 @@
+@model JoinCompetitionViewModel
+
+<!-- Joined Competition Details -->
+<div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+        <h3 class="pull-left">Competition Name: @Model.Competition.Name</h3>
+    </div>
+    <div class="panel-body">
+        <div class="col-sm-4"><img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" /></div>
+        <div class="col-sm-4">
+            <ul class="list-group">
+                <li class="list-group-item">Competition Location</li>
+                <li class="list-group-item">@Model.Competition.Location</li>
+                <li class="list-group-item">Start Time</li>
+                <li class="list-group-item">@Model.Competition.StartTime</li>
+                <li class="list-group-item">End Time</li>
+                <li class="list-group-item">@Model.Competition.EndTime</li>
+                <li class="list-group-item">Competition Sport Type</li>
+                <li class="list-group-item">@Model.Competition.SportType.Name</li>
+                <li class="list-group-item">Competition Sport Description</li>
+                <li class="list-group-item">@Model.Competition.SportType.Description</li>
+                <li class="list-group-item">Entry Capacity</li>
+                <li class="list-group-item">@Model.Competition.EntryCapacity</li>
+                <li class="list-group-item">Gender Restriction</li>
+                @if (@Model.Competition.GenderRestriction == 1)
+                {
+                    <li class="list-group-item">Male</li>
+                }
+                else if (@Model.Competition.GenderRestriction == 2)
+                {
+
+                    <li class="list-group-item">Female</li>
+                }
+                else
+                {
+                    <li class="list-group-item">Mixed</li>
+                }
+            </ul>
+        </div>
+        <div class="col-sm-4">
+            <ul class="list-group">
+                <li class="list-group-item">Division Type</li>
+                <li class="list-group-item">@Model.Competition.DivisionType.DivisionName</li>
+                <li class="list-group-item">Division Description</li>
+                <li class="list-group-item">@Model.Competition.DivisionType.DivisionDescription</li>
+                <li class="list-group-item">Team Minimum Number</li>
+                <li class="list-group-item">@Model.Competition.TeamSizeMin</li>
+                <li class="list-group-item">Team Maximum Number</li>
+                <li class="list-group-item">@Model.Competition.TeamSizeMax</li>
+                <li class="list-group-item">Minimum Age</li>
+                <li class="list-group-item">@Model.Competition.MinimumAge</li>
+                <li class="list-group-item">Maximum Age</li>
+                <li class="list-group-item">@Model.Competition.MaximumAge</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<!-- Join Button (as Individual)-->
+@if (Model.Competition.TeamSizeMin == 1 && Model.Competition.TeamSizeMax == 1)
+{
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <form>
+                <input type="submit" value="Confirm to join as individual" class="btn btn-primary btn-lg" />
+            </form>
+        </div>
+    </div>
+}
+else if (Model.Competition.TeamSizeMin == 1 && Model.Competition.TeamSizeMax > 1)  // Join Competition Form (as Team or Individual)
+{
+    <h3>This competition can be joined as an individual or as a team.</h3>
+            <form>
+                <input type="submit" value="Confirm to join as individual" class="btn btn-primary btn-lg" />
+            </form>
+
+            <h1>OR</h1>
+            <!-- Join Competition Form -->
+            <h2>Join Competition Form</h2>
+            <div class="row main-content">
+                <form>
+                    <div class="form-group col-md-4 col-sm-4">
+                        <label class="control-label" asp-for="TeamName"></label>
+                        <input type="text" class="form-control" asp-for="TeamName" placeholder="Team Name">
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label class="control-label">Team Members</label>
+                        <input type="text" class="form-control" asp-for="members" value="" multiple data-role="tagsinput" />
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="CoachParticipation" @*asp-for="CoachParticipation" *@ value=0 checked>
+                                Coach is competing
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="CoachParticipation" @*asp-for="CoachParticipation" *@ value=1>
+                                Coach is not competing
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12">
+                        <input type="submit" value="Confirm to join as team" class="btn btn-primary btn-lg" />
+                        <button asp-action="Index" class="btn btn-default btn-lg">Cancel</button>
+                    </div>
+                </form>
+            </div>
+}
+else// Join Competition Form (as Team)
+{
+            <!-- Join Competition Form -->
+    <h2>Join Competition Form</h2>
+            <div class="row main-content">
+                <form>
+                    <div class="form-group col-md-4 col-sm-4">
+                        <label class="control-label" asp-for="TeamName"></label>
+                        <input type="text" class="form-control" asp-for="TeamName" placeholder="Team Name">
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label class="control-label">Team Members</label>
+                        <input type="text" class="form-control" asp-for="members" value="" multiple data-role="tagsinput" />
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="CoachParticipation" @*asp-for="CoachParticipation" *@ value=0 checked>
+                                Coach is competing
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="CoachParticipation" @*asp-for="CoachParticipation" *@ value=1>
+                                Coach is not competing
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12">
+                        <input type="submit" value="Confirm to join as team" class="btn btn-primary btn-lg" />
+                        <button asp-action="Index" class="btn btn-default btn-lg">Cancel</button>
+                    </div>
+                </form>
+            </div>
+}
+        </div>
+    </div>

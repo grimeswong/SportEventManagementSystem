@@ -1,0 +1,148 @@
+@model SearchViewModel
+
+<div class="row">
+    <h2>@ViewData["Message"].</h2>
+    <div class="col-md-12 col-sd-12">
+        <div class="input-group" style="max-width: 500px">
+            <input class="form-control" id="param" value="@ViewData["param"]" placeholder="Search Event" />
+            <span class="input-group-btn">
+
+                <button onclick="search()" class="btn btn-default">
+                    <span class="glyphicon glyphicon-search">
+                        <span class="sr-only">Search</span>
+                    </span>
+                </button>
+            </span>
+        </div>
+            <hr />
+        @if (@Model != null && @Model.results != null && @Model.results.Count > 0)
+        {
+            <div class="panel-group">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h4>Search Results</h4>
+                    </div>
+                </div>
+                    @if (Model.results.Count > 0)
+                    {
+                        @for (int i = 0; i < Model.results.Count; i++)
+                        {
+                            <div class="panel panel-primary">
+                                <div class="panel-body">
+                                    <h4> Event Name: @Model.results[i].Name </h4>
+                                    <div class="col-sm-2">
+                                        <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <table class="event-listing">
+                                            <tr><th>Event Description</th></tr>
+                                            <tr><td>@Model.results[i].Description</td></tr>
+                                            <tr><th>Event Start Time</th><th>Event End Time</th></tr>
+                                            <tr><td>@Model.results[i].StartTime</td><td>@Model.results[i].EndTime</td></tr>
+                                            <tr><th>Registration Start Time</th><th>Registration End Time</th></tr>
+                                            <tr><td>@Model.results[i].RegStartTime</td><td>@Model.results[i].RegEndTime</td></tr>
+                                            <tr><th>Organiser Name</th><th>Organiser Club</th></tr>
+                                            <tr><td>@Model.results[i].OrganiserName</td><td>@Model.results[i].OrganiserClub</td></tr>
+                                            <tr><th>Event Venue Name</th><th>Event Address</th></tr>
+                                            <tr><td>@Model.results[i].VenueName</td><td>@Model.results[i].StreetAddress</td></tr>
+                                            <tr><th>Suburb</th><th>Postcode</th></tr>
+                                            <tr><td>@Model.results[i].Suburb</td><td>@Model.results[i].PostCode</td></tr>
+                                            <tr><th>Event Type</th></tr>
+                                            @if (@Model.results[i].IsPrivate == false)
+                                            {
+                                                <tr><td>Public</td></tr>
+                                            }
+                                            else
+                                            {
+                                                <tr><td>Private</td></tr>
+                                            }
+                                        </table>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <a class="btn btn-info" href="@Url.Action("ViewEvent", "Event", new { eventID = Model.results[@i].id })">View Event</a>
+                                        <button class="btn btn-default" id="btnSearchMoreInfo@(@i)" data-event-num="@i" data-toggle="collapse" data-target="#searchMoreInfo@(@i)">More Info <span id="chevron" class="glyphicon glyphicon-chevron-down"></span></button>
+                                        <script>
+                                        $("#btnSearchMoreInfo@(@i)").click(function () {
+                                 var chevron = $(this).children("#chevron")[0];
+                                 if ($(chevron).hasClass("glyphicon-chevron-down")) {
+                                     $(chevron).removeClass("glyphicon-chevron-down");
+                                     $(chevron).addClass("glyphicon-chevron-up");
+                                 } else {
+                                     $(chevron).removeClass("glyphicon-chevron-up");
+                                     $(chevron).addClass("glyphicon-chevron-down");
+                                 }
+                            });
+                                        </script>
+                                    </div>
+                                </div> <!-- end panel body -->
+                                @if (Model.results[i].Competitions.Count > 0)
+                                {
+                                    <div id="searchMoreInfo@(@i)" class="panel-body panel-collapse collapse">
+                                        @for (int j = 0; j < Model.results[i].Competitions.Count; j++)
+                                        { /*Render the competition card*/
+                                            <div id="searchComp@(@j)">
+                                                <h4>Competition Name: @Model.results[i].Competitions[j].Name</h4>
+                                                <div class="col-sm-2">
+                                                    <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <table class="event-listing">
+                                                        <tr><th>Competition Location</th><th>Start Time</th><th>End Time</th></tr>
+                                                        <tr>
+                                                            <td>@Model.results[i].Competitions[j].Location</td>
+                                                            <td>@Model.results[i].Competitions[j].StartTime</td>
+                                                            <td>@Model.results[i].Competitions[j].EndTime</td>
+
+                                                        </tr>
+                                                        <tr><th>Entry Capacity</th><th>Sport Type</th><th>Sport Description</th></tr>
+                                                        <tr>
+                                                            <td>@Model.results[i].Competitions[j].EntryCapacity</td>
+                                                            <td>@Model.results[i].Competitions[j].SportType.Name</td>
+                                                            <td>@Model.results[i].Competitions[j].SportType.Description</td>
+                                                        </tr>
+                                                        <tr><th>Division Type</th><th>Division Description</th><th>Gender Restriction</th></tr>
+                                                        <tr>
+                                                            <td>@Model.results[i].Competitions[j].DivisionType.DivisionName</td>
+                                                            <td>@Model.results[i].Competitions[j].DivisionType.DivisionDescription</td>
+                                                            @if (@Model.results[i].Competitions[j].GenderRestriction == 1)
+                                                            {
+                                                                <td>Male</td>
+                                                            }
+                                                            else if (@Model.results[i].Competitions[j].GenderRestriction == 2)
+                                                            {
+                                                                <td>Female</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>Mixed</td>
+                                                            }
+                                                        </tr>
+                                                        <tr><th>Team Minimum Number</th><th>Team Maximum Number</th></tr>
+                                                        <tr><th>@Model.results[i].Competitions[j].TeamSizeMin</th><th>@Model.results[i].Competitions[j].TeamSizeMax</th></tr>
+                                                        <tr><th>Minimum Age</th><th>Maximum Age</th></tr>
+                                                        <tr><th>@Model.results[i].Competitions[j].MinimumAge</th><th>@Model.results[i].Competitions[j].MaximumAge</th></tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+
+                                }
+                            </div>
+                        }
+                    } 
+                </div>
+        } else
+        { <!--end if (count event <= 0) -->
+            <h4 class="error-message"> No events found matching your search parameters.</h4>
+        }
+    </div>
+</div>
+
+<script>
+function search() {
+    var url ="@Url.Action("Search", "Event")";
+
+    window.location.href = url + "?param=" + $("#param").val();
+}
+</script>

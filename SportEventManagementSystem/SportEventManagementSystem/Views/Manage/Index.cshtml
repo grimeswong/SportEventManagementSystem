@@ -9,95 +9,101 @@
 <div>
     <h4>Change your account settings</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
-            <a asp-controller="Manage" asp-action="ChangePassword" class="btn-bracketed">Change</a>
-        </dd>
-    </dl>
+    <div class="row formgroup">
+        <label class="col-md-2 control-label">Password</label> 
+        <a asp-controller="Manage" asp-action="ChangePassword" class="btn btn-warning">Change</a>
+    </div>
     <div asp-validation-summary="All" class="text-danger"></div>
     <form asp-controller="Manage" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-        <div class="form-group">
+        <div class="row formgroup">
             <label asp-for="Email" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <br />
+        <div class="row formgroup">
             <label asp-for="FirstName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <br />
+        <div class="row formgroup">
             <label asp-for="MiddleName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="MiddleName" class="form-control" />
                 <span asp-validation-for="MiddleName" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <br />
+        <div class="row formgroup">
             <label asp-for="LastName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <br />
+        <div class="row formgroup">
             <label asp-for="Street" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="Street" class="form-control" />
                 <span asp-validation-for="Street" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <br />
+        <div class="row formgroup">
             <label asp-for="Suburb" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="Suburb" class="form-control" />
                 <span asp-validation-for="Suburb" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <br />
+        <div class="row formgroup">
             <label asp-for="PostCode" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="PostCode" class="form-control" />
                 <span asp-validation-for="PostCode" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <br />
+        <div class="row formgroup">
             <label asp-for="HomePhone" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="HomePhone" class="form-control" />
                 <span asp-validation-for="HomePhone" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <br />
+        <div class="row form-group">
             <label asp-for="MobilePhone" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="MobilePhone" class="form-control" />
                 <span asp-validation-for="MobilePhone" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <div class="row formgroup">
             <label asp-for="EmergencyContact" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="EmergencyContact" class="form-control" />
                 <span asp-validation-for="EmergencyContact" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <div class="row formgroup">
             <label asp-for="EmergencyContactNo" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="EmergencyContactNo" class="form-control" />
                 <span asp-validation-for="EmergencyContactNo" class="text-danger"></span>
             </div>
         </div>
-        <div class="row">
+        <div class="row formgroup">
             <div class="col-md-10">
                 <input type="submit" value="Update account details" class="btn btn-primary btn-lg" />
-                <button asp-action="Index" class="btn btn-default btn-lg">Cancel</button>
+                <a href="@Url.Action("Index", "Home")" class="btn btn-default btn-lg">Cancel</a>
             </div>
         </div>
     </form>
