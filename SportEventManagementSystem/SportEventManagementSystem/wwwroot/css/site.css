@@ -175,13 +175,12 @@ textarea {
     color: #ecf0f1;
 }
 
-.navbar-custom .navbar-brand:hover,
-.navbar-custom .navbar-brand:focus {
-    background-color: #FFF;
-    color: #337ab7;
-    border-radius: 50px;
-    font-size: 1.5em;
-}
+    .navbar-custom .navbar-brand:hover,
+    .navbar-custom .navbar-brand:focus {
+        background-color: #FFF;
+        color: #337ab7;
+        border-radius: 50px;
+    }
 
 .navbar-custom .navbar-text {
     color:#FFF;
@@ -196,7 +195,6 @@ textarea {
     background-color: #FFF;
     color: #337ab7;
     border-radius: 50px;
-    font-size:1.5em;
 }
 
 .navbar-custom .navbar-nav > .active > a,
@@ -229,6 +227,10 @@ textarea {
 .navbar-custom .navbar-collapse,
 .navbar-custom .navbar-form {
     border-color: #ecf0f1;
+    border-top:none;
+    border-bottom:none;
+    box-shadow:none;
+    margin-left:0;
 }
 
 .navbar-custom .navbar-link {
@@ -240,7 +242,7 @@ textarea {
     background-color: #FFF;
     color: #337ab7;
     border-radius: 50px;
-    font-size: 1.5em;
+    /*font-size: 1.5em;*/
     text-decoration:none;
     margin-top:0;
     margin-bottom:0;
@@ -263,4 +265,5 @@ textarea {
         background-color: #ecf0f1;
     }
 }
+
 
