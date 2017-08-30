@@ -3,17 +3,18 @@
 <div class="row">
     <h2>@ViewData["Message"].</h2>
     <div class="col-md-12 col-sd-12">
-        <div class="input-group" style="max-width: 500px">
-            <input class="form-control" id="param" value="@ViewData["param"]" placeholder="Search Event" />
-            <span class="input-group-btn">
-
-                <button onclick="search()" class="btn btn-default">
+         
+            <form class="input-group" style="max-width: 500px" post">
+                <input class="form-control" id="param" name="param" placeholder="Search Event..." />
+                <span class="input-group-btn">
+                <button type="button" onclick="search()" class="btn btn-default">
                     <span class="glyphicon glyphicon-search">
                         <span class="sr-only">Search</span>
                     </span>
                 </button>
-            </span>
-        </div>
+                </span>
+            </form>
+        
             <hr />
         @if (@Model != null && @Model.results != null && @Model.results.Count > 0)
         {
