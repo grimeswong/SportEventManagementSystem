@@ -457,7 +457,6 @@ namespace SportEventManagementSystem.Controllers
 
         //
         // Get: /Event/Search?param=
-        [Authorize]
         public IActionResult Search(string param = null)
         {
             ViewData["param"] = param;
