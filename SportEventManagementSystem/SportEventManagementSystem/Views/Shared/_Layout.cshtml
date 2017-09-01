@@ -92,7 +92,7 @@
                     <li><a asp-area="" asp-controller="Event" asp-action="Index">Events</a></li>
                     <li><a asp-area="" asp-controller="Event" asp-action="Search">Search Event</a></li>
                     <li>
-                <form class="input-group navbar-form" style="max-width: 250px" post" >
+                <form class="input-group navbar-form" style="max-width: 250px" id="search-form">
                     <input class="form-control" id="param-main-searchbar" name="param" placeholder="Search Event..." />
                     <span class="input-group-btn">
                         <button type="button" onclick="search()" class="btn btn-default">
@@ -119,9 +119,14 @@
 </html>
 
 <script>
+    //Used to prevent enter posting the form but rather call our function
+    $("#search-form").submit(function () {
+        search();
+        return false;
+    });
+
 function search() {
     var url ="@Url.Action("Search", "Event")";
-
     window.location.href = url + "?param=" + $("#param-main-searchbar").val();
 }
 </script>
