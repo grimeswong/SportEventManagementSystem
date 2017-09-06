@@ -366,7 +366,7 @@ namespace SportEventManagementSystem.Controllers
         [Authorize]
         public IActionResult JoinCompetition(string eventID, string competitionID)
         {
-            ViewData["ReturnUrl"] = "/Event/";
+            ViewData["ReturnUrl"] = "/Event/ViewEvent?eventID=" + eventID;
             var competition = QueryController.GetCompetitionFromId(QueryController.GetEventFromId(_context, eventID), competitionID);
 
             if (competition != null)
