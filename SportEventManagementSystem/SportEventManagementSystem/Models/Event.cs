@@ -51,16 +51,36 @@ namespace SportEventManagementSystem.Models
         public DateTime EndTime { get; set; }
         public int EntryCapacity { get; set; }
 
+        public bool userParticipating(string userID)
+        {
+            if (this.Teams != null)
+            {
+                foreach (Team t in this.Teams)
+                {
+                    if(t.ManagerID == userID)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         public int getParticipants()
         {
             int r = 0;
-            foreach (Team t in this.Teams)
+            if(this.Teams != null)
             {
-                if (t.ManagerParticipation == true)
+                foreach (Team t in this.Teams)
                 {
-                    r++;
+                    if (t.ManagerParticipation == true)
+                    {
+                        r++;
+                    }
+                    if (t.TeamMembers != null)
+                    {
+                        r += t.TeamMembers.Count;
+                    }
                 }
-                r += t.TeamMembers.Count;
             }
             return r;
         }
