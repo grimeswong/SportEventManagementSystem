@@ -349,7 +349,7 @@ namespace SportEventManagementSystem.Controllers
                     }
 
                 }
-                TempData["modal"] = "Successfully modified event details. Participants have been removed and notified via email to rejoin.";
+                TempData["modal"] = "Successfully modified event details. Participants have been emailed and asked to confirm if they wish to stay participating.";
                 return RedirectToLocal(returnUrl);
             }
             else
