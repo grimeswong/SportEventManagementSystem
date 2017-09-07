@@ -62,7 +62,8 @@
 {
     <div class="panel panel-primary">
         <div class="panel-body">
-            <form>
+            <form asp-controller="Event" asp-action="JoinCompetition" asp-route-eventID="@ViewData["eventID"]" asp-route-competitionID="@ViewData["competitionID"]" asp-route-returnUrl="@ViewData["returnUrl"]">
+                <input type="hidden" asp-for="JoinIndividual" value=true />
                 <input type="submit" value="Confirm to join as individual" class="btn btn-primary btn-lg" />
             </form>
         </div>
@@ -71,40 +72,33 @@
 else if (Model.Competition.TeamSizeMin == 1 && Model.Competition.TeamSizeMax > 1)  // Join Competition Form (as Team or Individual)
 {
     <h3>This competition can be joined as an individual or as a team.</h3>
-            <form>
-                <input type="submit" value="Confirm to join as individual" class="btn btn-primary btn-lg" />
-            </form>
+    <form asp-controller="Event" asp-action="JoinCompetition" asp-route-eventID="@ViewData["eventID"]" asp-route-competitionID="@ViewData["competitionID"]" asp-route-returnUrl="@ViewData["returnUrl"]">
+        <input type="hidden" asp-for="JoinIndividual" value=true />
+        <input type="submit" value="Join as individual" class="btn btn-primary btn-lg" />
+    </form>
 
-            <h1>OR</h1>
+    <h1>OR</h1>
             <!-- Join Competition Form -->
-            <h2>Join Competition Form</h2>
+    <h2>Join Competition Form</h2>
             <div class="row main-content">
-                <form>
-                    <div class="form-group col-md-4 col-sm-4">
+                <form asp-controller="Event" asp-action="JoinCompetition" asp-route-eventID="@ViewData["eventID"]" asp-route-competitionID="@ViewData["competitionID"]" asp-route-returnUrl="@ViewData["returnUrl"]">
+                    <input type="hidden" asp-for="JoinIndividual" value=false />
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label class="form-check-label" asp-for="ManagerParticipation"> </label>
+                        <input type="checkbox" class="form-control" asp-for="ManagerParticipation">
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
                         <label class="control-label" asp-for="TeamName"></label>
                         <input type="text" class="form-control" asp-for="TeamName" placeholder="Team Name">
                     </div>
                     <div class="form-group col-md-12 col-sm-12">
                         <label class="control-label">Team Members</label>
-                        <input type="text" class="form-control" asp-for="members" value="" multiple data-role="tagsinput" />
-                    </div>
-                    <div class="form-group col-md-4 col-sm-12">
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="CoachParticipation" @*asp-for="CoachParticipation" *@ value=0 checked>
-                                Coach is competing
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="CoachParticipation" @*asp-for="CoachParticipation" *@ value=1>
-                                Coach is not competing
-                            </label>
-                        </div>
+                        <select class="form-control" asp-for="TeamMembers" value="" multiple data-role="tagsinput" ></select>
+                        <span asp-validation-for="TeamMembers" class="text-danger"></span>
                     </div>
                     <div class="col-md-12 col-sm-12">
                         <input type="submit" value="Confirm to join as team" class="btn btn-primary btn-lg" />
-                        <button asp-action="Index" class="btn btn-default btn-lg">Cancel</button>
+                        <a href="@Url.Action("ViewEvent", "Event", new { eventID = ViewData["eventID"] })" class="btn btn-default btn-lg">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -113,36 +107,29 @@ else// Join Competition Form (as Team)
 {
             <!-- Join Competition Form -->
     <h2>Join Competition Form</h2>
-            <div class="row main-content">
-                <form>
-                    <div class="form-group col-md-4 col-sm-4">
-                        <label class="control-label" asp-for="TeamName"></label>
-                        <input type="text" class="form-control" asp-for="TeamName" placeholder="Team Name">
-                    </div>
-                    <div class="form-group col-md-12 col-sm-12">
-                        <label class="control-label">Team Members</label>
-                        <input type="text" class="form-control" asp-for="members" value="" multiple data-role="tagsinput" />
-                    </div>
-                    <div class="form-group col-md-4 col-sm-12">
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="CoachParticipation" @*asp-for="CoachParticipation" *@ value=0 checked>
-                                Coach is competing
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="CoachParticipation" @*asp-for="CoachParticipation" *@ value=1>
-                                Coach is not competing
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-12">
-                        <input type="submit" value="Confirm to join as team" class="btn btn-primary btn-lg" />
-                        <button asp-action="Index" class="btn btn-default btn-lg">Cancel</button>
-                    </div>
-                </form>
+    <div class="row main-content">
+        <form asp-controller="Event" asp-action="JoinCompetition" asp-route-eventID="@ViewData["eventID"]" asp-route-competitionID="@ViewData["competitionID"]">
+            <input type="hidden" asp-for="JoinIndividual" value=false />
+            <div class="form-group col-md-4 col-sm-4">
+                <label class="control-label" asp-for="TeamName"></label>
+                <input type="text" class="form-control" asp-for="TeamName" placeholder="Team Name">
             </div>
-}
-        </div>
+            <div class="form-group col-md-12 col-sm-12">
+                <label class="control-label">Team Members</label>
+                <select class="form-control" asp-for="TeamMembers" value="" multiple data-role="tagsinput"></select>
+                <span asp-validation-for="TeamMembers" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4 col-sm-12">
+                <label class="control-label" asp-for="TeamName"></label>
+                <input type="checkbox" class="form-control" asp-for="ManagerParticipation">
+            </div>
+            <div class="col-md-12 col-sm-12">
+                <input type="submit" value="Confirm to join as team" class="btn btn-primary btn-lg" />
+                <a href="@Url.Action("ViewEvent", "Event", new { eventID = ViewData["eventID"] })" class="btn btn-default btn-lg">Cancel</a>
+            </div>
+        </form>
     </div>
+}
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
