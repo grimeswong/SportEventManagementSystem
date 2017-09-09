@@ -7,7 +7,7 @@
             <form class="input-group" style="max-width: 500px" post">
                 <input class="form-control" id="param" name="param" placeholder="Search Event..." />
                 <span class="input-group-btn">
-                <button type="button" onclick="search()" class="btn btn-default">
+                <button type="button" onclick="search()" class="btn btn-default btn-searchbar">
                     <span class="glyphicon glyphicon-search">
                         <span class="sr-only">Search</span>
                     </span>
@@ -36,8 +36,18 @@
                                     </div>
                                     <div class="col-sm-7">
                                         <table class="event-listing">
-                                            <tr><th>Event Description</th></tr>
-                                            <tr><td>@Model.results[i].Description</td></tr>
+                                            <tr><th>Event Description</th><th>Event Type</th></tr>
+                                            <tr>
+                                                <td>@Model.results[i].Description</td>
+                                                @if (@Model.results[i].IsPrivate == false)
+                                                {
+                                                    <td>Public</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Private</td>
+                                                }
+                                            </tr>
                                             <tr><th>Event Start Time</th><th>Event End Time</th></tr>
                                             <tr><td>@Model.results[i].StartTime</td><td>@Model.results[i].EndTime</td></tr>
                                             <tr><th>Registration Start Time</th><th>Registration End Time</th></tr>
@@ -48,15 +58,6 @@
                                             <tr><td>@Model.results[i].VenueName</td><td>@Model.results[i].StreetAddress</td></tr>
                                             <tr><th>Suburb</th><th>Postcode</th></tr>
                                             <tr><td>@Model.results[i].Suburb</td><td>@Model.results[i].PostCode</td></tr>
-                                            <tr><th>Event Type</th></tr>
-                                            @if (@Model.results[i].IsPrivate == false)
-                                            {
-                                                <tr><td>Public</td></tr>
-                                            }
-                                            else
-                                            {
-                                                <tr><td>Private</td></tr>
-                                            }
                                         </table>
                                     </div>
                                     <div class="col-sm-3">
@@ -82,7 +83,9 @@
                                         @for (int j = 0; j < Model.results[i].Competitions.Count; j++)
                                         { /*Render the competition card*/
                                             <div id="searchComp@(@j)">
-                                                <h4>Competition Name: @Model.results[i].Competitions[j].Name</h4>
+                                                <div class="col-sm-12">
+                                                    <h4>Competition Name: @Model.results[i].Competitions[j].Name</h4>
+                                                </div>
                                                 <div class="col-sm-2">
                                                     <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
                                                 </div>

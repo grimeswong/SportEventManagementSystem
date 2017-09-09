@@ -81,6 +81,29 @@ body {
     margin-top: 35px;
 }
 
+@media screen and (min-width: 767px) {
+    body {
+    margin-top: 85px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    body {
+        margin-top: 35px;
+    }
+}
+
+/* keep the space between buttons */
+.btn {
+    margin: 3px;
+}
+
+/* correct back the search button position */
+.btn-searchbar {
+    margin: 0; 
+}
+
+
 /* Carousel image*/
 .img-responsive {
     width: 100%;
@@ -116,9 +139,21 @@ event-separator {
     text-align: center;
 }
 
+th {
+    padding-top:10px;
+    font-size:1.2em;
+    font-weight:bold;
+}
+
+td {
+    font-size:1.1em;
+}
+
 /*** Event Detail Page ***/
 .list-group li:nth-child(odd) {
     background-color: cornflowerblue;
+    font-weight: bold;
+    font-size: 1.1em;
 }
 
 .panel-heading {
@@ -127,7 +162,7 @@ event-separator {
 
 .event-list-title-font li:nth-child(odd) {
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 1.3em;
     background-color: lightblue;
 }
 

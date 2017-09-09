@@ -123,7 +123,7 @@ namespace SportEventManagementSystem.Models.EventViewModels
 
         [Required]
         [StringLength(30, ErrorMessage = "Please enter a valid location. {1} characters long.", MinimumLength = 1)]
-        [Display(Name = "Compeition Location")]
+        [Display(Name = "Competition Location")]
         public string Location { get; set; }
 
         [Required]
