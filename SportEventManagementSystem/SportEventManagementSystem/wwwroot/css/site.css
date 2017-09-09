@@ -137,6 +137,8 @@ event-separator {
 /*** Event Detail Page ***/
 .list-group li:nth-child(odd) {
     background-color: cornflowerblue;
+    font-weight: bold;
+    font-size: 1.1em;
 }
 
 .panel-heading {
@@ -145,7 +147,7 @@ event-separator {
 
 .event-list-title-font li:nth-child(odd) {
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 1.3em;
     background-color: lightblue;
 }
 
