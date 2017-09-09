@@ -139,6 +139,16 @@ event-separator {
     text-align: center;
 }
 
+th {
+    padding-top:10px;
+    font-size:1.2em;
+    font-weight:bold;
+}
+
+td {
+    font-size:1.1em;
+}
+
 /*** Event Detail Page ***/
 .list-group li:nth-child(odd) {
     background-color: cornflowerblue;
