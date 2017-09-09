@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using SportEventManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using SportEventManagementSystem.Data;
+using Microsoft.EntityFrameworkCore.Extensions.Internal;
 
 namespace SportEventManagementSystem.Controllers
 {
@@ -40,9 +41,11 @@ namespace SportEventManagementSystem.Controllers
                 .Include(e => e.Competitions)
                     .ThenInclude(c => c.DivisionType)
                 .Include(e => e.Competitions)
-                    .ThenInclude(c => c.Teams)
+                    .ThenInclude(c => c.Teams).ThenInclude(t=>t.TeamMembers)
                 .Include(e => e.Competitions)
                     .ThenInclude(c => c.SportType);
+
+
 
             return events.ToList();
         }
@@ -54,10 +57,11 @@ namespace SportEventManagementSystem.Controllers
             {
                 var evnt = GetFullEventsInfo(context).First(o => o.id == id);
                 return evnt;
-            } catch(InvalidOperationException)
+            }
+            catch (InvalidOperationException)
             {
                 return null;
-            }            
+            }
         }
 
         //Returns a competition object matching a competition ID from an event
@@ -101,7 +105,7 @@ namespace SportEventManagementSystem.Controllers
         }
 
         //Searches for competitions that a user has registered a team in and returns the relevant events
-        public static List<Event> GetUserParticipation(ApplicationDbContext context,ApplicationUser user)
+        public static List<Event> GetUserParticipation(ApplicationDbContext context, ApplicationUser user)
         {
             try
             {
@@ -113,11 +117,12 @@ namespace SportEventManagementSystem.Controllers
                                  select e).ToList();
 
                 return q;
-            } catch(Exception)
+            }
+            catch (Exception)
             {
                 return null;
             }
-                
+
         }
     }
 }

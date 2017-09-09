@@ -1,7 +1,9 @@
 @using SportEventManagementSystem.Controllers
-
+@using SportEventManagementSystem.Data
 @model ViewEventViewModel
+
 @inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext DbContext
 
 @{
     ViewData["Title"] = "Event Details";
@@ -14,7 +16,7 @@
             @if (UserManager.GetUserId(User) == @Model.CurrentEvent.ownerID)
             {
                 <a class="btn btn-warning pull-right" href="@Url.Action("EditEvent", "Event", new { eventID = @Model.CurrentEvent.id})">Edit Event</a>
-                        <button class="btn btn-info pull-right" onclick="openInviteModal()"> Invite</button>
+                <button class="btn btn-info pull-right" onclick="openInviteModal()"> Invite</button>
             }
 
         </div>
@@ -78,16 +80,24 @@
             <div class="panel-heading clearfix">
                 <h3 class="pull-left">@Model.CurrentEvent.Competitions[j].Name</h3>
                 <h3 class="text-center">Participants: @Model.CurrentEvent.Competitions[j].getParticipants() / @Model.CurrentEvent.Competitions[j].EntryCapacity</h3>
-                @if (Model.CurrentEvent.Competitions[j].getParticipants() != @Model.CurrentEvent.Competitions[j].EntryCapacity)
-                {
-                    //Competition not full
-                    <a class="btn btn-success pull-right" href="@Url.Action("JoinCompetition", "Event", new { eventID = @Model.CurrentEvent.id, competitionID = @Model.CurrentEvent.Competitions[j].id })"> Join Competition</a>
+                @if (Model.CurrentEvent.Competitions[j].userParticipating(UserManager.GetUserId(User)))
+                { //User is a part of the competition already
+                    <a class="btn btn-warning pull-right" href="@Url.Action("LeaveCompetition", "Event", new { eventID = @Model.CurrentEvent.id, competitionID = @Model.CurrentEvent.Competitions[j].id})"> Leave Competition</a>
                 }
                 else
-                {
-                    //Competition full disable button
-                    <a class="btn btn-success pull-right" disabled> Join Competition</a>
+                { //User is not a part of competition
+                    if (Model.CurrentEvent.Competitions[j].getParticipants() != @Model.CurrentEvent.Competitions[j].EntryCapacity)
+                    {
+                        //Competition not full
+                        <a class="btn btn-success pull-right" href="@Url.Action("JoinCompetition", "Event", new { eventID = @Model.CurrentEvent.id, competitionID = @Model.CurrentEvent.Competitions[j].id })"> Join Competition</a>
+                    }
+                    else
+                    {
+                        //Competition full disable button
+                        <a class="btn btn-success pull-right" disabled> Join Competition</a>
+                    }
                 }
+              
             </div>
             <div class="panel-body">
                 <div class="col-sm-4"><img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" /></div>

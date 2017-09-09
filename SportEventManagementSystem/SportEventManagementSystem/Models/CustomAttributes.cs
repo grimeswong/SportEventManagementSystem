@@ -26,12 +26,61 @@ namespace SportEventManagementSystem.Models
         }
 
         [AttributeUsage(AttributeTargets.Property)]
+        public sealed class IsListCountLargerThan : ValidationAttribute
+        {
+            private const string DefaultError = "'{0}' is mandatory.";
+            private readonly int MinimumElements;
+            private readonly string BoolField;
+            private readonly bool BoolRequiredVal;
+
+            public IsListCountLargerThan(int min, string boolField, bool boolRequiredVal, string defaultError = null) : base(defaultError != null ? defaultError : DefaultError)
+            {
+                MinimumElements = min;
+                if (string.IsNullOrEmpty(boolField))
+                {
+                    throw new ArgumentNullException("boolField");
+                }
+                BoolRequiredVal = boolRequiredVal;
+                BoolField = boolField;
+            }
+
+            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            {
+                    try
+                    { // Try to reflect event start and event end dates and do validation
+                        var boolField = validationContext.ObjectInstance.GetType()
+                        .GetProperty(BoolField);
+
+                        bool boolFieldValue = (bool)boolField.GetValue(validationContext.ObjectInstance, null);
+
+                        var list = value as IList;
+                        if (list != null)
+                        {
+                            if (list.Count >= MinimumElements && boolFieldValue == BoolRequiredVal)
+                            {
+                                return ValidationResult.Success;
+                            }
+                            else
+                            {
+                                return new ValidationResult("Please enter atleast " + MinimumElements + " item/s");
+                            }
+                        }
+                    }
+                    catch (InvalidCastException e)
+                    { 
+                        throw e;
+                    }
+                return null;
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.Property)]
         public sealed class IsDateBetweenTwoFields : ValidationAttribute
         {
             public string StartDateField { get; private set; }
             public string EndDateField { get; private set; }
             public string ErrorFieldName { get; private set; }
-            public IsDateBetweenTwoFields(string defaultError,string startDateField, string endDateField,string errorFieldName) : base(defaultError)
+            public IsDateBetweenTwoFields(string defaultError, string startDateField, string endDateField, string errorFieldName) : base(defaultError)
             {
                 if (string.IsNullOrEmpty(startDateField))
                 {
@@ -41,7 +90,7 @@ namespace SportEventManagementSystem.Models
                 {
                     throw new ArgumentNullException("eventEndName");
                 }
-                if(string.IsNullOrEmpty(errorFieldName))
+                if (string.IsNullOrEmpty(errorFieldName))
                 {
                     throw new ArgumentNullException("errorFieldName");
                 }
@@ -56,7 +105,7 @@ namespace SportEventManagementSystem.Models
                 //If value is of type DateTime
                 if (value is DateTime)
                 {
-                   time = (DateTime)value;
+                    time = (DateTime)value;
 
                     if (value != null)
                     {
@@ -82,7 +131,7 @@ namespace SportEventManagementSystem.Models
                             }
                             else
                             {
-                                return new ValidationResult("Please enter a value for {0} that is after or equal to the Event Start.",new[] { ErrorFieldName });
+                                return new ValidationResult("Please enter a value for {0} that is after or equal to the Event Start.", new[] { ErrorFieldName });
                             }
 
                         }
@@ -93,12 +142,12 @@ namespace SportEventManagementSystem.Models
                     }
                     else
                     {
-                        return new ValidationResult("Please enter a value for {0}.",new[] { ErrorFieldName });
+                        return new ValidationResult("Please enter a value for {0}.", new[] { ErrorFieldName });
                     }
                 }
                 else
                 {
-                    return new ValidationResult("Invalid date time format for {0}.",new[] { ErrorFieldName });
+                    return new ValidationResult("Invalid date time format for {0}.", new[] { ErrorFieldName });
                 }
                 //If it gets to here something went very wrong
                 return null;
@@ -180,7 +229,7 @@ namespace SportEventManagementSystem.Models
         {
             public string FirstDateField { get; private set; }
             public string ErrorFieldName { get; private set; }
-            public IsDateAfter(string defaultError,string firstDateField, string errorFieldName) : base(defaultError)
+            public IsDateAfter(string defaultError, string firstDateField, string errorFieldName) : base(defaultError)
             {
                 if (string.IsNullOrEmpty(firstDateField))
                 {

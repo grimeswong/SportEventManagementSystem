@@ -65,7 +65,6 @@ namespace SportEventManagementSystem.Controllers
             {
                 CurrentEvent = QueryController.GetEventFromId(_context, eventID)
             };
-
             if (model != null)
             {
                 return View(model);
@@ -349,7 +348,7 @@ namespace SportEventManagementSystem.Controllers
                     }
 
                 }
-                TempData["modal"] = "Successfully modified event details. Participants have been removed and notified via email to rejoin.";
+                TempData["modal"] = "Successfully modified event details. Participants have been emailed and asked to confirm if they wish to stay participating.";
                 return RedirectToLocal(returnUrl);
             }
             else
@@ -366,90 +365,182 @@ namespace SportEventManagementSystem.Controllers
         [Authorize]
         public IActionResult JoinCompetition(string eventID, string competitionID)
         {
-            ViewData["ReturnUrl"] = "/Event/";
+            ViewData["ReturnUrl"] = "/Event/ViewEvent?eventID=" + eventID;
             var competition = QueryController.GetCompetitionFromId(QueryController.GetEventFromId(_context, eventID), competitionID);
-
             if (competition != null)
             {
                 JoinCompetitionViewModel model = new JoinCompetitionViewModel
                 {
                     Competition = competition
                 };
+                ViewData["eventID"] = eventID;
+                ViewData["competitionID"] = competitionID;
                 return View(model);
             }
             ViewData["error"] = "Invalid event or competition.";
             return View("Error");
         }
 
-        //
+        //THIS FUNCTION IS WAYYYY TOO LONG PLEASE REFACTOR
         // POST: /Event/JoinCompetition?eventID=&competitionID=
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> JoinCompetition(string eventId, string competitionId, JoinCompetitionViewModel model, string returnUrl = null)
+        public async Task<IActionResult> JoinCompetition(string eventID, string competitionID, JoinCompetitionViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
-            {
-                Event evnt = QueryController.GetEventFromId(_context, eventId);
-                Competition comp = evnt.Competitions.Where(o => o.id == competitionId).First();
-
-                //Server side error checking
-                //if(model.)
-                //int memberCount = 
-                // if(model.members)
-                if (comp.EntryCapacity + model.members.Count + 1 > comp.EntryCapacity)
-                { //If trying to enter
-
-                }
-                List<TeamMember> members = new List<TeamMember>();
-                foreach (TeamMemberValidationModel m in model.members)
+            ViewData["eventID"] = eventID;
+            ViewData["competitionID"] = competitionID;
+            Event evnt = QueryController.GetEventFromId(_context, eventID);
+            Competition comp = evnt.Competitions.Where(o => o.id == competitionID).First();
+            ApplicationUser user = QueryController.GetCurrentUserAsync(_userManager, User);
+            model.Competition = comp;
+            if (ModelState.IsValid) //&& QueryController.IsUserParticipatingInCompetition(_context,user.details.id,competitionID) > 0)
+            { //If model is valid and the user isn't already participating
+                int participants = comp.getParticipants();
+                Team team = null;
+                if(model.JoinIndividual)
                 {
-                    members.Add(new TeamMember { MemberName = m.MemberName });
+                    if (model.TeamName == "" || model.TeamName == null)
+                    {
+                        model.TeamName = user.details.FirstName + " " + user.details.LastName + "'s team";
+                    }
+                    if ( + 1 <= comp.EntryCapacity)
+                    { //If adding one participant is within capacity add team
+                        team = new Team
+                        {
+                            ManagerID = user.Id,
+                            TeamName = model.TeamName,
+                            TeamMembers = null,
+                            ManagerParticipation = true
+                        };
+                    }
+                    else
+                    {
+                        TempData["modal"] = "This competition is unfortunately full.";
+                        return View(model);
+                    }
                 }
-                ApplicationUser user = QueryController.GetCurrentUserAsync(_userManager, User);
-                Team team = new Team
+                else if(model.TeamMembers != null)
                 {
-                    ManagerID = user.Id,
-                    TeamName = model.TeamName,
-                    TeamMembers = members
-                };
+                    int teamSize = model.TeamMembers.Length + (model.ManagerParticipation ? 1 : 0);
 
+                    //Firstly check if Team Size is between the competitions Min and Max team sizes otherwise let user know
+                    if (teamSize >= model.Competition.TeamSizeMin && teamSize <= model.Competition.TeamSizeMax)
+                    {
+                        if (model.TeamName == "" || model.TeamName == null)
+                        {
+                            model.TeamName = user.details.FirstName + " " + user.details.LastName + "'s team";
+                        }
+                        if (model.ManagerParticipation)
+                        { //Manager competing
+                            if (participants + model.TeamMembers.Length + 1 <= comp.EntryCapacity)
+                            { //Competition not full
+                                List<TeamMember> members = new List<TeamMember>();
+                                foreach (String s in model.TeamMembers)
+                                {
+                                    members.Add(new TeamMember { MemberName = s });
+                                }
 
-                comp.Teams.Add(team);
-                await _context.SaveChangesAsync();
-                TempData["modal"] = "Successfully joined competition.";
+                                team = new Team
+                                {
+                                    ManagerID = user.Id,
+                                    TeamName = model.TeamName,
+                                    TeamMembers = members,
+                                    ManagerParticipation = model.ManagerParticipation
+                                };
+                            }
+                            else
+                            { //Competition full
+                                TempData["modal"] = "This competition only has room for " + (comp.EntryCapacity - participants) + "participants. You tried to add: " + (model.TeamMembers.Length + 1);
+                                return View(model);
+                            }
+                        }
+                        else
+                        { //Manager not competing
+                            if (participants + model.TeamMembers.Length + 1 <= comp.EntryCapacity)
+                            { //Competition not full
+                                List<TeamMember> members = new List<TeamMember>();
+                                foreach (String s in model.TeamMembers)
+                                {
+                                    members.Add(new TeamMember { MemberName = s });
+                                }
+
+                                team = new Team
+                                {
+                                    ManagerID = user.Id,
+                                    TeamName = model.TeamName,
+                                    TeamMembers = members,
+                                    ManagerParticipation = model.ManagerParticipation
+                                };
+                            }
+                            else
+                            { //Competition full
+                                TempData["modal"] = "This competition only has room for " + (comp.EntryCapacity - participants) + "participants.You tried to add: " + model.TeamMembers.Length;
+                                return View(model);
+                            }
+                        }
+                        //team will never be null here but check anyway
+                        if (team != null)
+                        {
+                            comp.Teams.Add(team);
+                            await _context.SaveChangesAsync();
+                            TempData["modal"] = "Successfully joined competition.";
+                        }
+                        else
+                        {
+                            TempData["modal"] = "Unknown error occured please try again.";
+                        }
+
+                        return RedirectToLocal(returnUrl);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("TeamMembers", "Invalid amount of team members added. Please review competition min and max team sizes");
+                        return View(model);
+                    }
+                }
+                if (team != null)
+                {
+                    comp.Teams.Add(team);
+                    await _context.SaveChangesAsync();
+                    TempData["modal"] = "Successfully joined competition.";
+                }
+                else
+                { //They entered no team members
+                    ModelState.AddModelError("TeamMembers", "Invalid amount of team members added. Please review competition min and max team sizes");
+                    return View(model);
+                }
+
                 return RedirectToLocal(returnUrl);
             }
             else
             {
                 return View(model);
             }
-
         }
 
         //
-        // POST: /Event/Leave
-        [HttpPost]
+        // GET: /Event/LeaveCompetition?eventid=x&competitionid=y
         [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Leave(string eventId, string competitionId, string returnUrl = null)
+        public IActionResult LeaveCompetition(string eventID, string competitionID)
         {
+            string returnUrl = "/Event/ViewEvent?eventID=" + eventID;
             ViewData["ReturnUrl"] = returnUrl;
             try
             {
-                Event evnt = QueryController.GetEventFromId(_context, eventId);
+                Event evnt = QueryController.GetEventFromId(_context, eventID);
 
-                Competition comp = evnt.Competitions.Where(o => o.id == competitionId).First();
-                Team team = comp.Teams.First(o => o.ManagerID == QueryController.GetCurrentUserAsync(_userManager, User).Id);
+                Competition comp = evnt.Competitions.Where(o => o.id == competitionID).First();
+                Team team = comp.Teams.First(o => o.ManagerID == _userManager.GetUserId(User));
                 comp.Teams.Remove(team);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 TempData["modal"] = "Successfully left competition.";
 
             }
             catch (ArgumentNullException e)
             {
-                Console.WriteLine("Invalid" + e.Message);
+                
             }
 
             return RedirectToLocal(returnUrl);
@@ -457,7 +548,6 @@ namespace SportEventManagementSystem.Controllers
 
         //
         // Get: /Event/Search?param=
-        [Authorize]
         public IActionResult Search(string param = null)
         {
             ViewData["param"] = param;

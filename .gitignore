@@ -261,3 +261,7 @@ __pycache__/
 *.pyc
 /SportEventManagementSystem/SportEventManagementSystem/Properties/PublishProfiles/CustomProfile.pubxml
 /SportEventManagementSystem/SportEventManagementSystem/Properties/PublishProfiles
+
+*.zip
+
+*.rar
