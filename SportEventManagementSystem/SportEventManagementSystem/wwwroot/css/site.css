@@ -93,6 +93,16 @@ body {
     }
 }
 
+/* keep the space between buttons */
+.btn {
+    margin: 3px;
+}
+
+/* correct back the search button position */
+.btn-searchbar {
+    margin: 0; 
+}
+
 
 /* Carousel image*/
 .img-responsive {
@@ -128,11 +138,6 @@ event-separator {
 .error-message {
     text-align: center;
 }
-
-.btn {
-    margin:3px;
-}
-
 
 /*** Event Detail Page ***/
 .list-group li:nth-child(odd) {
