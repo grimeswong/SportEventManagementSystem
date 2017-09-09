@@ -71,7 +71,9 @@
                         /*Render the competition card*/
                         {
                             <div id="participatingComp@(@j)">
-                                <h4>Competition Name: @Model.ParticipatingEvents[i].Competitions[j].Name</h4>
+                                <div class="col-sm-12">
+                                    <h4>Competition Name: @Model.ParticipatingEvents[i].Competitions[j].Name</h4>
+                                </div>
                                 <div class="col-sm-2">
                                     <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
                                 </div>
@@ -194,7 +196,9 @@
                             /*Render the competition card*/
                             {
                                 <div id="createdComp@(@j)">
-                                    <h4>Competition Name: @Model.CreatedEvents[i].Competitions[j].Name</h4>
+                                    <div class="col-sm-12">
+                                        <h4>Competition Name: @Model.CreatedEvents[i].Competitions[j].Name</h4>
+                                    </div>
                                     <div class="col-sm-2">
                                         <img src="~/images/banner1.jpg" class="img-thumbnail" alt="Can't render image" />
                                     </div>
