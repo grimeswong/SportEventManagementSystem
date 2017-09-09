@@ -129,6 +129,11 @@ event-separator {
     text-align: center;
 }
 
+.btn {
+    margin:3px;
+}
+
+
 /*** Event Detail Page ***/
 .list-group li:nth-child(odd) {
     background-color: cornflowerblue;
