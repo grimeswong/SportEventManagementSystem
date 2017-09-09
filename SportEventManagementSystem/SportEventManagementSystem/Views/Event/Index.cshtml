@@ -24,8 +24,19 @@
                     </div>
                     <div class="col-sm-7">
                         <table class="event-listing">
-                            <tr><th>Event Description</th></tr>
-                            <tr><td>@Model.ParticipatingEvents[i].Description</td></tr>
+                            <tr><th>Event Description</th><th>Event Type</th></tr>
+                            <tr>
+                                <td>@Model.ParticipatingEvents[i].Description</td>
+                                @if (@Model.ParticipatingEvents[i].IsPrivate == false)
+                                {
+                                    <td>Public</td>
+                                }
+                                else
+                                {
+                                    <td>Private</td>
+                                }
+                            </tr>
+                            
                             <tr><th>Event Start Time</th><th>Event End Time</th></tr>
                             <tr><td>@Model.ParticipatingEvents[i].StartTime</td><td>@Model.ParticipatingEvents[i].EndTime</td></tr>
                             <tr><th>Registration Start Time</th><th>Registration End Time</th></tr>
@@ -36,15 +47,6 @@
                             <tr><td>@Model.ParticipatingEvents[i].VenueName</td><td>@Model.ParticipatingEvents[i].StreetAddress</td></tr>
                             <tr><th>Suburb</th><th>Postcode</th></tr>
                             <tr><td>@Model.ParticipatingEvents[i].Suburb</td><td>@Model.ParticipatingEvents[i].PostCode</td></tr>
-                            <tr><th>Event Type</th></tr>
-                            @if (@Model.ParticipatingEvents[i].IsPrivate == false)
-                            {
-                                <tr><td>Public</td></tr>
-                            }
-                            else
-                            {
-                                <tr><td>Private</td></tr>
-                            }
                         </table>
                     </div>
                     <div class="col-sm-3">
@@ -110,9 +112,9 @@
                                             }
                                         </tr>
                                         <tr><th>Team Minimum Number</th><th>Team Maximum Number</th></tr>
-                                        <tr><th>@Model.ParticipatingEvents[i].Competitions[j].TeamSizeMin</th><th>@Model.ParticipatingEvents[i].Competitions[j].TeamSizeMax</th></tr>
+                                        <tr><td>@Model.ParticipatingEvents[i].Competitions[j].TeamSizeMin</td><td>@Model.ParticipatingEvents[i].Competitions[j].TeamSizeMax</td></tr>
                                         <tr><th>Minimum Age</th><th>Maximum Age</th></tr>
-                                        <tr><th>@Model.ParticipatingEvents[i].Competitions[j].MinimumAge</th><th>@Model.ParticipatingEvents[i].Competitions[j].MaximumAge</th></tr>
+                                        <tr><td>@Model.ParticipatingEvents[i].Competitions[j].MinimumAge</td><td>@Model.ParticipatingEvents[i].Competitions[j].MaximumAge</td></tr>
                                     </table>
                                 </div>
                             </div>
@@ -149,8 +151,19 @@
                         </div>
                         <div class="col-sm-7">
                             <table class="event-listing">
-                                <tr><th>Event Description</th></tr>
-                                <tr><td>@Model.CreatedEvents[i].Description</td></tr>
+                                <tr><th>Event Description</th><th>Event Type</th></tr>
+                                <tr>
+                                    <td>@Model.CreatedEvents[i].Description</td>
+                                    @if (@Model.CreatedEvents[i].IsPrivate == false)
+                                    {
+                                        <td>Public</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Private</td>
+                                    }
+                                    
+                                </tr>
                                 <tr><th>Event Start Time</th><th>Event End Time</th></tr>
                                 <tr><td>@Model.CreatedEvents[i].StartTime</td><td>@Model.CreatedEvents[i].EndTime</td></tr>
                                 <tr><th>Registration Start Time</th><th>Registration End Time</th></tr>
@@ -161,15 +174,6 @@
                                 <tr><td>@Model.CreatedEvents[i].VenueName</td><td>@Model.CreatedEvents[i].StreetAddress</td></tr>
                                 <tr><th>Suburb</th><th>Postcode</th></tr>
                                 <tr><td>@Model.CreatedEvents[i].Suburb</td><td>@Model.CreatedEvents[i].PostCode</td></tr>
-                                <tr><th>Event Type</th></tr>
-                                @if (@Model.CreatedEvents[i].IsPrivate == false)
-                                {
-                                    <tr><td>Public</td></tr>
-                                }
-                                else
-                                {
-                                    <tr><td>Private</td></tr>
-                                }
                             </table>
                         </div>
                         <div class="col-sm-3">
@@ -235,9 +239,9 @@
                                                 }
                                             </tr>
                                             <tr><th>Team Minimum Number</th><th>Team Maximum Number</th></tr>
-                                            <tr><th>@Model.CreatedEvents[i].Competitions[j].TeamSizeMin</th><th>@Model.CreatedEvents[i].Competitions[j].TeamSizeMax</th></tr>
+                                            <tr><td>@Model.CreatedEvents[i].Competitions[j].TeamSizeMin</td><td>@Model.CreatedEvents[i].Competitions[j].TeamSizeMax</td></tr>
                                             <tr><th>Minimum Age</th><th>Maximum Age</th></tr>
-                                            <tr><th>@Model.CreatedEvents[i].Competitions[j].MinimumAge</th><th>@Model.CreatedEvents[i].Competitions[j].MaximumAge</th></tr>
+                                            <tr><td>@Model.CreatedEvents[i].Competitions[j].MinimumAge</td><td>@Model.CreatedEvents[i].Competitions[j].MaximumAge</td></tr>
                                         </table>
                                     </div>
                                 </div>
