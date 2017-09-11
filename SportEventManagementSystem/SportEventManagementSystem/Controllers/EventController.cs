@@ -65,9 +65,14 @@ namespace SportEventManagementSystem.Controllers
             {
                 CurrentEvent = QueryController.GetEventFromId(_context, eventID)
             };
-            if (model != null)
+            if (model != null && !model.CurrentEvent.IsDeleted)
             {
                 return View(model);
+            }
+            else if(model.CurrentEvent.IsDeleted)
+            {
+                ViewData["error"] = "This event has been deleted.";
+                return View("Error");
             }
             else
             {
@@ -578,6 +583,18 @@ namespace SportEventManagementSystem.Controllers
             }
             //Else no param just display form
             return View("Search");
+        }
+        //
+        //GET: /Event/DeleteEvent?eventID=x
+        [Authorize]
+        public IActionResult DeleteEvent(string eventID)
+        {
+            var evnt = QueryController.GetEventFromId(_context, eventID);
+            evnt.IsDeleted = true;
+            _context.SaveChanges();
+
+            TempData["modal"] = "Successfully deleted event.";
+            return RedirectToLocal("/Event");
         }
 
         #region Helpers

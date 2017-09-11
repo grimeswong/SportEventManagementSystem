@@ -43,10 +43,8 @@ namespace SportEventManagementSystem.Controllers
                 .Include(e => e.Competitions)
                     .ThenInclude(c => c.Teams).ThenInclude(t=>t.TeamMembers)
                 .Include(e => e.Competitions)
-                    .ThenInclude(c => c.SportType);
-
-
-
+                    .ThenInclude(c => c.SportType).Where(e=>e.IsDeleted == false); //Only show events that aren't deleted, since we don't have an admin page this is okay, 
+                                                                                   //if we want to implement a 'all access admin account' we should move this check into our controllers
             return events.ToList();
         }
 

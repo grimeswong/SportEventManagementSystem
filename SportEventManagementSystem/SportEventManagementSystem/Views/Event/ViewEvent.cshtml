@@ -15,6 +15,7 @@
         <div id="buttons" class="pull-right">
             @if (UserManager.GetUserId(User) == @Model.CurrentEvent.ownerID)
             {
+                <a class="btn btn-danger pull-right" href="@Url.Action("DeleteEvent", "Event", new { eventID = @Model.CurrentEvent.id})">Delete Event</a>
                 <a class="btn btn-warning pull-right" href="@Url.Action("EditEvent", "Event", new { eventID = @Model.CurrentEvent.id})">Edit Event</a>
                 <button class="btn btn-info pull-right" onclick="openInviteModal()"> Invite</button>
             }
