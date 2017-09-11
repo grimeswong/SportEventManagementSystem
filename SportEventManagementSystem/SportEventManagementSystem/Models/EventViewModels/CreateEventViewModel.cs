@@ -97,32 +97,32 @@ namespace SportEventManagementSystem.Models.EventViewModels
     public class CompetitionValidationModel
     {
         [Required]
-        [StringLength(30, ErrorMessage = "Please enter a valid competition name. {1} characters long.", MinimumLength = 4)]
+        [StringLength(30, ErrorMessage = "Please enter a valid competition name. Between {2} and {1} characters long.", MinimumLength = 4)]
         [Display(Name = "Competition Name")]
         public string CompName { get; set; }
 
         [Required]
-        [StringLength(30, ErrorMessage = "Please enter a valid division name. {1} characters long.", MinimumLength = 1)]
+        [StringLength(30, ErrorMessage = "Please enter a valid division name. Between {2} and {1} characters long.", MinimumLength = 1)]
         [Display(Name = "Division Name")]
         public string DivisionName { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "Please enter a valid division description. {1} characters long.", MinimumLength = 1)]
+        [StringLength(100, ErrorMessage = "Please enter a valid division description. Between {2} and {1} characters long.", MinimumLength = 1)]
         [Display(Name = "Division Description")]
         public string DivisionDescription { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessage = "Please enter a valid sport name. {1} characters long.", MinimumLength = 1)]
+        [StringLength(50, ErrorMessage = "Please enter a valid sport name. Between {2} and {1} characters long.", MinimumLength = 1)]
         [Display(Name = "Sport Name")]
         public string SportName { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessage = "Please enter a valid sport description. {1} characters long.", MinimumLength = 1)]
+        [StringLength(50, ErrorMessage = "Please enter a valid sport description. Between {2} and {1} characters long.", MinimumLength = 1)]
         [Display(Name = "Sport Description")]
         public string SportDescription { get; set; }
 
         [Required]
-        [StringLength(30, ErrorMessage = "Please enter a valid location. {1} characters long.", MinimumLength = 1)]
+        [StringLength(30, ErrorMessage = "Please enter a valid location. Between {2} and {1} characters long.", MinimumLength = 1)]
         [Display(Name = "Competition Location")]
         public string Location { get; set; }
 
