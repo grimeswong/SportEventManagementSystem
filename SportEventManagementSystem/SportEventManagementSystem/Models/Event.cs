@@ -15,6 +15,7 @@ namespace SportEventManagementSystem.Models
         public string id { get; set; }
 
         public bool IsPrivate { get; set; }
+        public bool IsDeleted { get; set; }
         public List<Competition> Competitions { get; set; }
         public string Name { get; set; }
         public string VenueName { get; set; }
@@ -122,6 +123,8 @@ namespace SportEventManagementSystem.Models
     public class Sport
     {
         [Key]
+        public string id { get; set; }
+
         public string Name { get; set; }
         public string Description { get; set; }
     }
