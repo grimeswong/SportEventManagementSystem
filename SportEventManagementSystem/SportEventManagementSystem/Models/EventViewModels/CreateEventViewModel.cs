@@ -67,7 +67,7 @@ namespace SportEventManagementSystem.Models.EventViewModels
 
         [Required]
         [DataType(DataType.DateTime)]
-        [CustomAttributes.IsDateBetweenTwoFields("'{0}' must be a later date / time then event start and an earlier date / time than event end.", "StartTime", "EndTime", "Registration End Date & Time")]
+        [CustomAttributes.IsDateBefore("'{0}' must be an earlier date / time than event end.", "EndTime", "Registration End Date & Time")]
         [Display(Name = "Registration End Date & Time")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yy H:mm:ss tt}")] // need to set the TimeSpan.Ten (option for the eastern and western time zone)
         public DateTime RegEndTime { get; set; }
