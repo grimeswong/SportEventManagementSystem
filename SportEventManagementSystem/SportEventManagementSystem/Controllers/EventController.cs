@@ -14,7 +14,7 @@ using SportEventManagementSystem.Data;
 
 namespace SportEventManagementSystem.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class EventController : Controller
     {
         #region Declaration
