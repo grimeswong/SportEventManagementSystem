@@ -5,7 +5,7 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-@if (SignInManager.IsSignedIn(User))
+@if (SignInManager.IsSignedIn(User) && QueryController.GetCurrentUserAsync(UserManager,User) != null)
 { 
         <ul class="nav navbar-nav navbar-right">
             <li>
