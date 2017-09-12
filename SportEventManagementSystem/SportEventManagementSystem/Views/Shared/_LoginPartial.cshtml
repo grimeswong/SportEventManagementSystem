@@ -5,21 +5,23 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-@if (SignInManager.IsSignedIn(User) && QueryController.GetCurrentUserAsync(UserManager,User) != null)
+@if (SignInManager.IsSignedIn(User) && QueryController.GetCurrentUserAsync(UserManager, User) != null)
 { 
+    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @QueryController.GetCurrentUserAsync(UserManager,User).details.FirstName @QueryController.GetCurrentUserAsync(UserManager,User).details.LastName!</a>
+                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @QueryController.GetCurrentUserAsync(UserManager, User).details.FirstName @QueryController.GetCurrentUserAsync(UserManager, User).details.LastName!</a>
             </li>
             <li>
-               <a asp-controller="Account" asp-action="Logout">Log out</a>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
             </li>
         </ul>
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
-        <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
-    </ul>
-}
+        </form>
+        }
+        else
+        {
+        <ul class="nav navbar-nav navbar-right">
+            <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+            <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+        </ul>
+        }
