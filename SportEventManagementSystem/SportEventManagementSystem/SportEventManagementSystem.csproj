@@ -12,6 +12,7 @@
     <UserSecretsId>aspnet-SportEventManagementSystem-4a516459-81b8-4085-b45f-fce85c9255c2</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="1.18.1.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.1" />
