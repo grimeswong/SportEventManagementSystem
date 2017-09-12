@@ -56,9 +56,8 @@ namespace SportEventManagementSystem.Models.AccountViewModels
         public string PostCode { get; set; }
 
         [Required]
-        [DataType("Gender")]
         [Display(Name = "Gender")]
-        [CustomAttributes.IsGender(ErrorMessage = "Please select a gender.")]
+        [Range(1,2,ErrorMessage = "Please select a gender.")]
         public int Gender { get; set; }
 
         [Required]
