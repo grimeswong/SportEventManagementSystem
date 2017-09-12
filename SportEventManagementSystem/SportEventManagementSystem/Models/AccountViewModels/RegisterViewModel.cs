@@ -33,7 +33,8 @@ namespace SportEventManagementSystem.Models.AccountViewModels
         public string LastName { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
+        [CustomAttributes.IsDateBeforeNow]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime DateOfBirth { get; set; }
 

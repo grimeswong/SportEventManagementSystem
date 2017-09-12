@@ -25,6 +25,23 @@ namespace SportEventManagementSystem.Models
             }
         }
 
+        public class IsDateBeforeNow : ValidationAttribute
+        {
+            public IsDateBeforeNow()
+            {
+            }
+
+            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            {
+                var dt = Convert.ToDateTime(value);
+                if (dt < DateTime.Now)
+                {
+                    return ValidationResult.Success;
+                }
+                return new ValidationResult("Please select a valid date.");
+            }
+        }
+
         [AttributeUsage(AttributeTargets.Property)]
         public sealed class IsListCountLargerThan : ValidationAttribute
         {
