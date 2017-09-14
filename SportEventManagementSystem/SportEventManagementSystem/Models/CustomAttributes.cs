@@ -25,6 +25,7 @@ namespace SportEventManagementSystem.Models
             }
         }
 
+        [AttributeUsage(AttributeTargets.Property)]
         public class IsDateBeforeNow : ValidationAttribute
         {
             public IsDateBeforeNow()
@@ -39,6 +40,47 @@ namespace SportEventManagementSystem.Models
                     return ValidationResult.Success;
                 }
                 return new ValidationResult("Please select a valid date.");
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.Property)]
+        public sealed class IsFieldLargerThanAnother : ValidationAttribute
+        {
+            private readonly string DefaultError;
+            private readonly string CompareToField;
+
+            public IsFieldLargerThanAnother(string compareToField, string defaultError = null) : base()
+            {
+                if (string.IsNullOrEmpty(compareToField))
+                {
+                    throw new ArgumentNullException("compareToField");
+                }
+                CompareToField = compareToField;
+                DefaultError = defaultError;
+            }
+
+            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+            {
+                try
+                { // Try to reflect event start and event end dates and do validation
+                    var compareToField = validationContext.ObjectInstance.GetType()
+                    .GetProperty(CompareToField);
+
+                    int compareToFieldValue = (int)compareToField.GetValue(validationContext.ObjectInstance, null);
+
+                    if ((int)value > compareToFieldValue)
+                    {
+                        return ValidationResult.Success;
+                    }
+                    else
+                    {
+                        return new ValidationResult(DefaultError);
+                    }
+                }
+                catch (InvalidCastException e)
+                {
+                    throw e;
+                }
             }
         }
 
@@ -63,30 +105,30 @@ namespace SportEventManagementSystem.Models
 
             protected override ValidationResult IsValid(object value, ValidationContext validationContext)
             {
-                    try
-                    { // Try to reflect event start and event end dates and do validation
-                        var boolField = validationContext.ObjectInstance.GetType()
-                        .GetProperty(BoolField);
+                try
+                { // Try to reflect event start and event end dates and do validation
+                    var boolField = validationContext.ObjectInstance.GetType()
+                    .GetProperty(BoolField);
 
-                        bool boolFieldValue = (bool)boolField.GetValue(validationContext.ObjectInstance, null);
+                    bool boolFieldValue = (bool)boolField.GetValue(validationContext.ObjectInstance, null);
 
-                        var list = value as IList;
-                        if (list != null)
+                    var list = value as IList;
+                    if (list != null)
+                    {
+                        if (list.Count >= MinimumElements && boolFieldValue == BoolRequiredVal)
                         {
-                            if (list.Count >= MinimumElements && boolFieldValue == BoolRequiredVal)
-                            {
-                                return ValidationResult.Success;
-                            }
-                            else
-                            {
-                                return new ValidationResult("Please enter atleast " + MinimumElements + " item/s");
-                            }
+                            return ValidationResult.Success;
+                        }
+                        else
+                        {
+                            return new ValidationResult("Please enter atleast " + MinimumElements + " item/s");
                         }
                     }
-                    catch (InvalidCastException e)
-                    { 
-                        throw e;
-                    }
+                }
+                catch (InvalidCastException e)
+                {
+                    throw e;
+                }
                 return null;
             }
         }
@@ -334,7 +376,7 @@ namespace SportEventManagementSystem.Models
                     if (value != null)
                     {
                         try
-                        { // Try to reflect event start and event end dates and do validation
+                        {
                             var endDate = validationContext.ObjectInstance.GetType()
                             .GetProperty(EndDateField);
 

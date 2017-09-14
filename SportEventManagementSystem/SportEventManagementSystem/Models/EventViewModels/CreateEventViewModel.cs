@@ -146,12 +146,12 @@ namespace SportEventManagementSystem.Models.EventViewModels
         public int EntryCapacity { get; set; }
 
         [Required]
-        [Range(1, 1000, ErrorMessage = "Team Minimum Number must be between 1 to 1000")]    // Range from 1 to 1000 
+        [Range(1,Double.MaxValue,ErrorMessage = "Please enter a valid number above 1.")]
         [Display(Name = "Team Minimum Number")]
         public int TeamSizeMin { get; set; }
 
         [Required]
-        [Range(1, 1000, ErrorMessage = "Team Maximum Number must be between 1 to 1000")]    // Range from 1 to 1000 
+        [CustomAttributes.IsFieldLargerThanAnother("TeamSizeMin","Please enter a value larger than the mininmum team size.")]
         [Display(Name = "Team Maximum Number")]
         public int TeamSizeMax { get; set; }
 
