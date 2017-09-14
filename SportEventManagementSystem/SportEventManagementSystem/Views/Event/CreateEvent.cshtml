@@ -151,6 +151,7 @@
             cache: false,
             type: "POST",
             data: $("#EventForm").serialize(),
+            async: false,
             success: function (data) {
                 var compCount = parseInt($("#CompetitionCount").val());
                 $("#CompetitionCount").val(compCount + 1);
@@ -171,6 +172,21 @@
         reInitValidation();
         return true;
     });
-    //Add one competition on page load as each event needs a minimum of one
-    addCompetition();
 </script>
+    
+    @if (Model != null && Model.Competitions != null)
+    {
+        <script type="text/javascript">
+        for (let i = 0; i < @Model.Competitions.Count; i++)
+        {
+            addCompetition();
+        }
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+        //Add one competition on page load as each event needs a minimum of one
+        addCompetition();
+            </script>
+    }
