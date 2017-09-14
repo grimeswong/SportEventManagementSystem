@@ -159,7 +159,7 @@ namespace SportEventManagementSystem.Models.EventViewModels
         [Display(Name = "Minimum Age")]
         public int MinimumAge { get; set; }
 
-        [Range(0, 130, ErrorMessage = "Age must be between 0 to 130")]  // Range from 0 to 130 (Age maximum) 
+        [CustomAttributes.IsFieldLargerThanAnother("MinimumAge", "Please enter a value larger than the mininmum age.")]
         [Display(Name = "Maximum Age")]
         public int MaximumAge { get; set; }
 
